@@ -1,0 +1,44 @@
+<form bindsubmit="add_submit">
+    <view class="add_box">
+        <view class="add_title">收货人</view>
+        <view class="add_content">
+            <input name="user" type="text" value="{{realname}}"></input>
+        </view>
+    </view>
+    <view class="add_box">
+        <view class="add_title">地区信息</view>
+        <view class="add_content">
+            <view bindtap="selectaddress" class="address">{{area}}</view>
+        </view>
+    </view>
+    <view class="add_box">
+        <view class="add_title">详细地址</view>
+        <view class="add_content">
+            <input name="address" type="text" value="{{Address}}"></input>
+        </view>
+    </view>
+    <view class="add_box">
+        <view class="add_title">手机号码</view>
+        <view class="add_content">
+            <input name="mobile" type="number" value="{{mobile}}"></input>
+        </view>
+    </view>
+    <button class="btn_sub" formType="submit" type="primary">保存</button>
+</form>
+<view class="citypicker" wx:if="{{flag}}">
+    <picker-view bindchange="bindChange" class="citybody" indicatorStyle="height: 50px;" style="width: 100%; height: 200px;" value="{{arrvalue}}">
+        <view class="cityheader">
+            <view bindtap="selectaddress" class="city-cancel">取消</view>
+            <view bindtap="open" class="city-true">确定</view>
+        </view>
+        <picker-view-column>
+            <view style="line-height: 50px;padding-left:10px;" wx:for="{{provinces}}" wx:key="item">{{item.Name}}</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view style="line-height: 50px;padding-left:10px;" wx:for="{{citys}}" wx:key="item">{{item.Name}}</view>
+        </picker-view-column>
+        <picker-view-column>
+            <view style="line-height: 50px;padding-left:10px;" wx:for="{{countys}}" wx:key="item">{{item.Name}}</view>
+        </picker-view-column>
+    </picker-view>
+</view>

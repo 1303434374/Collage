@@ -1,0 +1,56 @@
+.btn_box {
+    width: 100%;
+    overflow: hidden;
+}
+
+.btn_change {
+    float: right;
+    margin: 10px 4% 0;
+    font-size: 14px;
+}
+
+.answer_box {
+    width: 92%;
+    height: 32px;
+    line-height: 32px;
+    padding: 6px 4%;
+    font-size: 14px;
+    color: #000;
+    overflow: hidden;
+}
+
+.answer_title {
+    float: left;
+    margin-right: 4%;
+    height: 32px;
+}
+
+.anser_question {
+    float: left;
+    width: 78%;
+}
+
+.answer {
+    width: 100%;
+    height: 32px;
+    border-bottom: 1px solid #348df2;
+    padding-left: 10px;
+}
+
+.msg_box {
+    width: 92%;
+    padding: 20px 4%;
+}
+
+.msg_txt {
+    color: #aaa;
+    line-height: 32px;
+    font-size: 14px;
+}
+
+.btn_primary {
+    width: 92%;
+    margin: 0 4%;
+    color: #fff;
+    background: #3fa1f5;
+}

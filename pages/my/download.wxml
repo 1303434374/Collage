@@ -1,0 +1,16 @@
+<view class="main">
+    <view class="txt1">
+        <text class="txt">方法一：扫描图片二维码，或点击图片后可长按下载，再发到微信进行长按识别二维码</text>
+    </view>
+    <view>
+        <image bindtap="gotodownload" class="image" mode="scaleToFill" src="http://item-img.b0.upaiyun.com/pinhuo/items/dfa9d63ac07752f6ed0b0a3ea3a10405.png"></image>
+    </view>
+    <button bindtap="gotodownload" class="color_btn" size="default" style="margin-top:5px;" type="warn">查看图片</button>
+    <view style="margin-top:25px;">
+        <text class="txt">方法二：复制下面地址，打开浏览器粘贴到地址栏即可打开下载页面</text>
+    </view>
+    <view class="">
+        <input class="input_text" type="text" value="http://www.nahuo.com/service/DownLoadpinhuoApp"></input>
+        <button bindtap="setClipboard" class="color_btn" size="default" style="margin-top:5px;" type="warn">复制</button>
+    </view>
+</view>

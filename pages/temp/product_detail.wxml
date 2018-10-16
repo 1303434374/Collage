@@ -1,0 +1,53 @@
+<template name="product_detail">
+    <view style="height:25rpx;background-color: #f0f0f0;  "></view>
+    <view class="detailcontainer">
+        <view>
+            <image src="http://comm-img.b0.upaiyun.com/common/201606/131094206855250340.jpg" style="width:30rpx;height:30rpx"></image>
+            <text style="margin-left:10rpx;  font-size: 16px;">明码实价</text>
+        </view>
+        <view>
+            <image src="http://comm-img.b0.upaiyun.com/common/201606/131094206855250340.jpg" style="width:30rpx;height:30rpx"></image>
+            <text style="margin-left:10rpx;  font-size: 16px;">买手精选</text>
+        </view>
+        <view>
+            <image src="http://comm-img.b0.upaiyun.com/common/201606/131094206855250340.jpg" style="width:30rpx;height:30rpx"></image>
+            <text style="margin-left:10rpx;  font-size: 16px;">担保交易</text>
+        </view>
+    </view>
+    <view style="height:5rpx;background-color: #f0f0f0;  "></view>
+    <view style="margin-top:20rpx;margin-bottom:15rpx">
+        <view wx:if="{{Products}}">
+            <text style="margin-left:20rpx;  font-size: 14px;">颜色:</text>
+            <text style="margin-left:5rpx;color: #ccc;font-size: 14px;" wx:for="{{Products}}" wx:key="key"> {{item.Color}}</text>
+        </view>
+        <view style="margin-top:5rpx;" wx:if="{{Products[0].SizeList.length>0}}">
+            <text style="margin-left:20rpx;  font-size: 14px;">尺码:</text>
+            <text style="margin-left:5rpx;color:#ccc;font-size: 14px;" wx:for="{{Products[0].SizeList}}" wx:key="key"> {{item.Size}}</text>
+        </view>
+        <view style="margin-top:5rpx;" wx:if="{{StallsName}}">
+            <text style="margin-left:20rpx;  font-size: 14px;">档口:</text>
+            <text style="margin-left:15rpx;color:#ccc;font-size: 14px;">{{StallsName}}</text>
+        </view>
+    </view>
+    <view style="height:25rpx;background-color: #f0f0f0;  "></view>
+    <video control src="{{item}}" style="width:100%;height:850rpx;" wx:for="{{Videos}}" wx:key="key"></video>
+    <image mode="aspectFill" src="{{item.url}}" style="width:100%;height:850rpx;margin-top:10rpx;" wx:for="{{detailImages}}" wx:key="key"></image>
+    <view style="padding-bottom:10px;;margin-top:50rpx;background-color: #f0f0f0;">
+        <view style="margin-top:30rpx;">
+            <text style="margin-left:20rpx;  font-size: 14px;color:#333;">天天拼货团服务说明与承诺:</text>
+        </view>
+        <view style="margin-top:10rpx;">
+            <text style="margin-left:20rpx;  font-size: 12px;color:  #999;"> .明码实价，买手不得私自加价，一旦发现加一赔十</text>
+        </view>
+        <view style="margin-top:10rpx;">
+            <text style="margin-left:20rpx;  font-size: 12px;color:  #999;"> .拼货价格已包含买手服务费和当季打包服务费</text>
+        </view>
+        <view style="margin-top:10rpx;">
+            <text style="margin-left:20rpx;  font-size: 12px;color:  #999;"> .非质量问题不退不换</text>
+        </view>
+        <view style="margin-top:10rpx;">
+            <text style="margin-left:20rpx;  font-size: 12px;color:  #999;"> .支付担保交易</text>
+        </view>
+    </view>
+    <view style="height:25rpx; "></view>
+</template>

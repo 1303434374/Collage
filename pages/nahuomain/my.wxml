@@ -1,0 +1,87 @@
+<view class="header" style="background-color:#FC3D39;">
+    <image class="user_img" mode="aspectFill" src="{{url}}"></image>
+    <view class="nickname">{{nickName}}</view>
+    <view class="point">{{PointName}}:{{point}}</view>
+</view>
+<view style="width:100%;height:300rpx"></view>
+<view class="nav">
+    <view class="box">
+        <view class="title">我的订单</view>
+        <view class="skip">
+            <navigator url="/pages/order/order?id=0">查看全部订单></navigator>
+        </view>
+        <view class="nav_list">
+            <view class="nav_title">
+                <navigator url="/pages/order/order?id=1">
+                    <image class="nav_img" src="/Image/my/daizhifu@2x.png"></image>
+                    <view class="nav_text">待支付</view>
+                </navigator>
+            </view>
+            <view class="nav_title">
+                <navigator url="/pages/order/order?id=2">
+                    <image class="nav_img" src="/Image/my/daifahuo@2x.png"></image>
+                    <view class="nav_text">待发货</view>
+                </navigator>
+            </view>
+            <view class="nav_title">
+                <navigator url="/pages/order/order?id=3">
+                    <image class="nav_img" src="/Image/my/daishouhuo@2x.png"></image>
+                    <view class="nav_text">待收货</view>
+                </navigator>
+            </view>
+            <view class="nav_title">
+                <navigator url="/pages/order/order?id=4">
+                    <image class="nav_img" src="/Image/my/yiwanjie@2x.png"></image>
+                    <view class="nav_text">已完成</view>
+                </navigator>
+            </view>
+            <view class="nav_title">
+                <navigator url="/pages/order/sealed">
+                    <image class="nav_img" src="/Image/my/shouhou@2x.png"></image>
+                    <view class="nav_text">售后单</view>
+                </navigator>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="btn_list" style="border-top:1px solid #c8c7cc;">
+    <view bindtap="gotodownload" class="btn_box">
+        <view class="title">下载天天拼货团APP</view>
+        <view class="skip">看更多好款 ></view>
+    </view>
+</view>
+<view class="btn_list" style="border-bottom:1px solid #c8c7cc;margin-bottom:20rpx;">
+    <button bindtap="Alert" class="btn_kf">
+        <view class="btn_box" style="border-bottom:none;">
+            <view class="title">咨询客服</view>
+            <view class="skip">></view>
+        </view>
+    </button>
+</view>
+<view class="btn_list" style="border-top:1px solid #c8c7cc;">
+    <view bindtap="coupon" class="btn_box">
+        <view class="title">优惠券</view>
+        <view class="icon" wx:if="{{newbool}}">
+            <image src="/Image/login/new.png"></image>
+        </view>
+        <view class="skip">{{Total}}></view>
+    </view>
+</view>
+<view class="btn_list">
+    <view bindtap="liked" class="btn_box">
+        <view class="title">收藏足迹</view>
+        <view class="skip">></view>
+    </view>
+</view>
+<view class="btn_list">
+    <view bindtap="withdraw" class="btn_box">
+        <view class="title">我的余额</view>
+        <view class="skip">充值、提现等 ></view>
+    </view>
+</view>
+<view class="btn_list" style="border-bottom:1px solid #c8c7cc;">
+    <view bindtap="login_out" class="btn_box" style="border-bottom:none;">
+        <view class="title">退出登录</view>
+        <view class="skip">></view>
+    </view>
+</view>

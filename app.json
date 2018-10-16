@@ -1,0 +1,81 @@
+{
+    "pages": [
+        "pages/nahuomain/main",
+        "pages/login/login",
+        "pages/login/forget",
+        "pages/login/getcode",
+        "pages/login/setpassword",
+        "pages/login/findsuccess",
+        "pages/success/success",
+        "pages/login/regist",
+        "pages/car/car",
+        "pages/nahuomain/my",
+        "pages/order/order",
+        "pages/order/orderdetail",
+        "pages/pinhuo/pinhuodetail",
+        "pages/pinhuo/itemdetail",
+        "pages/pinhuo/settlement",
+        "pages/pinhuo/reply",
+        "pages/address/addresslist",
+        "pages/address/addressAdd",
+        "pages/search/search",
+        "pages/search/list",
+        "pages/withdraw/withdraw",
+        "pages/coupon/coupon",
+        "pages/my/download",
+        "pages/order/orderpay",
+        "pages/yft/open",
+        "pages/yft/setpassword",
+        "pages/yft/findpassword",
+        "pages/yft/resetpassword",
+        "pages/yft/answer",
+        "pages/classify/index",
+        "pages/classify/dk",
+        "pages/liked/index",
+        "pages/order/logistics",
+        "pages/order/sealed",
+        "pages/pinhuo/detail",
+        "pages/order/logisticsdetail",
+        "pages/webView/index",
+        "pages/xiaozu/list",
+        "pages/xiaozu/Detail"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fc3d39",
+        "navigationBarTitleText": "天天拼货",
+        "navigationBarTextStyle": "white"
+    },
+    "tabBar": {
+        "color": "#a9b7b7",
+        "selectedColor": "#FC3D39",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "black",
+        "list": [
+            {
+                "pagePath": "pages/nahuomain/main",
+                "text": "拼货",
+                "iconPath": "Image/login/tab_quick_normal.png",
+                "selectedIconPath": "Image/login/tab_quick_select.png"
+            },
+            {
+                "pagePath": "pages/classify/index",
+                "text": "分类",
+                "iconPath": "Image/login/classify.png",
+                "selectedIconPath": "Image/login/classify_selected.png"
+            },
+            {
+                "pagePath": "pages/car/car",
+                "text": "拿货车",
+                "iconPath": "Image/login/gouwuche.png",
+                "selectedIconPath": "Image/login/gouwuche1.png"
+            },
+            {
+                "pagePath": "pages/nahuomain/my",
+                "text": "我的",
+                "iconPath": "Image/login/tab_me_normal.png",
+                "selectedIconPath": "Image/login/tab_me_select.png"
+            }
+        ]
+    }
+}

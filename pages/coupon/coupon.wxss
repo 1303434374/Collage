@@ -1,0 +1,132 @@
+page {
+    background: #ebebeb;
+    font-family: "微软雅黑";
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 42px;
+    line-height: 40px;
+    background: #fff;
+}
+
+.header_title {
+    text-align: center;
+    height: 40px;
+    border-bottom: 2px solid #fff;
+    font-size: 14px;
+    color: #000;
+}
+
+.active {
+    border-bottom: 2px solid #d52831;
+    color: #d52831;
+}
+
+.box {
+    width: 94%;
+    padding: 0 3%;
+}
+
+.coupon_list {
+    height: 84px;
+    padding: 0 5px;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.img_left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 84px;
+    width: 5px;
+}
+
+.img_right {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 84px;
+    width: 5px;
+}
+
+.list_left {
+    width: 32%;
+    height: 84px;
+    float: left;
+    color: #fff;
+}
+
+.list_right {
+    width: 68%;
+    height: 84px;
+    float: left;
+    background: #fff;
+    color: #b8b8b8;
+    position: relative;
+}
+
+.status_0 {
+    background: #d52831;
+}
+
+.status_1 {
+    background: #a6a6a6;
+}
+
+.coupon_discount {
+    text-align: center;
+    font-size: 24px;
+    height: 36px;
+    line-height: 36px;
+    padding-top: 12px;
+}
+
+.coupon_condition {
+    text-align: center;
+    font-size: 12px;
+    height: 26px;
+    line-height: 26px;
+}
+
+.coupon_title {
+    width: 90%;
+    padding: 10px 5% 5px;
+    line-height: 18px;
+    color: #808080;
+    font-size: 14px;
+}
+
+.coupon_limit_summary,.coupon_limit_time {
+    width: 90%;
+    padding: 0 5%;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+}
+
+.coupon_status {
+    position: absolute;
+    right: 5%;
+    top: 38px;
+    font-size: 14px;
+}
+
+.status_color {
+    color: #d52831;
+}
+
+.empty_content {
+    position: fixed;
+    width: 100%;
+    color: #5d5d5d;
+    font-size: 14px;
+    text-align: center;
+    top: 30%;
+}

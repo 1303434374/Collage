@@ -1,0 +1,3 @@
+<view class="withdraw_title">可用余额(￥)</view>
+<view class="withdraw_moeny">{{balance}}</view>
+<view class="withdraw_action">提现充值请到“天天拼货团”APP上查看</view>

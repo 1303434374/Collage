@@ -1,0 +1,25 @@
+<view class="header">
+    <view bindtap="checkmeu" class="header_title {{statuid==0?'active':''}}" data-status="0">未使用</view>
+    <view bindtap="checkmeu" class="header_title {{statuid==1?'active':''}}" data-status="1">已使用</view>
+    <view bindtap="checkmeu" class="header_title {{statuid==2?'active':''}}" data-status="2">已过期</view>
+</view>
+<scroll-view bindscrolltolower="loadMore" class="box" scrollY="true" style="height:{{height-42}}px">
+    <view class="coupon_list" wx:for="{{list}}" wx:key="{{index}}">
+        <image class="img_left" src="/Image/pinhuo/coupon_red.png" wx:if="{{statuid==0}}"></image>
+        <image class="img_left" src="/Image/pinhuo/coupon_gray.png" wx:if="{{statuid==1||statuid==2}}"></image>
+        <view class="list_left {{statuid==0?'status_0':'status_1'}}">
+            <view class="coupon_discount">{{item.Discount}}</view>
+            <view class="coupon_condition">{{item.Condition}}</view>
+        </view>
+        <view class="list_right">
+            <view class="coupon_title">{{item.Title}}</view>
+            <view class="coupon_limit_summary">{{item.LimitSummary}}</view>
+            <view class="coupon_limit_time">有效期：{{item.FromTime}} 到 {{item.ToTime}}</view>
+            <view class="coupon_status {{statuid==0?'status_color':''}}">{{item.Statu}}</view>
+        </view>
+        <image class="img_right" src="/Image/pinhuo/coupon_white.png"></image>
+    </view>
+    <view class="empty_content" wx:if="{{list.length==0}}">
+        暂时没有相关优惠券哦
+    </view>
+</scroll-view>

@@ -1,0 +1,82 @@
+page {
+    background-color: #eeeef0;
+}
+
+.list_box {
+    padding: 10rpx 0 30rpx;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: 30rpx;
+}
+
+.list_hd {
+    height: 100rpx;
+    width: 700rpx;
+    padding: 10rpx 25rpx 30rpx;
+    overflow: hidden;
+}
+
+.logo_img {
+    width: 100rpx;
+    height: 100rpx;
+    float: left;
+    border-radius: 100%;
+}
+
+.topic_img {
+    width: 750rpx;
+    height: 210px;
+    margin: 0 auto;
+    display: block;
+}
+
+.title {
+    width: 700rpx;
+    padding: 20rpx 25rpx;
+    font-size: 32rpx;
+}
+
+.list_title_box {
+    float: left;
+    height: 100rpx;
+    overflow: hidden;
+    margin-left: 30rpx;
+}
+
+.list_title_txt {
+    font-size: 32rpx;
+    line-height: 70rpx;
+    height: 50rpx;
+    color: #000;
+}
+
+.list_title_time {
+    font-size: 28rpx;
+    line-height: 50rpx;
+    color: #c1c1c1;
+}
+
+.pick_img {
+    float: right;
+    height: 48rpx;
+    width: 48rpx;
+    margin-top: 26rpx;
+}
+
+.pick_txt {
+    height: 100rpx;
+    line-height: 100rpx;
+    font-size: 28rpx;
+    color: #c1c1c1;
+    float: right;
+    margin: 0 20rpx;
+}
+
+.summary {
+    padding: 0 25rpx 10rpx;
+    font-size: 26rpx;
+    color: #c2c2c2;
+    overflow: hidden;
+    word-wrap: break-word;
+    word-break: normal;
+}

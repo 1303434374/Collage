@@ -1,0 +1,49 @@
+<scroll-view class="scroll-view_H" scrollLeft="{{scrollLeft}}" scrollWithAnimation="true" scrollX="true" style="width: 100%">
+    <view bindtap="click_menu" class="scroll-view-item_H {{menu_static==item.Cid?'selected':''}}" id="{{item.Cid}}" wx:for="{{menu}}" wx:key="{{index}}">
+            {{item.Name}}
+        </view>
+</scroll-view>
+<view style="height:80rpx;width:750rpx;"></view>
+<view animation="{{adsanimationData}}" class="ads_box" wx:if="{{ad_cont}}">{{ad_cont}}</view>
+<swiper autoplay="true" circular="true" duration="1000" indicatorDots="true" interval="3000" style="margin-bottom: 20rpx;position:relative;width:750rpx;height:420rpx;" wx:if="{{ADList.length>0}}">
+    <swiper-item wx:for="{{ADList}}" wx:key="key">
+        <image bindtap="GoToContent" data-content="{{item.Content}}" lazyLoad="true" mode="aspectFill" src="{{item.ImageUrl}}" style="width:750rpx;height:420rpx;"></image>
+    </swiper-item>
+</swiper>
+<view>
+    <view class="c-minheight carditem01" wx:for="{{list}}" wx:key="{{index}}">
+        <view style="position:relative;">
+            <view style="border-radius:10rpx;height:50rpx;width:120rpx;margin:10rpx; position: absolute;background:rgba(67,67,67,.7);text-align: center" wx:if="{{item.Times>0}}">
+                <text style="font-size:12px;  color: #fff; "> 第{{item.Times}}期</text>
+            </view>
+            <image bindtap="navclick" class="wx-image_BEjy38" data-name="{{item.Name}}" data-qid="{{item.QsID}}" data-visit="{{item.VisitResult}}" lazyLoad="true" mode="aspectFill" src="{{item.AppCover}}" style="background-size: cover; background-position: center center; background-repeat: no-repeat;  "></image>
+            <image bindtap="play" class="play" data-index="{{index}}" src="/Image/pinhuo/play.png" wx:if="{{item.Video!==''}}"></image>
+            <video autoplay="true" bindended="playend" class="wx-image_BEjy38 video_place" controls="true" src="{{item.Video}}" wx:if="{{videoId==index}}"></video>
+            <view style="flex-direction:row;justify-content: center;width:100%;display:flex;margin-top:-13px;" wx:if="{{item.HasNewItems&&item.ActivityType=='拼货'}}">
+                <view class="bgred " style="border-radius:25rpx;width:65%;display:flex;justify-content: center;">
+                    <text style="font-size: 26rpx; margin-right:5rpx;margin-top:6px;color:white"> 距截单 </text>
+                    <text style="font-size: 28rpx;margin:5px;color:white "> {{timelist[index].tick}} </text>
+                </view>
+            </view>
+            <view style="flex-direction:row;justify-content: center;width:100%;display:flex;margin-top:-13px;" wx:elif="{{item.HasNewItems==false&&item.OpenStatu.Content}}">
+                <view style="border-radius:25rpx;width:65%;display:flex;justify-content: center;background: #00CC66">
+                    <text style="font-size: 26rpx; margin:5px;margin-top:6px;color:white"> {{item.OpenStatu.Content}} </text>
+                </view>
+            </view>
+        </view>
+        <view bindtap="navclick" data-name="{{item.Name}}" data-qid="{{item.QsID}}" data-visit="{{item.VisitResult}}">
+            <view class="wx-view_adF7Mw">
+                <view class="c-block wx-text_id0VJj" wx:if="{{item.Name}}">{{item.Name}}</view>
+                <view class="c-block wx-text_id0VJj1" wx:if="{{item.Description.length!==1}}">{{item.Description}}</view>
+            </view>
+        </view>
+    </view>
+</view>
+<view catchtap="GoSearch" class="carbox">
+    <image src="/Image/login/search.png"></image>
+    <view class="carbox_text">搜索</view>
+</view>
+<view bindtap="GoTop" class="btn_top">
+    <image class="home_src" src="/Image/pinhuo/btn_top.png" style="margin-top:6px;padding-bottom:0;"></image>
+    <text>顶部</text>
+</view>

@@ -1,0 +1,116 @@
+page {
+    background: #ebebeb;
+    font-family: "微软雅黑";
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 42px;
+    line-height: 40px;
+    background: #fff;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.header_title {
+    text-align: center;
+    height: 40px;
+    border-bottom: 2px solid #fff;
+    font-size: 14px;
+    color: #000;
+}
+
+.active {
+    border-bottom: 2px solid #FC3D39;
+}
+
+.detail_title {
+    background-color: #fff;
+    padding: 20rpx 25rpx;
+    width: 700rpx;
+    overflow: hidden;
+    font-size: 26rpx;
+    color: #000;
+    border-bottom: 1px solid #5eaffc;
+}
+
+.img_box {
+    width: 700rpx;
+    padding: 20rpx 25rpx;
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 20rpx;
+}
+
+.detail_img {
+    width: 180rpx;
+    height: 180rpx;
+    float: left;
+}
+
+.order_detail_num {
+    height: 50rpx;
+    line-height: 50rpx;
+    float: left;
+    width: 430rpx;
+}
+
+.status {
+    float: right;
+    font-size: 26rpx;
+    line-height: 50rpx;
+    color: #FC3D39;
+}
+
+.detail_content {
+    float: left;
+    width: 490rpx;
+    margin-left: 30rpx;
+    overflow: hidden;
+    height: 180rpx;
+}
+
+.title {
+    float: left;
+    width: 490rpx;
+    height: 130rpx;
+    overflow: hidden;
+    font-size: 30rpx;
+    color: #000;
+}
+
+.total_money {
+    float: left;
+    width: 245rpx;
+    height: 50rpx;
+    line-height: 50rpx;
+    text-align: left;
+    color: #b9b9b9;
+    font-size: 26rpx;
+}
+
+.total_num {
+    text-align: right;
+}
+
+.btn_box {
+    margin-top: 10rpx;
+    background-color: #fff;
+    padding-top: 20rpx;
+    width: 700rpx;
+    text-align: right;
+    float: left;
+    font-size: 26rpx;
+    border-top: 1px solid #ccc;
+}
+
+.goodlist {
+    overflow: hidden;
+    margin-bottom: 20rpx;
+}

@@ -1,0 +1,56 @@
+<view class="header">
+    <view class="headerlist">
+        <text style="color:#acacac;">物流单号：</text>{{Info.Code}}
+        <button bindtap="copy" class="btn" data-code="{{Info.Code}}" type="default">复制</button>
+    </view>
+    <view class="headerlist">
+        <text style="color:#acacac;">物流公司：</text>{{Info.Name}}</view>
+    <view class="headerlist">
+        <text style="color:#acacac;">件数重量：</text>{{Info.Summary}}</view>
+    <view class="headerlist">
+        <text style="color:#acacac;">发货时间：</text>{{Info.ShipTime}}</view>
+</view>
+<view class="header">
+    <view class="headerlist">
+        当前物流状态 
+        <button bindtap="detail" class="detail" data-detail="{{ExpressInfoList}}">物流详情</button>
+    </view>
+    <view class="status">{{ExpressInfoList[0].Content}}</view>
+    <view class="time">{{ExpressInfoList[0].Time}}</view>
+</view>
+<view class="goodlist">
+    <view class="goodtitlebox">
+        <image class="goodicon" src="/Image/pinhuo/dp3.png"></image>
+        <view class="goodaddress">已发商品</view>
+    </view>
+    <block wx:for="{{Orders}}" wx:for-index="idx" wx:key="n">
+        <view class="detail_title">
+            <view class="order_detail_num">商品单号：{{item.Code}}</view>
+            <button bindtap="copy" class="btn_copy" data-code="{{item.Code}}" type="default">复制</button>
+        </view>
+        <view class="img_box">
+            <image class="detail_img" mode="aspectFill" src="{{item.Cover}}"></image>
+            <view class="detail_content">
+                <view class="title">{{item.Title}}</view>
+                <view class="total_money">￥{{item.Price}}</view>
+                <view class="total_money total_num">共{{item.TotalQty}}件</view>
+            </view>
+            <view class="size_list">
+                <view class="color_size_qty" wx:for="{{item.Products}}" wx:for-index="idx1" wx:for-item="item1" wx:key="m">
+                    {{item1.Color}}/{{item1.Size}}/{{item1.Qty}}
+                </view>
+            </view>
+        </view>
+    </block>
+</view>
+<view class="footer_box">
+    <view class="foot_title">发货金额</view>
+    <view class="foot_money">{{Info.ProductAmount}}</view>
+    <view class="foot_title" wx:if="{{Info.PostFee!=='0.00'}}">实际运费</view>
+    <view class="foot_money" wx:if="{{Info.PostFee!=='0.00'}}">{{Info.PostFee}}
+        <view class="weight" wx:if="{{Info.PostFee!=='0.00'}}">{{Info.Weight}}</view>
+    </view>
+    <view class="foot_total_num">总款数：{{Info.ItemCount}}款，总件数：{{Info.ShipQty}}件</view>
+    <view class="foot_total_money">本次合计： <text style="color:#ff3976;">{{Info.TotalShipAmount}}</text>
+    </view>
+</view>

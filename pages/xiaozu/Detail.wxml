@@ -1,0 +1,45 @@
+<import src="../../wxParse/wxParse.wxml"></import>
+<view class="list_hd">
+    <image class="logo_img" src="http://api2.nahuo.com/v3/shop/userlogo/{{UserID}}"></image>
+    <view class="list_title_box">
+        <view class="list_title_txt">{{UserName}}</view>
+        <view class="list_title_time">{{TimeTips}}</view>
+    </view>
+</view>
+<view class="c_title">{{Title}}</view>
+<view class="content">
+    <template is="wxParse" data="{{wxParseData:Content.nodes}}"></template>
+</view>
+<view class="talk_list_box">
+    <view class="talk_list" wx:for="{{talkList}}" wx:for-index="index1" wx:for-item="item1" wx:key="{{index1}}">
+        <view class="list_hd2">
+            <image class="logo_img" src="http://api2.nahuo.com/v3/shop/userlogo/{{item1.UserID}}"></image>
+            <view class="list_title_box">
+                <view class="list_title_txt">{{item1.UserName}}</view>
+                <view class="list_title_time">{{item1.Floor}}楼|{{item1.CreateTime}}</view>
+            </view>
+            <image catchtap="ReplyName" class="pick_img" data-name="{{item1.UserName}}" data-pid="{{item1.ID}}" data-rootid="{{item1.ID}}" src="/Image/login/tlack.png"></image>
+        </view>
+        <view class="talk_content">{{item1.Content}}</view>
+        <view class="talk_child" wx:if="{{item1.Childs.length>0}}">
+            <view catchtap="ReplyName" class="child_list" data-name="{{item2.UserName}}" data-pid="{{item2.ID}}" data-rootid="{{item2.Pid}}" wx:for="{{item1.Childs}}" wx:for-index="index2" wx:for-item="item2" wx:key="{{index2}}">
+                {{item2.UserName}}
+                <text style="color:#616161">回复</text>{{item2.ReplyUserName}}：{{item2.Content}}
+            </view>
+        </view>
+    </view>
+</view>
+<view class="fixed_talk">
+    <view catchtap="ReplyName" class="fixed_talk_c" data-name="楼主" data-pid="0" data-rootid="0">回复楼主</view>
+</view>
+<view wx:if="{{ShowTalk}}">
+    <view class="mask"></view>
+    <view class="fixed_text_box">
+        <view class="text_heade">
+            <button catchtap="CanCle" class="text_cancle">取消</button>
+            <view class="text_mid">回复{{NickName}}</view>
+            <button catchtap="Confire2" class="text_comfire">发送</button>
+        </view>
+        <textarea autoFocus="true" bindconfirm="Confire" bindinput="ValueChange" class="textarea" cursorSpacing="150" fixed="true" focus="true" value="{{postcontent}}"></textarea>
+    </view>
+</view>

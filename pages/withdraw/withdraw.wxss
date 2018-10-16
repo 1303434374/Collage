@@ -1,0 +1,25 @@
+page {
+    background: #fff;
+    font-size: "微软雅黑";
+}
+
+.withdraw_title {
+    width: 92%;
+    padding: 20px 0 0 8%;
+    color: #555;
+    font-size: 16px;
+}
+
+.withdraw_moeny {
+    width: 92%;
+    padding: 10px 0 30px 8%;
+    color: #000;
+    font-size: 30px;
+}
+
+.withdraw_action {
+    width: 100%;
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+}

@@ -1,0 +1,42 @@
+<form bindsubmit="formBindsubmit">
+    <view class="imgcontainer">
+        <image bindtap="goindex" class="close" src="/Image/login/closed.png"></image>
+        <view>
+            <image class="image" mode="scaleToFill" src="/Image/login/login_logo.png"></image>
+        </view>
+    </view>
+    <view class="imgcontainerContent">
+        <view class="w90p mt20 " wx:if="{{status==2}}">
+            <input bindinput="mobile" class="phone-input" maxlength="40" name="account" placeholder="请输入手机号" style="height:36px;" type="number"></input>
+        </view>
+        <view class="w90p mt20 " wx:if="{{status==1}}">
+            <input class="phone-input" maxlength="40" name="account" placeholder="手机/账号" style="height:36px;"></input>
+        </view>
+        <view class="w90p mt20" wx:if="{{status==1}}">
+            <input class="phone-input" maxlength="20" name="password" password="true" placeholder="请输入密码" style="height:36px;"></input>
+        </view>
+        <view class="w90p mt20" wx:if="{{status==2}}">
+            <view class="code_box">
+                <view class="code">
+                    <input maxlength="6" name="mobileCode" placeholder="请输入验证码"></input>
+                </view>
+                <button bindtap="getcode" class="get_code" disabled="{{disabled}}" type="default">
+                    <block wx:if="{{!disabled}}">获取验证码</block>
+                    <block wx:if="{{disabled}}">{{cont}}s后重新获取</block>
+                </button>
+            </view>
+        </view>
+        <view bindtap="getyuyin" class="w90p mt20 text" wx:if="{{status==2}}">
+            收不到短信，试试语音验证码
+        </view>
+        <view class="w90p mt20 ">
+            <button class="color_btn" formType="submit" size="default" type="warn"> {{status==2?'登录/注册':'登录'}}</button>
+        </view>
+        <view class="forget_box">
+            <view bindtap="changeStatus" class="goindex">
+                {{status==1?'手机短信快捷登录':'账号密码登录'}}
+            </view>
+            <view bindtap="forget" class="forget">忘记密码</view>
+        </view>
+    </view>
+</form>
