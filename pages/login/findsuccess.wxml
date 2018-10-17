@@ -1,2 +1,0 @@
-<view class="title">恭喜您密码找回成功！</view>
-<button bindtap="login" class="btn_success color_btn" type="warn">重新登录</button>
