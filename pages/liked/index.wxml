@@ -1,0 +1,32 @@
+<view class="header">
+    <view bindtap="checkmeu" class="header_title " data-status="{{item.status}}" wx:for="{{statusList}}" wx:key="key">
+        <view class="namestyle {{item.status==status?'active':''}}">{{item.name}}</view>
+    </view>
+</view>
+<view class="headerfill"></view>
+<view class="img_list">
+    <view bindtap="imagenavigator" class="img_wrap" data-testId="{{item.ID}}" wx:for="{{list}}" wx:key="key">
+        <view class="img_box">
+            <image class="overimg" src="/Image/pinhuo/JIESHU@3x.png" wx:if="{{item.Statu=='已下架'}}"></image>
+            <image class="bgimg" mode="aspectFill" src="{{item.itemcover}}"></image>
+            <image class="sealout" mode="widthFix" src="/Image/pinhuo/selaout.png" wx:if="{{item.IsSaleOut}}"></image>
+            <image class="videos" mode="widthFix" src="/Image/pinhuo/play.png" wx:if="{{item.HasVideo}}"></image>
+            <image capture-catch:tap="cannelliked" class="liked" data-id="{{item.ID}}" data-index="{{index}}" src="/Image/pinhuo/collect.png" wx:if="{{status==1}}"></image>
+        </view>
+        <view style="display: block;margin-left:10rpx">
+            <view style=" font-size:12px;line-height:20px;text-align: left;overflow:hidden;height:40px;"> {{item.Title}}</view>
+        </view>
+        <view style="margin-left:10rpx;overflow:hidden; ">
+            <text style=" position:relative;font-size:16px;color:#FC3D39;float:left;height:18px;line-height:18px;"> ¥ {{item.Price}}</text>
+            <text style=" position:relative; color:#555; font-size:12px;float:right;height:18px;line-height:18px;" wx:if="{{item.TotalQty>0}}"> 总销量{{item.TotalQty}}件</text>
+        </view>
+        <view>
+            <progress color="#FC3D39" percent="{{item.DealCount/item.ChengTuanCount*100}}" strokeWidth="6" style="margin:10rpx "></progress>
+        </view>
+        <view style="display: block;margin-left:10rpx;font-size:13px;line-height:35rpx;overflow:hidden;text-align:center;">
+            <image mode="scaleToFill" src="/Image/pinhuo/new.png" style="height:35rpx;width:35rpx;display: inline-block;" wx:if="{{item.DisplayStatuID==0&&item.Statu!=='已下架'}}"></image>
+            <image mode="scaleToFill" src="/Image/pinhuo/patch.png" style="height:35rpx;width:35rpx;display: inline-block;" wx:if="{{item.DisplayStatuID==1&&item.Statu!=='已下架'}}"></image>
+            <view style="height:35rpx;display: inline-block;line-height:35rpx;">{{item.Statu=='已下架'?'已下架':item.tips}}</view>
+        </view>
+    </view>
+</view>

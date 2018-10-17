@@ -1,0 +1,13 @@
+<view class="listbox">
+    <view class="listall">
+        <view class="listcommentbox">
+            <view class="line"></view>
+            <view class="listcomment {{idx==0?'first':''}}" wx:for="{{detail}}" wx:for-index="idx" wx:key="key">
+                {{item.Time}}：{{item.Content}}
+                <view class="wcile {{idx==0?'':'bf'}}">
+                    <view class="icile {{idx==0?'':'cile'}}"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

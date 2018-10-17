@@ -1,0 +1,37 @@
+<form bindsubmit="submit">
+    <view class="header_box">
+        <view class="box">
+            <icon size="16" type="search"></icon>
+            <input bindinput="searchKey" name="key" placeholder="按{{placehoder}}名称搜索" type="text" value="{{keyvalue}}"></input>
+            <view class="keylistbox" wx:if="{{listkey.length>0}}">
+                <view bindtap="choosekey" class="keylist" data-key="{{item}}" wx:for="{{listkey}}" wx:key="key">{{item}}</view>
+            </view>
+        </view>
+        <view class="btn">
+            <button formType="submit" type="default">搜索</button>
+        </view>
+        <view class="title">
+            <view class="title_list" wx:for="{{classfity}}" wx:key="{{index}}">
+                <view bindtap="change" class="border {{curNav==item.id?'selected':''}}" data-id="{{item.id}}" data-item="{{item.item}}">{{item.item}}</view>
+            </view>
+        </view>
+    </view>
+    <view style="height:100px;width:100%;"></view>
+</form>
+<view class="title_header">
+    <image src="/Image/search/hot.png"></image>
+    <text>热销{{placehoder}}</text>
+</view>
+<view class="list_box">
+    <view bindtap="select" class="list_list" data-id="{{item}}" wx:if="{{curNav==1}}" wx:for="{{HotBrands}}" wx:key="key">{{item}}</view>
+    <view bindtap="select" class="list_list" data-id="{{item}}" wx:if="{{curNav==3}}" wx:for="{{HotKeywords}}" wx:key="key">{{item}}</view>
+    <view bindtap="select" class="list_list" data-id="{{item}}" wx:if="{{curNav==2}}" wx:for="{{HotCategroys}}" wx:key="key">{{item}}</view>
+</view>
+<view class="title_header">
+    <icon class="list_icon" color="#afb3b9" size="28" type="waiting_circle"></icon>
+    <view class="list_text">最近搜索</view>
+    <image bindtap="clear" class="list_img" src="/Image/search/close.png"></image>
+</view>
+<view class="list_box">
+    <view bindtap="select" class="list_list" data-id="{{item}}" wx:for="{{keyarr}}" wx:key="{{index}}">{{item}}</view>
+</view>

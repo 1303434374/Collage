@@ -1,0 +1,15 @@
+<scroll-view class="left_box" scrollY="true">
+    <view bindtap="click_menu" class="left_list {{index==clid?'left_list_selected':''}}" data-clid="{{index}}" wx:for="{{list}}" wx:key="index">
+        <image class="title_icon" mode="widthFix" src="{{index==clid?item.Cover2:item.Cover}}"></image>
+        <view class="title">{{item.Name}}</view>
+    </view>
+</scroll-view>
+<scroll-view class="right_box" scrollY="true">
+    <view bindtap="goto" class="right_list" data-key="{{item.Name}}" data-rid="{{item.ID}}" data-valueid="{{item.ValueIDS}}" wx:for="{{list[clid].Datas}}" wx:key="index">
+        <image class="img_thum" mode="scaleToFill" src="{{item.Cover}}"></image>
+        <view class="list_text">{{item.Name}}</view>
+    </view>
+    <view class="center" wx:if="{{list[clid].Datas.length==0}}">
+        暂时没有内容
+    </view>
+</scroll-view>

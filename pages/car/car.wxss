@@ -1,0 +1,424 @@
+page {
+    background: #fff;
+}
+
+.title {
+    width: 750rpx;
+    height: 40px;
+    line-height: 40px;
+    background-color: #fafafa;
+    overflow: hidden;
+}
+
+.icon_title {
+    float: left;
+    height: 20px;
+    margin-top: 10px;
+}
+
+.title_text {
+    float: left;
+    height: 40px;
+    color: #000;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.timeout {
+    height: 80rpx;
+    line-height: 80rpx;
+    color: #FC3D39;
+    font-weight: bold;
+    font-size: 28rpx;
+    width: 650rpx;
+    padding-left: 100rpx;
+    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.timeImg {
+    width: 36rpx;
+    height: 36rpx;
+    position: absolute;
+    left: 40rpx;
+    top: 22rpx;
+}
+
+.timecount {
+    display: inline-block;
+    position: absolute;
+    left: 120rpx;
+    top: -80rpx;
+    z-index: 1;
+}
+
+.list_box {
+    background: #f5f5f5;
+    padding: 30rpx 30rpx 24rpx 0;
+    width: 720rpx;
+    overflow: hidden;
+    margin-bottom: 17rpx;
+    position: relative;
+    z-index: 1;
+}
+
+.icon_checkbox {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+.checkbox {
+    width: 94rpx;
+    height: 164rpx;
+    float: left;
+    position: relative;
+}
+
+.logo_pic {
+    width: 164rpx;
+    height: 164rpx;
+    float: left;
+    border-radius: 10rpx;
+    overflow: hidden;
+    position: relative;
+}
+
+.logo_pic image {
+    width: 164rpx;
+    height: 164rpx;
+    border-radius: 10rpx;
+}
+
+.drag_false {
+    width: 164rpx;
+    height: 164rpx;
+    position: absolute;
+    left: 0;
+    top: 0;
+    line-height: 164rpx;
+    text-align: center;
+    color: #fff;
+    z-index: 13;
+}
+
+.lose {
+    position: absolute;
+    left: 94rpx;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.4);
+    z-index: 12;
+}
+
+.content_box {
+    float: right;
+    width: 450rpx;
+    overflow: hidden;
+}
+
+.title_msg {
+    width: 320rpx;
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 26rpx;
+    color: #292929;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+}
+
+.total_mun {
+    height: 40rpx;
+    line-height: 40rpx;
+    font-size: 26rpx;
+    color: #FC3D39;
+    float: right;
+}
+
+.size_box {
+    width: 430rpx;
+    min-height: 96rpx;
+    padding: 10rpx;
+    background-color: #fff;
+    border-radius: 10rpx;
+    font-size: 24rpx;
+    color: #646464;
+    float: left;
+    margin-top: 10rpx;
+}
+
+.pirce_btn_box {
+    padding-top: 20rpx;
+    float: left;
+    width: 624rpx;
+    padding-left: 94rpx;
+    overflow: hidden;
+    font-size: 28rpx;
+}
+
+.price_t {
+    float: left;
+    color: #FC3D39;
+}
+
+.btn_r {
+    float: right;
+    background-color: #fff;
+    font-size: 28rpx;
+}
+
+.footer {
+    height: 94px;
+    width: 100%;
+    position: relative;
+}
+
+.ads_box {
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding: 5px 4%;
+    bottom: 48px;
+    height: 24px;
+    background-color: #FFFBCC;
+    font-size: 14px;
+    color: #333333;
+    z-index: 100;
+    text-align: center;
+}
+
+.footer_box {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    height: 48px;
+    width: 100%;
+    background: #f5f5f5;
+    z-index: 100;
+}
+
+.icon_all_check {
+    float: left;
+    height: 48px;
+    padding: 0 15rpx;
+}
+
+.icon_all {
+    height: 20px;
+    float: left;
+    margin-top: 14px;
+}
+
+.total {
+    float: left;
+    height: 40px;
+    padding-top: 5px;
+}
+
+.total_b {
+    height: 24px;
+    line-height: 24px;
+    font-size: 18px;
+    color: #000;
+    font-weight: bold;
+    padding-top: 7px;
+}
+
+.freight {
+    height: 18px;
+    line-height: 18px;
+    font-size: 12px;
+    color: #727272;
+}
+
+.account,.delete {
+    height: 48px;
+    line-height: 48px;
+    background: #FC3D39;
+    color: #fff;
+    text-align: center;
+    float: right;
+    font-size: 14px;
+}
+
+.account {
+    width: 90px;
+}
+
+.delete {
+    background-color: #f5f5f5;
+    color: #c2c2c2;
+    padding: 0 10px;
+}
+
+.empty {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #fff;
+}
+
+.empty_content {
+    position: fixed;
+    width: 100%;
+    color: #5d5d5d;
+    font-size: 14px;
+    text-align: center;
+    top: 30%;
+}
+
+.drag {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 999;
+}
+
+.box {
+    position: fixed;
+    bottom: -80%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    z-index: 1000;
+}
+
+.popcontainer {
+    width: 100%;
+    display: flex;
+}
+
+.modeimg {
+    height: 150rpx;
+    width: 150rpx;
+    margin-left: 30rpx;
+    margin-right: 30rpx;
+    margin-top: 10rpx;
+}
+
+.commodity_attr_list {
+    background: #fff;
+    padding: 0 20rpx;
+    font-size: 26rpx;
+    overflow: hidden;
+    width: 100%;
+}
+
+.attr_value {
+    float: left;
+    padding: 10rpx 10rpx;
+    margin: 0 10rpx 10rpx;
+    border-radius: 10rpx;
+    border: 1rpx solid #ececec;
+}
+
+.attr_value_active {
+    background: #FC3D39;
+    border-radius: 10rpx;
+    color: #fff;
+    padding: 10rpx 10rpx;
+}
+
+.attr_value_disabled {
+    background: #ececec;
+}
+
+.detailcontainer {
+    width: 100%;
+    height: 60rpx;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    margin-top: 20rpx;
+}
+
+.bggrey {
+    background: #f1f1f1;
+}
+
+.flex {
+    flex: 1;
+    text-align: center;
+}
+
+.detailcontainer_item {
+    width: 100%;
+    height: 60rpx;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    margin-top: 4rpx;
+}
+
+.stepper {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    height: 26px;
+    margin: 0 auto;
+}
+
+.stepper text {
+    width: 19px;
+    line-height: 26px;
+    text-align: center;
+    float: left;
+}
+
+.stepper input {
+    color: black;
+    float: left;
+    margin: 0 auto;
+    width: 30px;
+    height: 26px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.stepper .normal {
+    color: black;
+}
+
+.stepper .disabled {
+    color: #ccc;
+}
+
+.stepper .num2 {
+    width: 40px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.choose {
+    width: 95%;
+    padding: 2rpx;
+    font-size: 15px;
+    min-height: 150rpx;
+    max-height: 200rpx;
+    border: 1rpx solid #FC3D39;
+    color: #FC3D39;
+}
+
+.bgred {
+    background: #FC3D39;
+}
+
+.wd3 {
+    width: 33.33%;
+    text-align: center;
+}

@@ -1,0 +1,15 @@
+<view class="list_box" wx:for="{{detail}}" wx:for-index="idx1" wx:for-item="item1" wx:key="idx1">
+    <view class="logo_pic">
+        <image mode="aspectFill" src="{{item1.Cover}}"></image>
+    </view>
+    <view class="content_box">
+        <view class="title_msg">{{item1.Name}}</view>
+        <view class="total_mun">共{{item1.TotalQty}}件</view>
+        <view class="size_box">
+            <view wx:for="{{item1.colorList}}" wx:for-index="idx2" wx:for-item="item2" wx:key="idx2">
+                {{item2.color}}：{{item2.msg}}；
+            </view>
+        </view>
+    </view>
+    <view class="pirce_btn_box">￥{{item1.Price}}</view>
+</view>

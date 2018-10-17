@@ -1,0 +1,23 @@
+<view class="header">
+    <view bindtap="checkmeu" class="header_title {{statuID==-1?'active':''}}" data-status="-1">全部</view>
+    <view bindtap="checkmeu" class="header_title {{statuID==1?'active':''}}" data-status="1">待处理</view>
+    <view bindtap="checkmeu" class="header_title {{statuID==2?'active':''}}" data-status="2">已处理</view>
+</view>
+<view style="height:50px;width:750rpx;"></view>
+<view class="goodlist" wx:for="{{list}}" wx:key="key">
+    <view class="detail_title">
+        <view class="order_detail_num">商品单号：{{item.OrderCode}}</view>
+        <view class="status">{{item.ResultTypeName}}</view>
+    </view>
+    <view bindtap="detail" class="img_box">
+        <image class="detail_img" mode="aspectFill" src="{{item.Cover}}"></image>
+        <view class="detail_content">
+            <view class="title">{{item.Name}}</view>
+            <view class="total_money">￥{{item.Price}}</view>
+            <view class="total_money total_num">共登记{{item.Qty}}件</view>
+        </view>
+        <view class="btn_box">
+            {{item.OrderText}}
+        </view>
+    </view>
+</view>

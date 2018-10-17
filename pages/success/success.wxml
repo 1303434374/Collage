@@ -1,0 +1,16 @@
+<view class="header">
+    <image class="success_img" src="/Image/my/paySuccess@3x.png"></image>
+    <view class="right_title">
+        <view class="title">支付金额：<text style="color:#ff431c">{{money}}</text>
+        </view>
+        <view class="title">支付方式：<text style="color:#ff431c">{{payway}}</text>
+        </view>
+    </view>
+</view>
+<view class="btn_box">
+    <navigator openType="switchTab" url="/pages/nahuomain/main">
+        <button class="btn_add" type="default"> 继续拼货</button>
+    </navigator>
+</view>
+<view class="warn">查看订单：我的 -> 查看全部订单</view>
+<view class="warn">注意如果订货单未刷新，请一到两分钟后重试</view>

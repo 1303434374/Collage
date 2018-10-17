@@ -1,0 +1,67 @@
+<template name="login">
+    <view class="drag_box"></view>
+    <view class="login_box">
+        <form bindsubmit="login_submit" wx:if="{{globalData.status==1}}">
+            <view class="close">
+                <icon bindtap="closelogin" size="24" type="clear"></icon>
+            </view>
+            <view class="login_title">
+                <view bindtap="changetitle" class="title_btn {{globalData.curNav==index?'title_btn_select':''}}" data-id="{{index}}" wx:for="{{globalData.arrNav}}" wx:key="{{index}}">
+                        {{item}}
+                    </view>
+            </view>
+            <view class="login_key">
+                <input bindinput="key_mobile" class="phone" name="phone" placeholder="请输入手机号" type="text"></input>
+            </view>
+            <view class="login_key" wx:if="{{globalData.flag2}}">
+                <input class="code" name="code" placeholder="请输入验证码" type="text"></input>
+                <button bindtap="login_code" class="btn_code" disabled="{{!globalData.disabled}}" type="default">
+                    <block wx:if="{{globalData.disabled}}">获取验证码</block>
+                    <block wx:if="{{!globalData.disabled}}">{{globalData.cont}}s后重新获取</block>
+                </button>
+            </view>
+            <view class="login_key">
+                <input class="password" name="password" password="{{globalData.flag3}}" placeholder="请输入6-12位密码" type="text"></input>
+                <image bindtap="eyecheck" class="eye" src="/Image/login/eye.png"></image>
+            </view>
+            <button class="login_btn" formType="submit" type="default">
+                <block wx:if="{{globalData.curNav==0}}">登录</block>
+                <block wx:if="{{globalData.curNav==1}}">注册</block>
+            </button>
+            <view bindtap="ChangeStatus" class="login_key login_text">
+                手机短信快捷登录
+            </view>
+        </form>
+        <form bindsubmit="fast_submit" wx:if="{{globalData.status==2}}">
+            <view class="close">
+                <icon bindtap="closelogin" size="24" type="clear"></icon>
+            </view>
+            <view class="login_title">
+                <view class="title_btn title_btn_select codemsg">
+                    短信快捷登录
+                </view>
+            </view>
+            <view class="code_text">若您之前未注册过该手机号，登录时将自动注册并登录</view>
+            <view class="login_key">
+                <input bindinput="key_mobile" class="phone" name="phone" placeholder="请输入手机号" type="text"></input>
+            </view>
+            <view class="login_key">
+                <input class="code" name="code" placeholder="请输入验证码" type="text"></input>
+                <button bindtap="GetCode" class="btn_code" data-id="1" disabled="{{!globalData.disabled2}}" type="default">
+                    <block wx:if="{{globalData.disabled2}}">获取验证码</block>
+                    <block wx:if="{{!globalData.disabled2}}">{{globalData.cont2}}s后重新获取</block>
+                </button>
+            </view>
+            <view bindtap="GetCode" class="login_key" data-id="2" style="color:#1296db;border:none;padding-top:10px;padding-bottom:10px;font-size:22rpx;">
+                收不到短信，试试语音验证码
+            </view>
+            <button class="login_btn fastlogin" formType="submit" type="default">
+                登录
+            </button>
+            <view bindtap="ChangeStatus" class="login_key login_text">
+                账号密码登录/注册
+            </view>
+        </form>
+    </view>
+</template>
+>

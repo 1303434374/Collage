@@ -1,0 +1,157 @@
+<view class="addresstitle">
+    <view>
+        <image src="/Image/pinhuo/shxx3.png" style="width:40rpx;height:40rpx;margin-top:5rpx;margin-left:30rpx"></image>
+    </view>
+    <view>
+        <text style="font-size:15px;margin-left:30rpx">收货地址{{indexss}}</text>
+    </view>
+</view>
+<view bindtap="navaddress" class="addressbox">
+    <view bindtap="navaddress">
+        <text style="font-size:13px;margin-left:30rpx;font-weight:900;">{{postinfo.RealName}}</text>
+        <text style="font-size:13px;margin-left:30rpx;font-weight:900;">{{postinfo.Mobile}}</text>
+    </view>
+    <view bindtap="navaddress">
+        <text style="font-size:13px;margin-left:30rpx">{{postinfo.Area}}</text>
+        <text style="font-size:13px;margin-left:30rpx;font-weight:900;">{{postinfo.Address}}</text>
+    </view>
+    <image class="bar" src="/Image/pinhuo/bar.png"></image>
+</view>
+<view bindtap="usedcoupon" class="coupon_use_box bgf" wx:if="{{Coupons.length!==0}}">
+    <view class="coupon_use">优惠券</view>
+    <view capture-catch:tap="ShowInfo" class="info" data-content="{{CouponsNotice}}" data-title="如何获得更多优惠券">
+        <image src="/Image/login/i.png"></image>
+    </view>
+    <view class="coupon_use_num {{Coupons.length==0?'':'coupon_used_num'}}">
+        <block wx:if="{{Coupons.length==0}}">无可用</block>
+        <block wx:else>{{Coupons.length}}张可用</block>
+    </view>
+    <view class="coupon_use_title">
+        <block wx:if="{{use_coupon_obj.Type}}">{{use_coupon_obj.Type}}:-{{use_coupon_obj.Discount}}</block>
+        <text style="color:#aaaaaa;"> ></text>
+    </view>
+</view>
+<view bindtap="kdway" class="coupon_use_box bgf">
+    <view class="coupon_use">配送方式</view>
+    <view capture-catch:tap="ShowInfo" class="info" data-content="{{ShipSettingNotice}}" data-title="配送说明">
+        <image src="/Image/login/i.png"></image>
+    </view>
+    <view class="coupon_use_title">{{typeid==2?'物流':'快递'}}<text style="color:#aaaaaa;"> ></text>
+    </view>
+</view>
+<view bindtap="fhway" class="coupon_use_box bgf">
+    <view class="coupon_use">发货方式</view>
+    <view capture-catch:tap="ShowInfo" class="info" data-content="{{ShipApplyNotice}}" data-title="发货说明">
+        <image src="/Image/login/i.png"></image>
+    </view>
+    <view class="coupon_use_title">{{ShipApply.Desc}}<text style="color:#aaaaaa;"> ></text>
+    </view>
+</view>
+<view style="border-bottom:1px solid #fff;" wx:for="{{info}}" wx:for-index="attrIndex" wx:for-item="attrValueObj" wx:key="{{index}}">
+    <view class="bgf" style="height:80rpx;display:flex; flex-direction:row;align-items:center">
+        <view>
+            <image src="/Image/pinhuo/dp3.png" style="width:40rpx;height:40rpx;margin-top:5rpx;margin-left:30rpx"></image>
+        </view>
+        <view>
+            <text style="font-size:15px;margin-left:30rpx">{{attrValueObj.Name}}</text>
+        </view>
+    </view>
+    <view bindtap="detail" class="pic_box" data-item="{{attrValueObj.Items}}">
+        <view class="detail_pic">
+            <image class="imgList" mode="aspectFill" src="{{item.Cover}}" wx:for="{{attrValueObj.Items}}" wx:key="key"></image>
+        </view>
+        <view class="totalmun">共{{attrValueObj.TotalQty}}件></view>
+    </view>
+</view>
+<view animation="{{animationData1}}" bindtap="showhide" class="fee_box">
+    <view class="feelist">
+        <view class="feetitle">商品金额</view>
+        <view class="feeprice">{{TotalProductAmount}}</view>
+    </view>
+    <view class="feelist">
+        <view class="feetitle">预付运费（多退少补）</view>
+        <view class="feeprice">{{TotalOriPostFeeAmount}}</view>
+    </view>
+    <view class="weight">{{TotalWeight}}</view>
+    <view class="feelist" wx:if="{{ProductDiscount}}">
+        <view class="feetitle">商品优惠</view>
+        <view class="feeprice">{{ProductDiscount}}</view>
+    </view>
+    <view class="feelist" wx:if="{{PostfeeDiscount}}">
+        <view class="feetitle">运费减免</view>
+        <view class="feeprice">{{PostfeeDiscount}}</view>
+    </view>
+</view>
+<view class="bgf footfixed">
+    <view style="float:right;">
+        <button bindtap="orderSubmit" class="bgred" style="width:200rpx;height:100rpx;border-radius:0px;">
+            <text style="color:#fff;font-size:14px;">提交订单</text>
+        </button>
+    </view>
+    <view style="float:left;">
+        <View style="margin-top:30rpx;margin-left:20rpx;font-size:30rpx;">实付金额
+            <text style="color:#FC3D39;font-weight:900;">¥{{money}}</text>
+        </View>
+    </view>
+    <view bindtap="showhide" class="showlist" hidden="{{showhide}}">费用详情</view>
+</view>
+<view class="action_drag" wx:if="{{coupon_flag}}"></view>
+<view animation="{{animationData}}" class="action_foot">
+    <view class="action_coupon_title">
+        <view capture-catch:tap="cannel" class="coupon_cannel">
+            <icon color="" style="margin-top:10px;" type="clear"></icon>
+        </view>
+        <view class="action_coupon">{{status?'优惠券':'配送方式'}}</view>
+        <view capture-catch:tap="comfirm" class="coupon_confirm">确定</view>
+    </view>
+    <scroll-view scrollY="true" style="height:276px;width:94%;padding:0 3%;">
+        <view capture-catch:tap="checkcoupon" class="coupon_list" data-id="{{item.ID}}" data-index="{{index}}" wx:if="{{status}}" wx:for="{{Coupons}}" wx:key="{{index}}">
+            <image class="img_left" src="/Image/pinhuo/coupon_red.png"></image>
+            <view class="list_left status_0">
+                <view class="coupon_discount">{{item.Discount}}</view>
+                <view class="coupon_condition">{{item.Condition}}</view>
+            </view>
+            <view class="list_right">
+                <view class="coupon_title">{{item.Title}}</view>
+                <view class="coupon_limit_summary">{{item.LimitSummary}}</view>
+                <view class="coupon_limit_time">有效期：{{item.FromTime}} 到 {{item.ToTime}}</view>
+            </view>
+            <image class="img_right" src="/Image/pinhuo/coupon_white.png"></image>
+            <icon class="icon_type" type="{{item.seclted?'success_circle':'circle'}}"></icon>
+        </view>
+        <view capture-catch:tap="logistics" class="shiplist" data-index="{{index}}" data-isdefault="{{item.IsDefault}}" wx:if="{{!status}}" wx:for="{{ShipSetting}}" wx:key="key">
+            <view class="shiptitle">{{item.Name}}</view>
+            <view class="shipcontent">
+                <view class="content">{{item.Description}}</view>
+            </view>
+            <view class="shipicon">
+                <icon class="icon_type" type="{{item.IsDefault?'success_circle':'circle'}}"></icon>
+            </view>
+        </view>
+    </scroll-view>
+</view>
+<view class="fhbox" hidden="{{!fhbool}}">
+    <form bindsubmit="subData">
+        <view class="fh_title">
+            发货方式
+            <icon bindtap="close" class="clearimg" size="18" type="clear"></icon>
+        </view>
+        <radio-group bindchange="changeData" style="overflow:hidden;padding-left:10%;">
+            <label wx:for="{{ApplyTypeList}}" wx:key="key">
+                <view class="fh_list">
+                    <radio checked="{{item.IsSelected}}" class="radiosize" value="{{item.TypeID}}"></radio>
+                    <view class="fh_text" wx:if="{{item.split}}">{{item.Desc}}</view>
+                    <block wx:if="{{!item.split}}">
+                        <view class="text_left">{{item.firstText}}</view>
+                        <view class="inputnum">
+                            <input data-max="{{item.Max}}" data-min="{{item.Min}}" name="type{{item.TypeID}}" type="number"></input>
+                        </view>
+                        <view class="text_right">{{item.lasttText}}</view>
+                    </block>
+                </view>
+            </label>
+        </radio-group>
+        <view class="fh_info">{{selecteData.Summary}}</view>
+        <button class="submit" formType="submit" size="mini" type="primary">提交</button>
+    </form>
+</view>

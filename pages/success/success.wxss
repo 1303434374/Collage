@@ -1,0 +1,44 @@
+.header {
+    width: 100%;
+    padding-top: 200rpx;
+    overflow: hidden;
+}
+
+.success_img {
+    width: 165px;
+    height: 165px;
+    float: left;
+    margin-left: 6%;
+}
+
+.right_title {
+    padding-top: 60px;
+    float: left;
+}
+
+.title {
+    width: 100%;
+    height: 28px;
+    color: #000;
+    line-height: 28px;
+    font-size: 14px;
+}
+
+.btn_box {
+    width: 100%;
+    overflow: hidden;
+}
+
+.btn_add {
+    width: 80%;
+    float: left;
+    margin-left: 10%;
+}
+
+.warn {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #bfbfbf;
+    margin-top: 16px;
+}

@@ -1,0 +1,85 @@
+<scroll-view bindscroll="bindscroll" bindscrolltolower="loadMore" scrollY="true" style="height: {{stop}}px;">
+    <view id="header" style="position:relative;background:#fff;">
+        <image mode="widthFix" src="{{Cover}}" style="width:100%;" wx:if="{{Cover}}"></image>
+        <view class="dktitle" wx:if="{{Title}}">{{Title}}</view>
+        <view class="Summary" wx:if="{{Summary}}">{{Summary}}</view>
+        <view class="filled"></view>
+        <view class="fiter_box {{fiter_fixed?'fixed_search':''}}" wx:if="{{SortMenus.length>0}}">
+            <view bindtap="bindsearch" class="filter_list {{sort==item.Value?'red':''}} {{item.Value==20&&shino?'red':''}}" data-id="{{item.Value}}" wx:if="{{item.selected}}" wx:for="{{SortMenus}}" wx:key="key">
+                {{item.Title}}
+            </view>
+        </view>
+    </view>
+    <view class="img_list" wx:if="{{newlist.length>0}}">
+        <view bindtap="imagenavigator" class="img_wrap" data-testId="{{item.ID}}" wx:for="{{newlist}}" wx:key="key">
+            <view class="img_box">
+                <image class="overimg" src="/Image/pinhuo/JIESHU@3x.png" wx:if="{{item.Statu=='已下架'}}"></image>
+                <image class="bgimg imglist" mode="aspectFill" src="{{item.itemcover}}"></image>
+                <image class="sealout" mode="widthFix" src="/Image/pinhuo/selaout.png" wx:if="{{item.IsSaleOut}}"></image>
+                <image class="videos" mode="widthFix" src="/Image/pinhuo/play.png" wx:if="{{item.HasVideo}}"></image>
+            </view>
+            <view style="display: block;margin-left:10rpx">
+                <view style=" font-size:12px;line-height:20px;text-align: left;overflow:hidden;height:40px;"> {{item.Title}}</view>
+            </view>
+            <view style="margin-left:10rpx;overflow:hidden; ">
+                <text style=" position:relative;font-size:16px;color:#FC3D39;float:left;height:18px;line-height:18px;"> ¥ {{item.Price}}</text>
+                <text style=" position:relative; color:#555; font-size:12px;float:right;height:18px;line-height:18px;" wx:if="{{item.TotalQty>0}}"> 总销量{{item.TotalQty}}件</text>
+            </view>
+            <view>
+                <progress color="#f97b7c" percent="{{item.DealCount/item.ChengTuanCount*100}}" strokeWidth="6" style="margin:10rpx "></progress>
+            </view>
+            <view style="display: block;margin-left:10rpx;font-size:13px;line-height:20px;height:20px;overflow:hidden;text-align:center;">
+                <image mode="scaleToFill" src="/Image/pinhuo/new.png" style="height:20px;width:20px;display: inline-block;float:left;" wx:if="{{item.DisplayStatuID==0&&item.Statu!=='已下架'}}"></image>
+                <image mode="scaleToFill" src="/Image/pinhuo/patch.png" style="height:20px;width:20px;display: inline-block;float:left;" wx:if="{{item.DisplayStatuID==1&&item.Statu!=='已下架'}}"></image>
+                <view style="color:#555;margin-left:4px;height:20px;display: inline-block;line-height:20px;{{item.Statu=='已下架'?'':'float:left'}};">{{item.Statu=='已下架'?'已下架':item.tips}}</view>
+            </view>
+        </view>
+    </view>
+    <view class="img_list" wx:if="{{passlist.length>0}}">
+        <view class="passtitle">往期好货</view>
+        <view bindtap="imagenavigator" class="img_wrap" data-testId="{{item.ID}}" wx:for="{{passlist}}" wx:key="key">
+            <view class="img_box">
+                <image class="overimg" src="/Image/pinhuo/JIESHU@3x.png" wx:if="{{item.Statu=='已下架'}}"></image>
+                <image class="bgimg" mode="aspectFill" src="{{item.itemcover}}"></image>
+                <image class="sealout" mode="widthFix" src="/Image/pinhuo/selaout.png" wx:if="{{item.IsSaleOut}}"></image>
+                <image class="videos" mode="widthFix" src="/Image/pinhuo/play.png" wx:if="{{item.HasVideo}}"></image>
+            </view>
+            <view style="display: block;margin-left:10rpx">
+                <view style=" font-size:12px;line-height:20px;text-align: left;overflow:hidden;height:40px;"> {{item.Title}}</view>
+            </view>
+            <view style="margin-left:10rpx;overflow:hidden; ">
+                <text style=" position:relative;font-size:16px;color:#FC3D39;float:left;height:18px;line-height:18px;"> ¥ {{item.Price}}</text>
+                <text style=" position:relative; color:#555; font-size:12px;float:right;height:18px;line-height:18px;" wx:if="{{item.TotalQty>0}}"> 总销量{{item.TotalQty}}件</text>
+            </view>
+        </view>
+    </view>
+    <view style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;" wx:if="{{hasmore}}">
+        <text class="wx-text_id0VJj">加载更多数据...</text>
+    </view>
+</scroll-view>
+<view bindtap="canneled" class="mask" wx:if="{{mask}}"></view>
+<scroll-view animation="{{animationData1}}" class="grid" scrollY="true">
+    <view class="grid_list">
+        <block wx:for="{{grid}}" wx:for-index="idx1" wx:for-item="item1" wx:key="key1">
+            <view class="grid_title">
+                <view class="title_name">{{item1.Name}}</view>
+                <view bindtap="choose" class="title_method" data-index="{{idx1}}" wx:if="{{item1.Panels.length>6&&item1.TypeID!==3}}">{{item1.choose?'∧':'∨'}}</view>
+                <view bindtap="choose" class="title_method" data-index="{{idx1}}" wx:if="{{item1.Panels.length>3&&item1.TypeID==3}}">{{item1.choose?'∧':'∨'}}</view>
+            </view>
+            <view class="grid_list_box {{item1.choose?'heightauto':''}}">
+                <view class="input_min" wx:if="{{item1.TypeID==3}}">
+                    <input name="MinPrice" placeholder="￥最低价格" type="number" value="{{MinPrice}}"></input>
+                </view>
+                <view class="center" wx:if="{{item1.TypeID==3}}">至</view>
+                <view class="input_min" wx:if="{{item1.TypeID==3}}">
+                    <input name="MaxPrice" placeholder="￥最高价格" type="number" value="{{MaxPrice}}"></input>
+                </view>
+                <view bindtap="selected" class="list_grid {{item2.selected?'b_c_r':''}}" data-parent="{{item1.selected}}" data-pindex="{{idx1}}" data-sindex="{{idx2}}" data-son="{{item2.selected}}" wx:for="{{item1.Panels}}" wx:for-index="idx2" wx:for-item="item2" wx:key="key2">{{item2.Name}}</view>
+            </view>
+        </block>
+    </view>
+</scroll-view>
+<view animation="{{animationData1}}" class="grid_bottom">
+    <button bindtap="canneled1" class="c_grid">筛选清除</button>
+    <button bindtap="comfire" class="s_grid">确定</button>
+</view>

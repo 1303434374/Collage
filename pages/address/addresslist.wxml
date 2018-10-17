@@ -1,0 +1,26 @@
+<view class="list_address_box">
+    <view class="address_box" wx:for="{{arrlist}}" wx:key="{{index}}">
+        <view bindtap="navclick" class="address_left" data-Address="{{item.Address}}" data-Area="{{item.Area}}" data-AreaID="{{item.AreaID}}" data-Mobile="{{item.Mobile}}" data-RealName="{{item.RealName}}" data-id="{{item.ID}}">
+            <view class="address_title">
+                <text class="name">{{item.RealName}}</text>
+                <text class="phone">{{item.Mobile}}</text>
+                <text class="normal" wx:if="{{item.IsDefault}}">[默认]</text>
+            </view>
+            <view class="address_title">
+                {{item.Area}}
+            </view>
+            <view class="address_title">
+                {{item.Address}}
+            </view>
+        </view>
+        <view class="right">
+            <view>
+                <image bindtap="revamp" data-Address="{{item.Address}}" data-Area="{{item.Area}}" data-AreaID="{{item.AreaID}}" data-Mobile="{{item.Mobile}}" data-RealName="{{item.RealName}}" data-id="{{item.ID}}" src="/Image/search/repair.png"></image>
+            </view>
+            <view style="margin-top:20px;">
+                <image bindtap="del" data-id="{{item.ID}}" src="/Image/search/cancel.png"></image>
+            </view>
+        </view>
+    </view>
+</view>
+<button bindtap="navadd" class="add_btn" type="primary">添加</button>

@@ -1,0 +1,130 @@
+page {
+    background-color: #efeff4;
+}
+
+.header {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 250rpx;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50rpx;
+}
+
+.user_img {
+    border-radius: 128rpx;
+    width: 128rpx;
+    height: 128rpx;
+}
+
+.nickname {
+    margin-top: 20rpx;
+    font-size: 38rpx;
+    color: #fff;
+}
+
+.nav {
+    width: 100%;
+    padding: 10px 0;
+    background: #efeff4;
+}
+
+.box {
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #c8c7cc;
+    border-bottom: 1px solid #c8c7cc;
+    overflow: hidden;
+}
+
+.title {
+    float: left;
+    margin-left: 4%;
+    height: 44px;
+    line-height: 44px;
+    color: #000;
+    font-size: 14px;
+}
+
+.skip {
+    float: right;
+    margin-right: 4%;
+    height: 44px;
+    line-height: 44px;
+    color: #ababab;
+    font-size: 14px;
+}
+
+.nav_list {
+    float: left;
+    width: 96%;
+    margin-left: 4%;
+    height: 60px;
+    border-top: 1px solid #c8c7cc;
+    padding: 16rpx 0;
+}
+
+.point {
+    font-size: 14px;
+    color: #fff;
+    padding: 5px 0;
+}
+
+.nav_title {
+    float: left;
+    width: 20%;
+    height: 60px;
+    font-size: 12px;
+    text-align: center;
+    color: #555;
+}
+
+.nav_img {
+    display: block;
+    margin: 3px auto;
+    width: 28px;
+    height: 28px;
+}
+
+.btn_list {
+    width: 100%;
+    height: 45px;
+    line-height: 44px;
+    background-color: #fff;
+}
+
+.btn_box {
+    width: 96%;
+    margin-left: 4%;
+    height: 44px;
+    border-bottom: 1px solid #c8c7cc;
+    overflow: hidden;
+}
+
+.icon {
+    float: left;
+    height: 44px;
+    margin-left: 10px;
+}
+
+.icon image {
+    width: 48px;
+    height: 44px;
+}
+
+button.btn_kf {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+button.btn_kf::after {
+    border: none;
+}
