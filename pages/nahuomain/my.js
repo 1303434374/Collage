@@ -67,10 +67,10 @@ Page({
         wx.getStorageSync("token") && t.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
             t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
             wx.setTabBarBadge({
-                index: 3,
+                index: 2,
                 text: t.Data.CartItemQty
             })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
-                index: 2
+                index: 9
             }));
         }, "GET");
     },
