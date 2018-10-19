@@ -19,6 +19,7 @@ Page({
         CarNum: 0
     },
     onLoad: function(t) {
+        console.log(t)
         var a = decodeURIComponent(t.scene);
         a && a.split("&").map(function(a) {
             "i" == a.slice(0, 1) ? t.id = a.slice(1) : "k" == a.slice(0, 1) ? t.key = a.slice(1) : "t" == a.slice(0, 1) && (t.tag = a.slice(1));
@@ -37,13 +38,20 @@ Page({
     },
     onShow: function() {},
     onReady: function() {
+        console.log(this.data.obj)
         this.init(this.data.options, this.data.obj);
     },
+    //获取商品详情
     init: function(o, n) {
         var l = this;
         t.showLoading("页面加载中..."), a.httppost("pinhuoitem/detail2", n, function(n) {
+<<<<<<< HEAD
           console.log('详细商品中');
           console.log(n);
+=======
+            console.log('商品详情=')
+            console.log(n)
+>>>>>>> bd10d55a9187dd9f6b0256f39338dff568121f08
             o.key && a.httppostmore("shop/wx/SaveWxItemStatistics", {
                 Key: o.key,
                 OpenID: wx.getStorageSync("openid"),
@@ -110,6 +118,7 @@ Page({
             });
         }, "GET");
     },
+    //收藏功能
     collect: function() {
         var e = this;
         this.data.flagdrag ? this.data.IsFavorite ? (t.showLoading("取消收藏"), a.httppost("shop/agent/RemoveItemFromMyFavorite", {
@@ -136,6 +145,7 @@ Page({
             globalData: this.data.globalData
         }));
     },
+    //预览图片
     loadimg: function(t) {
         var a = t.target.dataset.src, e = [];
         this.data.newimages.map(function(t) {
@@ -145,11 +155,13 @@ Page({
             urls: e
         });
     },
+    //点击左下图标
     itemPick: function(t) {
         "收藏" == t.currentTarget.dataset.action ? this.collect() : "拿货车" == t.currentTarget.dataset.action ? wx.switchTab({
             url: "/pages/car/car"
         }) : "首页" == t.currentTarget.dataset.action && this.home();
     },
+
     addcar: function(t) {
         this.data.flagdrag ? this.setData({
             actionSheetHidden: !this.data.actionSheetHidden,
@@ -158,6 +170,7 @@ Page({
             globalData: this.data.globalData
         }));
     },
+    //点击拿货
     actionSheetTap: function(t) {
         var a = this;
         return "已下架" != t.currentTarget.dataset.action && (wx.getStorageSync("token") ? void (t.currentTarget.dataset.my && (a.data.flagdrag ? a.setData({
@@ -241,6 +254,7 @@ Page({
             });
         }
     },
+    //加入拿货车
     addcarnext: function(e) {
         var s = this;
         if (s.data.IsJiesuan) {
