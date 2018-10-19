@@ -65,12 +65,6 @@
                 "selectedIconPath": "Image/login/classify_selected.png"
             },
             {
-                "pagePath": "pages/xiaozu/list",
-                "text": "约拼",
-                "iconPath": "Image/login/yp.png",
-                "selectedIconPath": "Image/login/yp_selected.png"
-            },
-            {
                 "pagePath": "pages/car/car",
                 "text": "拿货车",
                 "iconPath": "Image/login/gouwuche.png",

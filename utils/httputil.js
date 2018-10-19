@@ -20,11 +20,12 @@ module.exports = {
                     url: "/pages/login/login"
                 }); else {
                     if (500 != t.statusCode) return "answer_not_match" == t.data.Code || "not_enouth_stock" == t.data.Code || "password_error" == t.data.Code || "登录过于频繁，请稍后再试" == t.data.Message || "user_no_exist" == t.data.Code || "unknow_error" == t.data.Code || "10001" == t.data.Code ? (wx.hideToast(), 
-                    wx.showModal({
-                        title: "提示",
-                        content: t.data.Message,
-                        showCancel: !1
-                    }), !1) : (wx.showModal({
+                    // wx.showModal({
+                    //     title: "提示",
+                    //     content: t.data.Message,
+                    //     showCancel: !1
+                    // }), 
+                    !1) : (wx.showModal({
                         title: "提示",
                         content: t.data.Message,
                         showCancel: !1,
@@ -35,15 +36,15 @@ module.exports = {
                         }
                     }), !1);
                     wx.showToast({
-                        title: "获取信息失败，请重新登录",
-                        icon: "success"
+                        title: "获取数据失败",
+                        icon: "none"
                     });
                 }
             },
             fail: function(t) {
                 wx.showToast({
-                    title: "网络超时，请重试",
-                    icon: "success",
+                    title: "网络超时请重试",
+                    icon: "none",
                     mask: !0
                 });
             },
@@ -69,11 +70,12 @@ module.exports = {
                     url: "/pages/login/login"
                 }); else {
                     if (500 != t.statusCode) return "answer_not_match" == t.data.Code || "not_enouth_stock" == t.data.Code || "password_error" == t.data.Code || "登录过于频繁，请稍后再试" == t.data.Message || "user_no_exist" == t.data.Code || "unknow_error" == t.data.Code || "10001" == t.data.Code ? (wx.hideToast(), 
-                    wx.showModal({
-                        title: "提示",
-                        content: t.data.Message,
-                        showCancel: !1
-                    }), !1) : (wx.showModal({
+                    // wx.showModal({
+                    //     title: "提示",
+                    //     content: t.data.Message,
+                    //     showCancel: !1
+                    // }), 
+                    !1) : (wx.showModal({
                         title: "提示",
                         content: t.data.Message,
                         showCancel: !1,
@@ -84,15 +86,15 @@ module.exports = {
                         }
                     }), !1);
                     wx.showToast({
-                        title: "获取信息失败，请重新登录",
-                        icon: "success"
+                        title: "获取数据失败",
+                        icon: "none"
                     });
                 }
             },
             fail: function(t) {
                 wx.showToast({
-                    title: "网络超时，请重试",
-                    icon: "success",
+                    title: "网络超时请重试",
+                    icon: "none",
                     mask: !0
                 });
             },

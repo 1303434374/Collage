@@ -31,6 +31,8 @@ Page({
             fromType: 3,
             version: 2
         }, function(e) {
+            console.log('热搜=')
+            console.log(e)
             a.setData({
                 HotBrands: e.Data.HotBrands,
                 HotKeywords: e.Data.HotKeyWords,

@@ -35,6 +35,7 @@ Page({
             }
         }), this.init(!0);
     },
+    //根据条件获取数据
     init: function(i) {
         var s = this;
         e.showLoading("搜索中"), s.data.NewItems = [], s.data.PassItems = [], s.data.pageIndex = 1;
@@ -49,6 +50,8 @@ Page({
             filterValues: JSON.stringify(s.data.filterValues)
         };
         t.httppost("pinhuoitem/SearchV2", d, function(t) {
+            console.log('搜索到的商品=')
+            console.log(t)
             if (0 == t.Data.PassItems.length && 0 == t.Data.NewItems.length && i) return s.setData({
                 empty: "亲，没有该类的商品哟",
                 firstEmpty: !0
@@ -99,6 +102,7 @@ Page({
             });
         }, "GET");
     },
+    //下拉加载更多
     loadMore: function() {
         if (!this.data.loadflage) return wx.showToast({
             title: "没有更多数据",
@@ -117,6 +121,8 @@ Page({
             filterValues: JSON.stringify(i.data.filterValues)
         };
         t.httppost("pinhuoitem/SearchV2", s, function(t) {
+            console.log('下拉加载的商品=')
+            console.log(t)
             t.Data.NewItems.map(function(t) {
                 t.Cover = a.getUrl(t.Cover, 300);
             }), t.Data.PassItems.map(function(t) {
@@ -129,9 +135,111 @@ Page({
             });
         }, "GET");
     },
+    //跳转商品详情
     skip: function(a) {
         wx.navigateTo({
             url: "../pinhuo/itemdetail?id=" + a.currentTarget.dataset.id
+        });
+    },
+    //点击排序类型
+    bindsearch: function(a) {
+        var i = this;
+        if (20 != a.currentTarget.dataset.id) return i.data.pageIndex = 1, 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
+        i.data.SortMenus.map(function(a) {
+            5 == a.Value && (a.selected = !1), 4 == a.Value && (a.selected = !0);
+        })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(a) {
+            4 == a.Value && (a.selected = !1), 5 == a.Value && (a.selected = !0);
+        })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
+        i.init(!1), i.setData({
+            scroll_top: 0
+        }), !1;
+        i.data.firsted ? (e.showLoading("数据加载中"), t.httppost("pinhuoitem/GetSearchPanel", {
+            areaid: i.data.AreaID,
+            datas: JSON.stringify(i.data.Datas)
+        }, function(a) {
+            console.log('筛选条件=')
+            console.log(a)
+            a.Result && (a.Data.Panels.map(function(a) {
+                a.choose = !1, 1 == a.TypeID || 2 == a.TypeID ? a.selected = !0 : a.selected = !1, 
+                a.Panels.map(function(a) {
+                    a.selected = !1;
+                });
+            }), i.setData({
+                grid: a.Data.Panels,
+                firsted: !1
+            }), i.animation(!0));
+        }, "POST")) : i.animation(!0);
+    },
+    //筛选面板多选
+    selected: function(a) {
+        var t = a.currentTarget.dataset;
+        if (t.parent) this.data.grid[t.pindex].Panels[t.sindex].selected = !this.data.grid[t.pindex].Panels[t.sindex].selected; else if (this.data.grid[t.pindex].Panels[t.sindex].selected) this.data.grid[t.pindex].Panels.map(function(a) {
+            a.selected = !1;
+        }), 3 == this.data.grid[t.pindex].TypeID && (this.data.MinPrice = "", this.data.MaxPrice = ""); else if (this.data.grid[t.pindex].Panels.map(function(a) {
+            a.selected = !1;
+        }), this.data.grid[t.pindex].Panels[t.sindex].selected = !0, 3 == this.data.grid[t.pindex].TypeID) {
+            var e = this.data.grid[t.pindex].Panels[t.sindex].Name.split("-");
+            this.data.MinPrice = Number(e[0]), this.data.MaxPrice = Number(e[1]);
+        }
+        this.setData({
+            grid: this.data.grid,
+            MinPrice: this.data.MinPrice,
+            MaxPrice: this.data.MaxPrice
+        });
+    },
+    //筛选面板箭头
+    choose: function(a) {
+        this.data.grid[a.currentTarget.dataset.index].choose = !this.data.grid[a.currentTarget.dataset.index].choose, 
+        this.setData({
+            grid: this.data.grid
+        });
+    },
+    //筛选面板输入框
+    MinPrice: function(a) {
+        this.data.MinPrice = a.detail.value;
+    },
+    MaxPrice: function(a) {
+        this.data.MaxPrice = a.detail.value;
+    },
+    //重置筛选
+    canneled: function() {
+        this.data.grid.map(function(a) {
+            a.Panels.map(function(a) {
+                a.selected = !1;
+            });
+        }), this.setData({
+            grid: this.data.grid,
+            MinPrice: "",
+            MaxPrice: ""
+        });
+    },
+    //确认筛选
+    comfire: function(a) {
+        var t = this;
+        return this.data.filterValues.MaxPrice = "" == this.data.MaxPrice ? 1e5 : this.data.MaxPrice, 
+        this.data.filterValues.MinPrice = "" == this.data.MinPrice ? 0 : this.data.MinPrice, 
+        this.data.filterValues.Params = [], this.data.grid.map(function(a) {
+            if (3 !== a.TypeID) {
+                var e = {}, i = [];
+                a.Panels.map(function(a) {
+                    a.selected && i.push(a.ID);
+                }), i.length > 0 && (e.TypeID = a.TypeID, e.Values = i.join(","), t.data.filterValues.Params.push(e));
+            }
+        }), this.canneled1(), "" == this.data.MaxPrice && "" == this.data.MinPrice && 0 == this.data.filterValues.Params.length ? this.data.shino = !1 : this.data.shino = !0, 
+        this.init(!1), this.setData({
+            scroll_top: 0
+        }), !1;
+    },
+    //点击遮罩
+    canneled1: function(a) {
+        this.animation(!1);
+    },
+    //点击顶部导航
+    checkpart: function(a) {
+        if (this.data.displaymode == a.currentTarget.dataset.id) return !1;
+        this.data.displaymode = a.currentTarget.dataset.id, this.data.List = [], this.data.pageIndex = 1, 
+        this.data.loadflage = !0, this.init(!1), this.setData({
+            scroll_top: 0
         });
     },
     unique: function(a) {
@@ -170,97 +278,6 @@ Page({
         });
         this.animationx = t, a ? t.translateY(0).step() : t.translateY(-44).step(), this.setData({
             animationData2: t.export()
-        });
-    },
-    canneled: function() {
-        this.data.grid.map(function(a) {
-            a.Panels.map(function(a) {
-                a.selected = !1;
-            });
-        }), this.setData({
-            grid: this.data.grid,
-            MinPrice: "",
-            MaxPrice: ""
-        });
-    },
-    bindsearch: function(a) {
-        var i = this;
-        if (20 != a.currentTarget.dataset.id) return i.data.pageIndex = 1, 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
-        i.data.SortMenus.map(function(a) {
-            5 == a.Value && (a.selected = !1), 4 == a.Value && (a.selected = !0);
-        })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(a) {
-            4 == a.Value && (a.selected = !1), 5 == a.Value && (a.selected = !0);
-        })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
-        i.init(!1), i.setData({
-            scroll_top: 0
-        }), !1;
-        i.data.firsted ? (e.showLoading("数据加载中"), t.httppost("pinhuoitem/GetSearchPanel", {
-            areaid: i.data.AreaID,
-            datas: JSON.stringify(i.data.Datas)
-        }, function(a) {
-            a.Result && (a.Data.Panels.map(function(a) {
-                a.choose = !1, 1 == a.TypeID || 2 == a.TypeID ? a.selected = !0 : a.selected = !1, 
-                a.Panels.map(function(a) {
-                    a.selected = !1;
-                });
-            }), i.setData({
-                grid: a.Data.Panels,
-                firsted: !1
-            }), i.animation(!0));
-        }, "POST")) : i.animation(!0);
-    },
-    selected: function(a) {
-        var t = a.currentTarget.dataset;
-        if (t.parent) this.data.grid[t.pindex].Panels[t.sindex].selected = !this.data.grid[t.pindex].Panels[t.sindex].selected; else if (this.data.grid[t.pindex].Panels[t.sindex].selected) this.data.grid[t.pindex].Panels.map(function(a) {
-            a.selected = !1;
-        }), 3 == this.data.grid[t.pindex].TypeID && (this.data.MinPrice = "", this.data.MaxPrice = ""); else if (this.data.grid[t.pindex].Panels.map(function(a) {
-            a.selected = !1;
-        }), this.data.grid[t.pindex].Panels[t.sindex].selected = !0, 3 == this.data.grid[t.pindex].TypeID) {
-            var e = this.data.grid[t.pindex].Panels[t.sindex].Name.split("-");
-            this.data.MinPrice = Number(e[0]), this.data.MaxPrice = Number(e[1]);
-        }
-        this.setData({
-            grid: this.data.grid,
-            MinPrice: this.data.MinPrice,
-            MaxPrice: this.data.MaxPrice
-        });
-    },
-    choose: function(a) {
-        this.data.grid[a.currentTarget.dataset.index].choose = !this.data.grid[a.currentTarget.dataset.index].choose, 
-        this.setData({
-            grid: this.data.grid
-        });
-    },
-    comfire: function(a) {
-        var t = this;
-        return this.data.filterValues.MaxPrice = "" == this.data.MaxPrice ? 1e5 : this.data.MaxPrice, 
-        this.data.filterValues.MinPrice = "" == this.data.MinPrice ? 0 : this.data.MinPrice, 
-        this.data.filterValues.Params = [], this.data.grid.map(function(a) {
-            if (3 !== a.TypeID) {
-                var e = {}, i = [];
-                a.Panels.map(function(a) {
-                    a.selected && i.push(a.ID);
-                }), i.length > 0 && (e.TypeID = a.TypeID, e.Values = i.join(","), t.data.filterValues.Params.push(e));
-            }
-        }), this.canneled1(), "" == this.data.MaxPrice && "" == this.data.MinPrice && 0 == this.data.filterValues.Params.length ? this.data.shino = !1 : this.data.shino = !0, 
-        this.init(!1), this.setData({
-            scroll_top: 0
-        }), !1;
-    },
-    canneled1: function(a) {
-        this.animation(!1);
-    },
-    MinPrice: function(a) {
-        this.data.MinPrice = a.detail.value;
-    },
-    MaxPrice: function(a) {
-        this.data.MaxPrice = a.detail.value;
-    },
-    checkpart: function(a) {
-        if (this.data.displaymode == a.currentTarget.dataset.id) return !1;
-        this.data.displaymode = a.currentTarget.dataset.id, this.data.List = [], this.data.pageIndex = 1, 
-        this.data.loadflage = !0, this.init(!1), this.setData({
-            scroll_top: 0
         });
     }
 });

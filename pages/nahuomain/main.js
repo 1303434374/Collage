@@ -44,9 +44,36 @@ Page({
         }
         this.ajax();
     },
+    onShow: function() {
+        this.GetQty();
+    },
+    onShareAppMessage: function() {
+        return wx.getStorageSync("userid") ? {
+            title: "天天拼货团",
+            path: "/pages/nahuomain/main?key=" + wx.getStorageSync("userid") + "&tag=swx",
+            success: function(t) {
+                console.log(t.shareTickets);
+            }
+        } : {
+            title: "天天拼货团",
+            path: "/pages/nahuomain/main",
+            success: function(t) {
+                console.log(t.shareTickets);
+            }
+        };
+    },
+    onPullDownRefresh: function() {
+        var t = this;
+        wx.stopPullDownRefresh(), a.showLoading("页面加载中..."), setTimeout(function() {
+            t.ajax();
+        }, 2e3);
+    },
+    //获取首页数据
     ajax: function() {
         var e = this;
         a.showLoading(""), i.httppost("pinhuoitem/GetHomeActivityList2?from=4&cid=" + this.data.menu_static + "&debug=" + e.data.debug, {}, function(a) {
+            console.log('分类+列表=')
+            console.log(a)
             e.data.clocklist = [], a.Data.ActivityList.map(function(t) {
                 var a = t.ToTime.split(/[^0-9]/), i = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]).getTime() - new Date().getTime();
                 e.data.clocklist.push({
@@ -63,6 +90,62 @@ Page({
             });
         }), e.adsMeus();
     },
+   //获取轮播图数据
+    adsMeus: function() {
+        var t = this;
+        i.httppost("ads/GetBannersFormTypeV2", {
+            AreaTypeID: 1,
+            valueID: t.data.menu_static,
+            from: 4,
+            verid: 2
+        }, function(a) {
+            console.log('轮播图=')
+            console.log(a)
+            var e = [];
+            a.Data.ADList.map(function(t) {
+                0 == t.ImageUrl.indexOf("http://common-img-server.b0.upaiyun.com") ? t.ImageUrl = t.ImageUrl + "!thum.800" : t.ImageUrl = n.getUrl(t.ImageUrl, 400), 
+                -1 == t.Content.indexOf("www.nahuo.com") && e.push(t);
+            }), t.setData({
+                ADList: e
+            });
+        }, "GET");
+    },
+    //获取底部工具栏红点
+    GetQty: function(t) {
+        wx.getStorageSync("token") && i.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
+            console.log('底部工具栏红点=')
+            console.log(t)
+            t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+            wx.setTabBarBadge({
+                index: 3,
+                text: t.Data.CartItemQty
+            })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
+                index: 2
+            }));
+        }, "GET");
+    },
+    //点击菜单
+    click_menu: function(t) {
+        this.data.menu_static = t.currentTarget.id, this.ajax();
+    },
+    //点击专场
+    navclick: function(t) {
+        // var a = t.currentTarget.dataset.visit;
+        // if (!a.CanVisit) return wx.showModal({
+        //     title: "提示",
+        //     content: a.Message,
+        //     showCancel: !1
+        // }), !1;
+        wx.navigateTo({
+            url: "../pinhuo/pinhuodetail?title=" + t.currentTarget.dataset.name + "&qsid=" + t.currentTarget.dataset.qid
+        });
+    },
+    //点击轮播图
+    GoToContent: function(t) {
+        -1 == t.currentTarget.dataset.content.indexOf("www.nahuo.com") && wx.navigateTo({
+            url: "/pages/pinhuo/pinhuodetail?qsid=" + t.currentTarget.dataset.content + "&title="
+        });
+    },
     loadMore: function(t) {
         var a = this, e = a.data.menu_static;
         a.data.hasMore && i.httppost("pinhuoitem/GetHomeActivityList2?cid=" + e + "&debug=" + a.data.debug + "&pageindex=" + ++a.data.pageIndex, {}, function(t) {
@@ -73,20 +156,6 @@ Page({
                 hasMore: t.Data.ActivityList.length >= 20,
                 menuStatic: e
             });
-        });
-    },
-    click_menu: function(t) {
-        this.data.menu_static = t.currentTarget.id, this.ajax();
-    },
-    navclick: function(t) {
-        var a = t.currentTarget.dataset.visit;
-        if (!a.CanVisit) return wx.showModal({
-            title: "提示",
-            content: a.Message,
-            showCancel: !1
-        }), !1;
-        wx.navigateTo({
-            url: "../pinhuo/pinhuodetail?title=" + t.currentTarget.dataset.name + "&qsid=" + t.currentTarget.dataset.qid
         });
     },
     bindscroll: function(t) {
@@ -119,30 +188,6 @@ Page({
             videoId: -1
         });
     },
-    onShareAppMessage: function() {
-        return wx.getStorageSync("userid") ? {
-            title: "天天拼货团",
-            path: "/pages/nahuomain/main?key=" + wx.getStorageSync("userid") + "&tag=swx",
-            success: function(t) {
-                console.log(t.shareTickets);
-            }
-        } : {
-            title: "天天拼货团",
-            path: "/pages/nahuomain/main",
-            success: function(t) {
-                console.log(t.shareTickets);
-            }
-        };
-    },
-    onPullDownRefresh: function() {
-        var t = this;
-        wx.stopPullDownRefresh(), a.showLoading("页面加载中..."), setTimeout(function() {
-            t.ajax();
-        }, 2e3);
-    },
-    onShow: function() {
-        this.GetQty();
-    },
     adanimation: function(t) {
         var a = wx.createAnimation({
             duration: 200,
@@ -153,39 +198,6 @@ Page({
             adsanimationData: a.export(),
             ad_cont: this.data.ad_cont || ""
         });
-    },
-    adsMeus: function() {
-        var t = this;
-        i.httppost("ads/GetBannersFormTypeV2", {
-            AreaTypeID: 1,
-            valueID: t.data.menu_static,
-            from: 4,
-            verid: 2
-        }, function(a) {
-            var e = [];
-            a.Data.ADList.map(function(t) {
-                0 == t.ImageUrl.indexOf("http://common-img-server.b0.upaiyun.com") ? t.ImageUrl = t.ImageUrl + "!thum.800" : t.ImageUrl = n.getUrl(t.ImageUrl, 400), 
-                -1 == t.Content.indexOf("www.nahuo.com") && e.push(t);
-            }), t.setData({
-                ADList: e
-            });
-        }, "GET");
-    },
-    GoToContent: function(t) {
-        -1 == t.currentTarget.dataset.content.indexOf("www.nahuo.com") && wx.navigateTo({
-            url: "/pages/pinhuo/pinhuodetail?qsid=" + t.currentTarget.dataset.content + "&title="
-        });
-    },
-    GetQty: function(t) {
-        wx.getStorageSync("token") && i.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
-            t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-            wx.setTabBarBadge({
-                index: 3,
-                text: t.Data.CartItemQty
-            })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
-                index: 2
-            }));
-        }, "GET");
     },
     GoSearch: function() {
         wx.navigateTo({

@@ -27,6 +27,7 @@ Page({
         ShowCoinPayIcon: !0
     },
     onLoad: function(a) {
+        console.log(a)
         var i = decodeURIComponent(a.scene);
         i && i.split("&").map(function(t) {
             "i" == t.slice(0, 1) ? a.qsid = t.slice(1) : "k" == t.slice(0, 1) ? a.key = t.slice(1) : "t" == t.slice(0, 1) && (a.tag = t.slice(1));
@@ -58,6 +59,8 @@ Page({
             filterValues: JSON.stringify(d.data.filterValues)
         };
         e.httppost("pinhuoitem/getitemsv2", n, function(e) {
+            console.log('专场详情+商品列表=')
+            console.log(e)
             if (e.Result) {
                 if (t.setTitle(e.Data.Info.Name), !e.Data.Info.VisitResult.CanVisit) return wx.showModal({
                     title: "提示",
