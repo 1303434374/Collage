@@ -23,6 +23,7 @@ Page({
         partList: !0
     },
     onLoad: function(a) {
+      console.log(a);
         var t = this;
         "" == a.key ? (e.setTitle(a.title), t.data.AreaID = 3) : (e.setTitle(a.key), t.data.AreaID = 2, 
         a.rid = -1, a.ValueIDS = ""), t.data.Datas = {

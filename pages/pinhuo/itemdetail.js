@@ -42,6 +42,8 @@ Page({
     init: function(o, n) {
         var l = this;
         t.showLoading("页面加载中..."), a.httppost("pinhuoitem/detail2", n, function(n) {
+          console.log('详细商品中');
+          console.log(n);
             o.key && a.httppostmore("shop/wx/SaveWxItemStatistics", {
                 Key: o.key,
                 OpenID: wx.getStorageSync("openid"),
