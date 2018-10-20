@@ -32,6 +32,8 @@ Page({
     init: function() {
         var a = this;
         i.showLoading("页面加载中..."), e.httppost("pinhuocart/GetItems3", {}, function(e) {
+            console.log('购物车=')
+            console.log(e)
             e.Result && (e.Data.Items.map(function(e) {
                 e.selected = !0, e.TimeList.map(function(e) {
                     e.ToTime = e.ToTime.replace(/-/g, "/");

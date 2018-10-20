@@ -91,7 +91,7 @@
         <view style="font-size: 13px;margin-left:30rpx;">
             <text>请选择颜色尺码</text>
         </view>
-        <view class="commodity_attr_list" style="margin-top:10rpx">
+        <view class="commodity_attr_list" style="margin-top:10rpx" style="display:flex;">
             <view wx:for="{{Products}}" wx:for-index="attrIndex" wx:for-item="attrValueObj" wx:key="key">
                 <view bindtap="selectAttrValue" class="attr_value {{fristindex==attrIndex?'attr_value_active':'attr_value_disabled'}}" data-index="{{attrIndex}}" data-key="key" data-value="{{attrValueObj.Color}}">
                     {{attrValueObj.Color}}
