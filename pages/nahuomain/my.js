@@ -10,7 +10,6 @@ Page({
             console.log('个人信息=')
             console.log(n)
             o.showLoading("页面加载中..."), t.httppost("pinhuobuyer/GetOrderStatuAmount2", {}, function(t) {
-                console.log(t)
                 a.setData({
                     point: n.Data.Point,
                     PointName: n.Data.PointName,
