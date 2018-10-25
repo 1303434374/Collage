@@ -29,6 +29,8 @@ Page({
                 Authorization: wx.getStorageSync("token")
             },
             success: function(e) {
+                console.log('获取默认地址=')
+                console.log(e)
                 if (e.data.Result) {
                     i.data.AddressID = e.data.Data.ID, i.data.postinfo = e.data.Data;
                     var u = {
@@ -38,6 +40,8 @@ Page({
                         AddressID: i.data.AddressID
                     };
                     t.showLoading("数据加载中"), a.httppost("pinhuo/order/CreateTempOrder", u, function(t) {
+                        console.log('确认订单=')
+                        console.log(t)
                         for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) a[e].Items[s].Cover = o.getUrl(a[e].Items[s].Cover, 300);
                         t.Data.ShipSetting.map(function(t) {
                             t.IsDefault && i.setData({

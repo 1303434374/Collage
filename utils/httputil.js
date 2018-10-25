@@ -1,6 +1,15 @@
 var t = "https://api2.nahuo.com/";
 
+let u = 'https://pj.dede1.com/app/index.php'
+let b = {
+    i: '116',
+    m: 'tonghuagushi',
+    c: 'entry',
+    a: 'wxapp'
+}
+
 module.exports = {
+
     httppost: function(a, e, o, s) {
         var n = (t = "user" == a.substring(0, 4) ? "https://api2.nahuo.com/v4/" : "https://api2.nahuo.com/v3/") + a;
         wx.request({
@@ -51,6 +60,7 @@ module.exports = {
             complete: function(t) {}
         });
     },
+
     httppostmore: function(a, e, o, s) {
         var n = (t = "user" == a.substring(0, 4) ? "https://api2.nahuo.com/v4/" : "https://api2.nahuo.com/v3/") + a;
         wx.request({
@@ -100,5 +110,26 @@ module.exports = {
             },
             complete: function(t) {}
         });
+    },
+
+    http_post: function(a, e, o, s) {
+        wx.request({
+            url: u,
+            data: this.merge({do: a}, this.merge(b, e)),
+            method: s,
+            success: function(t) {
+                wx.hideLoading()
+                "function" == typeof o && o(t.data)
+            },
+            fail: function(t) {},
+            complete: function(t) {}
+        });
+    },
+
+    merge: function (target, source) {
+        for (var obj in source) {
+            target[obj] = source[obj]
+        }
+        return target
     }
 };

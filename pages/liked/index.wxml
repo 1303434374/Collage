@@ -1,9 +1,9 @@
-<view class="header">
+<!--<view class="header">
     <view bindtap="checkmeu" class="header_title " data-status="{{item.status}}" wx:for="{{statusList}}" wx:key="key">
         <view class="namestyle {{item.status==status?'active':''}}">{{item.name}}</view>
     </view>
 </view>
-<view class="headerfill"></view>
+<view class="headerfill"></view>-->
 <view class="img_list">
     <view bindtap="imagenavigator" class="img_wrap" data-testId="{{item.ID}}" wx:for="{{list}}" wx:key="key">
         <view class="img_box">

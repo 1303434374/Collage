@@ -11,8 +11,14 @@ Page({
         dataurl: "",
         url: "",
         flag: !1,
-        flagadd: !1
+        flagadd: !1,
+        regionVal: ''
     },
+    changeRegion: function(e) {
+        this.setData({
+            regionVal: e.detail.value
+        });
+    },    
     onLoad: function(t) {
         t.url && this.setData({
             url: t.url,
@@ -127,6 +133,7 @@ Page({
         });
     },
     open: function() {
+        console.log('open')
         0 == this.data.citys.length ? (this.data.area = this.data.provinces[this.data.arrvalue[0]].Name, 
         this.setData({
             flag: !1,

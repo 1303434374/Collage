@@ -26,9 +26,9 @@
                 </button>
             </view>
         </view>
-        <view bindtap="getyuyin" class="w90p mt20 text" wx:if="{{status==2}}">
+        <!--<view bindtap="getyuyin" class="w90p mt20 text" wx:if="{{status==2}}">
             收不到短信，试试语音验证码
-        </view>
+        </view>-->
         <view class="w90p mt20 ">
             <button class="color_btn" formType="submit" size="default" type="warn"> {{status==2?'登录/注册':'登录'}}</button>
         </view>

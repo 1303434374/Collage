@@ -27,6 +27,8 @@ Page({
             loginFrom: 4
         }, o = this;
         t.httppostmore("user/user/login", i, function(e) {
+            console.log('登录信息=')
+            console.log(e)
             if (e.Result) {
                 if (wx.setStorageSync("token", "Bearer " + e.Data.Token), wx.setStorageSync("account", e.Data.UserName), 
                 wx.setStorageSync("userid", e.Data.UserID), wx.getStorageSync("loginflag") || t.httppost("buyertool/eccbuyer/assigneccbuyer", {}, function(t) {
@@ -51,7 +53,7 @@ Page({
         wx.stopPullDownRefresh();
     },
     forget: function() {
-        wx.redirectTo({
+        wx.navigateTo({
             url: "/pages/login/forget"
         });
     },

@@ -13,6 +13,8 @@ Page({
     init: function(n) {
         var o = this;
         o.data.info = {}, e.showLoading(""), t.httppost("pinhuobuyer/OrderDetailV2?orderid=" + o.data.id, {}, function(t) {
+            console.log('订单详情=')
+            console.log(t)
             var e = 0;
             t.Data.Buttons.map(function(t) {
                 "联系客服" != t.action && "发货方式" != t.action || (t.isEnable = !1), t.isEnable && e++;
@@ -110,7 +112,7 @@ Page({
     },
     goitem: function(n) {
         var o = this, i = n.currentTarget.dataset;
-        "补货" == i.action ? wx.reLaunch({
+        "补货" == i.action ? wx.navigateTo({
             url: "/pages/pinhuo/itemdetail?id=" + i.itemid
         }) : "场次" == i.action ? wx.navigateTo({
             url: "/pages/pinhuo/pinhuodetail?qsid=" + i.qsid

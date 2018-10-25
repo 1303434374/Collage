@@ -109,6 +109,10 @@ Page({
                 ADList: e
             });
         }, "GET");
+        i.http_post("GetTukufenlei", {}, function(a) {
+            console.log('微擎数据=')
+            console.log(a)
+        }, "GET");
     },
     //获取底部工具栏红点
     GetQty: function(t) {

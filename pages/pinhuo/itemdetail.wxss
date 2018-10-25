@@ -351,3 +351,46 @@ button.btn_kf_e {
     font-size: 12px;
     line-height: 20px;
 }
+
+.line {
+    width: 100%;
+    min-height: 20rpx;
+    background-color: #f0f0f0;
+}
+
+.title-line {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 40rpx);
+    height: 70rpx;
+    margin: 0 20rpx;
+    border-bottom: 1px solid #ddd;
+}
+
+.title-line .left {
+    min-width: 8rpx;
+    min-height: 35rpx;
+    margin-right: 15rpx;
+    background-color: #f53a38;
+}
+
+.title-line .right {
+    color: #000;
+    font-size: 30rpx;
+}
+
+.content-line {
+    display: flex;
+    flex-direction: column;
+    padding: 20rpx;
+}
+
+.content-line .inline {
+    color: #999;
+    font-size: 25rpx;
+    line-height: 40rpx;
+}
+
+.content-line .inline .bold {
+    color: #000;
+}

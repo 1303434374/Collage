@@ -54,6 +54,8 @@ Page({
             keyword: i.data.keyword
         };
         i.data.flag = !1, e.showLoading("数据请求中"), a.httppost("pinhuoBuyer/GetOrderListV5", s, function(a) {
+            console.log('订单列表=')
+            console.log(a)
             i.data.notice = a.Data.Notice, a.Data.OrderList.map(function(a) {
                 a.imglist = [], a.Images.map(function(e) {
                     a.imglist.push(t.getUrl(e, 300));
