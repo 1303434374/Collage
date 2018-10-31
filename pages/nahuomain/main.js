@@ -9,7 +9,7 @@ function t(t) {
 }
 
 var a = getApp(), e = require("../../utils/timeutil.js"), i = require("../../utils/httputil.js"), n = (require("../../utils/md5util.js"), 
-require("../../utils/imgutil.js"));
+require("../../utils/imgutil.js")),we7 = a.globalData.we7;
 
 Page({
     data: {
@@ -28,24 +28,29 @@ Page({
         CarNum: 0
     },
     onLoad: function(t) {
-        var a = decodeURIComponent(t.scene);
-        a && a.split("&").map(function(a) {
-            "k" == a.slice(0, 1) ? t.key = a.slice(1) : "t" == a.slice(0, 1) && (t.tag = a.slice(1));
-        }), wx.showShareMenu && wx.showShareMenu({
-            withShareTicket: !0
-        });
-        if (t.key) {
-            var e = {
-                Key: t.key,
-                OpenID: wx.getStorageSync("openid"),
-                tag: t.tag
-            };
-            i.httppostmore("shop/wx/SaveWxIndexStatistics", e, function(t) {}, "POST");
+        this.setData({
+            we7: we7
+        })
+        if (we7) {
+            var a = decodeURIComponent(t.scene);
+            a && a.split("&").map(function(a) {
+                "k" == a.slice(0, 1) ? t.key = a.slice(1) : "t" == a.slice(0, 1) && (t.tag = a.slice(1));
+            }), wx.showShareMenu && wx.showShareMenu({
+                withShareTicket: !0
+            });
+            if (t.key) {
+                var e = {
+                    Key: t.key,
+                    OpenID: wx.getStorageSync("openid"),
+                    tag: t.tag
+                };
+                i.httppostmore("shop/wx/SaveWxIndexStatistics", e, function(t) {}, "POST");
+            }
         }
         this.ajax();
     },
     onShow: function() {
-        this.GetQty();
+        !we7 && this.GetQty();
     },
     onShareAppMessage: function() {
         return wx.getStorageSync("userid") ? {
@@ -71,48 +76,90 @@ Page({
     //获取首页数据
     ajax: function() {
         var e = this;
-        a.showLoading(""), i.httppost("pinhuoitem/GetHomeActivityList2?from=4&cid=" + this.data.menu_static + "&debug=" + e.data.debug, {}, function(a) {
-            console.log('分类+列表=')
-            console.log(a)
-            e.data.clocklist = [], a.Data.ActivityList.map(function(t) {
-                var a = t.ToTime.split(/[^0-9]/), i = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]).getTime() - new Date().getTime();
-                e.data.clocklist.push({
-                    tick: i
-                }), t.Description = t.Description.replace(/(^\s*)|(\s*$)/g, "");
-            }), t(e), e.setData({
-                videoId: -1,
-                list: a.Data.ActivityList,
-                hidden: !0,
-                menu: a.Data.CategoryList,
-                menuStatic: e.data.menu_static,
-                hasMore: a.Data.ActivityList.length >= 20,
-                timelist: e.data.timelist
+        if (we7) {
+            a.showLoading("");
+            i.http_post("getareaorlanmu", {
+                cid: this.data.menu_static
+            }, (a) => {
+                if (a.Data) {
+                    console.log('微擎分类+列表=')
+                    console.log(a)
+                    e.data.clocklist = [], a.Data.ActivityList.map(function(t) {
+                        var a = t.ToTime.split(/[^0-9]/), i = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]).getTime() - new Date().getTime();
+                        e.data.clocklist.push({
+                            tick: i
+                        }), t.Description = t.Description.replace(/(^\s*)|(\s*$)/g, "");
+                    }), t(e), e.setData({
+                        videoId: -1,
+                        list: a.Data.ActivityList,
+                        hidden: !0,
+                        menu: a.Data.CategoryList,
+                        menuStatic: e.data.menu_static,
+                        hasMore: a.Data.ActivityList.length >= 20,
+                        timelist: e.data.timelist
+                    });
+                    e.adsMeus();
+                }
             });
-        }), e.adsMeus();
+        } else {
+            a.showLoading(""), i.httppost("pinhuoitem/GetHomeActivityList2?from=4&cid=" + this.data.menu_static + "&debug=" + e.data.debug, {}, function(a) {
+                console.log('分类+列表=')
+                console.log(a)
+                e.data.clocklist = [], a.Data.ActivityList.map(function(t) {
+                    var a = t.ToTime.split(/[^0-9]/), i = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]).getTime() - new Date().getTime();
+                    e.data.clocklist.push({
+                        tick: i
+                    }), t.Description = t.Description.replace(/(^\s*)|(\s*$)/g, "");
+                }), t(e), e.setData({
+                    videoId: -1,
+                    list: a.Data.ActivityList,
+                    hidden: !0,
+                    menu: a.Data.CategoryList,
+                    menuStatic: e.data.menu_static,
+                    hasMore: a.Data.ActivityList.length >= 20,
+                    timelist: e.data.timelist
+                });
+            }), e.adsMeus();
+        }
     },
    //获取轮播图数据
     adsMeus: function() {
         var t = this;
-        i.httppost("ads/GetBannersFormTypeV2", {
-            AreaTypeID: 1,
-            valueID: t.data.menu_static,
-            from: 4,
-            verid: 2
-        }, function(a) {
-            console.log('轮播图=')
-            console.log(a)
-            var e = [];
-            a.Data.ADList.map(function(t) {
-                0 == t.ImageUrl.indexOf("http://common-img-server.b0.upaiyun.com") ? t.ImageUrl = t.ImageUrl + "!thum.800" : t.ImageUrl = n.getUrl(t.ImageUrl, 400), 
-                -1 == t.Content.indexOf("www.nahuo.com") && e.push(t);
-            }), t.setData({
-                ADList: e
+        if (we7) {
+            i.http_post("getbanner", {
+                valueID: this.data.menu_static
+            }, (a) => {
+                if (a.Data) {
+                    console.log('微擎轮播图=')
+                    console.log(a)
+                    // var e = [];
+                    // a.Data.ADList.map(function(t) {
+                    //     0 == t.ImageUrl.indexOf("http://common-img-server.b0.upaiyun.com") ? t.ImageUrl = t.ImageUrl + "!thum.800" : t.ImageUrl = n.getUrl(t.ImageUrl, 400), 
+                    //     -1 == t.Content.indexOf("www.nahuo.com") && e.push(t);
+                    // }), 
+                    t.setData({
+                        ADList: a.Data.ADList
+                    });
+                }
             });
-        }, "GET");
-        i.http_post("GetTukufenlei", {}, function(a) {
-            console.log('微擎数据=')
-            console.log(a)
-        }, "GET");
+        } else {
+            i.httppost("ads/GetBannersFormTypeV2", {
+                AreaTypeID: 1,
+                valueID: t.data.menu_static,
+                from: 4,
+                verid: 2
+            }, function(a) {
+                console.log('轮播图=')
+                console.log(a)
+                var e = [];
+                a.Data.ADList.map(function(t) {
+                    0 == t.ImageUrl.indexOf("http://common-img-server.b0.upaiyun.com") ? t.ImageUrl = t.ImageUrl + "!thum.800" : t.ImageUrl = n.getUrl(t.ImageUrl, 400), 
+                    -1 == t.Content.indexOf("www.nahuo.com") && e.push(t);
+                }), t.setData({
+                    ADList: e
+                });
+            }, "GET");
+        }
     },
     //获取底部工具栏红点
     GetQty: function(t) {

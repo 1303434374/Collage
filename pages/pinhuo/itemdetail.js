@@ -1,5 +1,5 @@
 var t = getApp(), a = (require("../../utils/timeutil.js"), require("../../utils/httputil.js")), e = require("../../utils/imgutil.js"), s = require("../../utils/messageutil.js"), i = (require("../../utils/common.js"), 
-require("../../wxParse/wxParse.js"));
+require("../../wxParse/wxParse.js")), we7 = t.globalData.we7;
 
 Page({
     data: {
@@ -20,6 +20,9 @@ Page({
     },
     onLoad: function(t) {
         console.log(t)
+        this.setData({
+            we7: we7
+        })
         var a = decodeURIComponent(t.scene);
         a && a.split("&").map(function(a) {
             "i" == a.slice(0, 1) ? t.id = a.slice(1) : "k" == a.slice(0, 1) ? t.key = a.slice(1) : "t" == a.slice(0, 1) && (t.tag = a.slice(1));
@@ -44,74 +47,134 @@ Page({
     //获取商品详情
     init: function(o, n) {
         var l = this;
-        t.showLoading("页面加载中..."), a.httppost("pinhuoitem/detail2", n, function(n) {
-            console.log('商品详情=')
-            console.log(n)
-            o.key && a.httppostmore("shop/wx/SaveWxItemStatistics", {
-                Key: o.key,
-                OpenID: wx.getStorageSync("openid"),
-                QsID: n.Data.Activity.QsID,
-                ItemID: o.id,
-                tag: o.tag
-            }, function(t) {}, "POST"), l.data.newimages = n.Data.Images.slice(0, 5).map(function(t) {
-                return {
-                    url: e.getUrl(t, 1e3)
-                };
-            }), l.data.detailImages = n.Data.Images.map(function(t) {
-                return {
-                    url: e.getUrl(t, 1e3)
-                };
-            }), n.Data.Products.map(function(t) {
-                t.ColorPic = e.getUrl(t.ColorPic, 200);
-            });
-            var d = 0;
-            n.Data.DisplayStatu, n.Data.ItemStatu;
-            n.Data.Products.map(function(t) {
-                t.SizeList.map(function(t) {
-                    t.qty = 0, d += t.Stock;
+        t.showLoading("页面加载中...")
+        if (we7) {
+            a.http_post("getdetailgood", {
+                gID: o.id
+            }, (n) => {
+                if (n.Data) {
+                    console.log('微擎商品详情=')
+                    console.log(n)
+                    var d = 0;
+                    n.Data.DisplayStatu, n.Data.ItemStatu;
+                    n.Data.Products.map(function(t) {
+                        t.SizeList.map(function(t) {
+                            t.qty = 0, d += t.Stock;
+                        });
+                    }), l.data.ButtomSmallButtons = [ {
+                        title: "首页",
+                        action: "首页",
+                        isPoint: !1,
+                        isEnable: !0,
+                        type: "button"
+                    } ], n.Data.ButtomSmallButtons.map(function(t) {
+                        "分享" == t.action ? t.isEnable = !1 : l.data.ButtomSmallButtons.push(t);
+                    }),
+                    //  n.Data.coverurl = e.getUrl(n.Data.Cover, 200), 
+                    l.data.newimages = n.Data.Images.slice(0, 5)
+                     t.setTitle(n.Data.Name), l.setData({
+                        coverurl: n.Data.Cover,
+                        IsFavorite: n.Data.IsFavorite,
+                        height: l.data.height,
+                        ItemId: l.data.ItemId,
+                        // StallID: n.Data.StallID,
+                        newimages: l.data.newimages,
+                        name: n.Data.Name,
+                        Tags: n.Data.Tags,
+                        Price: n.Data.Price,
+                        Discount: n.Data.Discount,
+                        OriPrice: n.Data.OriPrice,
+                        // BuyerShopUrl: 0 == n.Data.BuyerShopID ? "" : "https://api2.nahuo.com/v3/shop/logo/uid/" + n.Data.BuyerShopID,
+                        // BuyerShopID: n.Data.BuyerShopID,
+                        // BuyerShopName: n.Data.BuyerShopName,
+                        Activity: n.Data.Activity,
+                        message: s.showtips(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
+                        message1: s.showchengtuantiops(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
+                        Products: n.Data.Products,
+                        // StallsName: n.Data.StallsName,
+                        // Propertys: n.Data.Propertys,
+                        detailImages: n.Data.Images,
+                        Videos: n.Data.Videos,
+                        stopheight: .8 * Number(l.data.height) - 210,
+                        newtips: "",
+                        globalData: t.globalData,
+                        ButtomBigButtons: n.Data.ButtomBigButtons,
+                        ButtomSmallButtons: l.data.ButtomSmallButtons,
+                        Color: n.Data.Color,
+                        Size: n.Data.Size
+                    })
+                }
+            })
+        } else {
+            a.httppost("pinhuoitem/detail2", n, function(n) {
+                console.log('商品详情=')
+                console.log(n)
+                o.key && a.httppostmore("shop/wx/SaveWxItemStatistics", {
+                    Key: o.key,
+                    OpenID: wx.getStorageSync("openid"),
+                    QsID: n.Data.Activity.QsID,
+                    ItemID: o.id,
+                    tag: o.tag
+                }, function(t) {}, "POST"), l.data.newimages = n.Data.Images.slice(0, 5).map(function(t) {
+                    return {
+                        url: e.getUrl(t, 1e3)
+                    };
+                }), l.data.detailImages = n.Data.Images.map(function(t) {
+                    return {
+                        url: e.getUrl(t, 1e3)
+                    };
+                }), n.Data.Products.map(function(t) {
+                    t.ColorPic = e.getUrl(t.ColorPic, 200);
                 });
-            }), l.data.ButtomSmallButtons = [ {
-                title: "首页",
-                action: "首页",
-                isPoint: !1,
-                isEnable: !0,
-                type: "button"
-            } ], n.Data.ButtomSmallButtons.map(function(t) {
-                "分享" == t.action ? t.isEnable = !1 : l.data.ButtomSmallButtons.push(t);
-            }), n.Data.coverurl = e.getUrl(n.Data.Cover, 200), t.setTitle(n.Data.Name), l.setData({
-                coverurl: n.Data.coverurl,
-                IsFavorite: n.Data.IsFavorite,
-                height: l.data.height,
-                ItemId: l.data.ItemId,
-                StallID: n.Data.StallID,
-                newimages: l.data.newimages,
-                name: n.Data.Name,
-                Tags: n.Data.Tags,
-                Price: n.Data.Price,
-                Discount: n.Data.Discount,
-                OriPrice: n.Data.OriPrice,
-                BuyerShopUrl: 0 == n.Data.BuyerShopID ? "" : "https://api2.nahuo.com/v3/shop/logo/uid/" + n.Data.BuyerShopID,
-                BuyerShopID: n.Data.BuyerShopID,
-                BuyerShopName: n.Data.BuyerShopName,
-                Activity: n.Data.Activity,
-                message: s.showtips(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
-                message1: s.showchengtuantiops(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
-                Products: n.Data.Products,
-                StallsName: n.Data.StallsName,
-                Propertys: n.Data.Propertys,
-                detailImages: l.data.detailImages,
-                Videos: n.Data.Videos,
-                stopheight: .8 * Number(l.data.height) - 210,
-                newtips: "",
-                globalData: t.globalData,
-                ButtomBigButtons: n.Data.ButtomBigButtons,
-                ButtomSmallButtons: l.data.ButtomSmallButtons
-            }), i.wxParse("DescriptionHead", "html", n.Data.DescriptionHead, l);
-        }, "GET"), wx.getStorageSync("token") && a.httppost("pinhuocart/GetTotalQty", {}, function(t) {
-            l.setData({
-                CarNum: t.Data.TotalQty
-            });
-        }, "GET");
+                var d = 0;
+                n.Data.DisplayStatu, n.Data.ItemStatu;
+                n.Data.Products.map(function(t) {
+                    t.SizeList.map(function(t) {
+                        t.qty = 0, d += t.Stock;
+                    });
+                }), l.data.ButtomSmallButtons = [ {
+                    title: "首页",
+                    action: "首页",
+                    isPoint: !1,
+                    isEnable: !0,
+                    type: "button"
+                } ], n.Data.ButtomSmallButtons.map(function(t) {
+                    "分享" == t.action ? t.isEnable = !1 : l.data.ButtomSmallButtons.push(t);
+                }), n.Data.coverurl = e.getUrl(n.Data.Cover, 200), t.setTitle(n.Data.Name), l.setData({
+                    coverurl: n.Data.coverurl,
+                    IsFavorite: n.Data.IsFavorite,
+                    height: l.data.height,
+                    ItemId: l.data.ItemId,
+                    StallID: n.Data.StallID,
+                    newimages: l.data.newimages,
+                    name: n.Data.Name,
+                    Tags: n.Data.Tags,
+                    Price: n.Data.Price,
+                    Discount: n.Data.Discount,
+                    OriPrice: n.Data.OriPrice,
+                    BuyerShopUrl: 0 == n.Data.BuyerShopID ? "" : "https://api2.nahuo.com/v3/shop/logo/uid/" + n.Data.BuyerShopID,
+                    BuyerShopID: n.Data.BuyerShopID,
+                    BuyerShopName: n.Data.BuyerShopName,
+                    Activity: n.Data.Activity,
+                    message: s.showtips(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
+                    message1: s.showchengtuantiops(n.Data.Activity.TransCount, n.Data.Activity.ChengTuanCount),
+                    Products: n.Data.Products,
+                    StallsName: n.Data.StallsName,
+                    Propertys: n.Data.Propertys,
+                    detailImages: l.data.detailImages,
+                    Videos: n.Data.Videos,
+                    stopheight: .8 * Number(l.data.height) - 210,
+                    newtips: "",
+                    globalData: t.globalData,
+                    ButtomBigButtons: n.Data.ButtomBigButtons,
+                    ButtomSmallButtons: l.data.ButtomSmallButtons
+                }), i.wxParse("DescriptionHead", "html", n.Data.DescriptionHead, l);
+            }, "GET"), wx.getStorageSync("token") && a.httppost("pinhuocart/GetTotalQty", {}, function(t) {
+                l.setData({
+                    CarNum: t.Data.TotalQty
+                });
+            }, "GET");
+        }
     },
     //收藏功能
     collect: function() {

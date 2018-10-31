@@ -34,7 +34,8 @@
         <view bindtap="navclick" data-name="{{item.Name}}" data-qid="{{item.QsID}}" data-visit="{{item.VisitResult}}">
             <view class="wx-view_adF7Mw">
                 <view class="c-block wx-text_id0VJj" wx:if="{{item.Name}}">{{item.Name}}</view>
-                <view class="c-block wx-text_id0VJj1" wx:if="{{item.Description.length!==1}}">{{item.Description}}</view>
+                <view class="c-block wx-text_id0VJj1" wx:if="{{we7}}">{{item.Desindex}}</view>
+                <view class="c-block wx-text_id0VJj1" wx:else>{{item.Description}}</view>
             </view>
         </view>
     </view>

@@ -1,3 +1,4 @@
+var we7 = !0
 var e = require("utils/httputil.js");
 
 require("utils/mta_analysis.js"), require("utils/ald-stat.js");
@@ -46,7 +47,8 @@ App(function(e, t, n) {
         cont: 60,
         disabled: !0,
         status: 2,
-        disabled2: !0
+        disabled2: !0,
+        we7: we7
     },
     getUserInfo: function(e) {
         this.globalData.userInfo && "function" == typeof e && e(this.globalData.userInfo);

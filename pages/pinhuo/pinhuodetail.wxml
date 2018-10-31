@@ -14,13 +14,13 @@
                 <text style="font-size: 28rpx;margin:5px;color:white ">{{tick}} </text>
             </view>
         </view>
-        <view style=" text-align:center;border:1px solid red;margin-top:20rpx;padding-top:30rpx;padding-bottom:30rpx;margin-left:10rpx;margin-right:10rpx" wx:elif="{{OpenStatu=='预告'}}">
+        <view style="text-align:center;border:1px solid red;margin-top:20rpx;padding-top:30rpx;padding-bottom:30rpx;margin-left:10rpx;margin-right:10rpx" wx:elif="{{OpenStatu=='预告'}}">
             <text style="color:red;font-size:14px"> {{Summary}} </text>
         </view>
         <view class="empty_fillx" wx:if="{{SortMenus.length>0}}"></view>
-        <view class="empty_fillx" wx:if="{{partList}}"></view>
+        <view class="empty_fillx" wx:if="{{partList && !we7}}"></view>
         <view animation="{{animationData2}}" class="fixed_box {{fixed?'fixed_search':''}}">
-            <view class="part_box" wx:if="{{partList}}">
+            <view class="part_box" wx:if="{{partList && !we7}}">
                 <view bindtap="checkpart" class="part_list {{displaymode==item.displaymode?'part_selected':''}}" data-id="{{item.displaymode}}" wx:if="{{item.istrue}}" wx:for="{{PartTitle}}" wx:key="PartTitle">{{item.PartTitleText}}</view>
             </view>
             <view class="fiter_box " wx:if="{{SortMenus.length>0}}">
@@ -31,12 +31,12 @@
         </view>
     </view>
     <view class="img_list">
-        <view bindtap="imagenavigator" class="img_wrap" data-testId="{{item.ID}}" wx:for="{{List}}" wx:key="{{index}}">
+        <view bindtap="imagenavigator" class="img_wrap" data-testId="{{we7 ? item.gID : item.ID}}" wx:for="{{List}}" wx:key="{{index}}">
             <view class="img_box">
-                <image class="bgimg" lazyLoad="true" mode="aspectFill" src="{{item.itemcover}}" style="height:440.625rpx;"></image>
+                <image class="bgimg" lazyLoad="true" mode="aspectFill" src="{{we7 ? item.Itemcover : item.itemcover}}" style="height:440.625rpx;"></image>
                 <image class="sealout" mode="widthFix" src="/Image/pinhuo/selaout.png" wx:if="{{item.IsSaleOut}}"></image>
                 <image class="videos" mode="widthFix" src="/Image/pinhuo/play.png" wx:if="{{item.HasVideo}}"></image>
-                <image class="top_right" mode="widthFix" src="/Image/pinhuo/new.png" wx:if="{{item.DisplayStatuID==0&&item.IsShowStatuIcon}}"></image>
+                <image class="top_right" mode="widthFix" src="/Image/pinhuo/new.png" wx:if="{{(item.DisplayStatuID==0&&item.IsShowStatuIcon) || we7}}"></image>
                 <image class="top_right" mode="widthFix" src="/Image/pinhuo/patch.png" wx:if="{{item.DisplayStatuID==1&&item.IsShowStatuIcon}}"></image>
             </view>
             <view style="display: block;margin-left:10rpx;padding:10rpx 0;">
@@ -52,7 +52,7 @@
                 <image class="coin" src="http://banwo-files.b0.upaiyun.com/img/nhbicon.png" wx:if="{{ShowCoinPayIcon}}"></image>
                 <text style=" position:relative; color:#555; font-size:12px;float:right;height:24px;line-height:24px;margin-right:10rpx;" wx:if="{{item.TotalQty>0&&!item.Discount}}"> 总销量{{item.TotalQty}}件</text>
             </view>
-            <view wx:if="{{displaymode==1}}">
+            <view wx:if="{{displaymode==1 || we7}}">
                 <view style="margin:10rpx;overflow:hidden;border-radius:3px;">
                     <progress color="#FC3D39" percent="{{item.DealCount/item.ChengTuanCount*100}}" strokeWidth="6"></progress>
                 </view>

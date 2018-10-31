@@ -2,17 +2,17 @@
 <import src="../../wxParse/wxParse.wxml"></import>
 <swiper circular="true" duration="1000" indicatorDots="true" style="height:937.5rpx">
     <swiper-item wx:for="{{newimages}}" wx:key="{{index}}">
-        <image bindtap="loadimg" class="bgimg" lazyLoad="true" mode="aspectFill" src="{{item.url}}" style="width:750rpx;height:937.5rpx;"></image>
+        <image bindtap="loadimg" class="bgimg" lazyLoad="true" mode="aspectFill" src="{{we7 ? item : item.url}}" style="width:750rpx;height:937.5rpx;"></image>
     </swiper-item>
 </swiper>
-<view class="buyer" wx:if="{{BuyerShopID!==0}}">
+<view class="buyer" wx:if="{{BuyerShopID!==0 && !we7}}">
     <image class="buyerimg" src="{{BuyerShopUrl}}"></image>
     <view class="buyername">买手：{{BuyerShopName}}</view>
 </view>
 <view class="title_name">
     <text class="discount" wx:if="{{Discount}}">{{Discount}}</text>{{name}}</view>
 <view style="overflow:hidden;">
-    <text class="tagName" wx:for="{{Tags}}" wx:key="key">{{item.Name}}</text>
+    <text class="tagName" wx:for="{{Tags}}" wx:key="key">{{we7 ? item : item.Name}}</text>
 </view>
 <view style="margin-top:20rpx;margin-left:20rpx;margin-right:20rpx;overflow:hidden;">
     <view style="float:left;">
@@ -34,56 +34,59 @@
 <view class="grey" style="margin-top:20rpx;margin-bottom:20rpx;font-size:12px;text-align:center">
     {{message1}}
 </view>
-<!--<template is="wxParse" data="{{wxParseData:DescriptionHead.nodes}}"></template>-->
-<view class="line"></view>
-<image src="/Image/pinhuo/detail_1.jpg" mode="widthFix" style="width: 100%;"></image>
-<view class="line"></view>
-<view class="title-line">
-    <view class="left"></view>
-    <view class="right">
-        配送信息
+<block wx:if="{{we7}}">
+    <view class="line"></view>
+    <image src="/Image/pinhuo/detail_1.jpg" mode="widthFix" style="width: 100%;"></image>
+    <view class="line"></view>
+    <view class="title-line">
+        <view class="left"></view>
+        <view class="right">
+            配送信息
+        </view>
     </view>
-</view>
-<view class="content-line">
-    <view class="inline">
-        <text class="bold">本场结束时间：</text>
-        <text>明天明天明天明天</text>
+    <view class="content-line">
+        <view class="inline">
+            <text class="bold">本场结束时间：</text>
+            <text>今天（10月31日）12点结束</text>
+        </view>
+        <view class="inline">
+            <text class="bold">预计配送时间：</text>
+            <text>排单9~11天，预计11月09号内可发货，如遇档口改期，延3～5天</text>
+        </view>
+        <view class="inline">
+            <text class="bold">发货仓库：</text>
+            <text>广州仓</text>
+        </view>
     </view>
-    <view class="inline">
-        <text class="bold">本场结束时间：</text>
-        <text>明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天明天</text>
+    <view class="line"></view>
+    <view class="title-line">
+        <view class="left"></view>
+        <view class="right">
+            商品信息
+        </view>
     </view>
-    <view class="inline">
-        <text class="bold">本场结束时间：</text>
-        <text>明天明天明天明天</text>
+    <view class="content-line">
+        <view class="inline">
+            <text class="bold">颜色：</text>
+            <text>{{Color}}</text>
+        </view>
+        <view class="inline">
+            <text class="bold">尺码：</text>
+            <text>{{Size}}</text>
+        </view>
     </view>
-</view>
-<view class="line"></view>
-<view class="title-line">
-    <view class="left"></view>
-    <view class="right">
-        商品信息
+    <view class="line"></view>
+    <view class="title-line">
+        <view class="left"></view>
+        <view class="right">
+            实拍图片
+        </view>
     </view>
-</view>
-<view class="content-line">
-    <view class="inline">
-        <text class="bold">本场结束时间：</text>
-        <text>明天明天明天明天</text>
-    </view>
-    <view class="inline">
-        <text class="bold">本场结束时间：</text>
-        <text>明天明天明天明天</text>
-    </view>
-</view>
-<view class="line"></view>
-<view class="title-line">
-    <view class="left"></view>
-    <view class="right">
-        实拍图片
-    </view>
-</view>
-<video control src="{{item}}" style="width:100%;height:850rpx;margin:10px 0;" wx:for="{{Videos}}" wx:key="key"></video>
-<image lazyLoad="true" mode="widthFix" src="{{item.url}}" style="width:100%;margin-top:10rpx;" wx:for="{{detailImages}}" wx:key="key"></image>
+</block>
+<template is="wxParse" data="{{wxParseData:DescriptionHead.nodes}}" wx:else></template>
+<video control src="{{Videos}}" style="width:100%;height:850rpx;margin:10px 0;" wx:if="{{we7 && Videos}}"></video>
+<video control src="{{item}}" style="width:100%;height:850rpx;margin:10px 0;" wx:for="{{Videos}}" wx:key="key" wx:if="{{!we7}}"></video>
+<image lazyLoad="true" mode="widthFix" src="{{we7 ? item : item.url}}" style="width:100%;margin-top:10rpx;" wx:for="{{detailImages}}" wx:key="key"></image>
 <view style="background-color:#f0f0f0;height:10px;"></view>
 <view style="background-color: #fff;">
     <view style="margin-top:10rpx;">

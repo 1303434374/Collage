@@ -1,4 +1,4 @@
-var t = getApp(), a = require("../../utils/timeutil.js"), e = require("../../utils/httputil.js"), i = require("../../utils/imgutil.js"), s = require("../../utils/messageutil.js");
+var t = getApp(), a = require("../../utils/timeutil.js"), e = require("../../utils/httputil.js"), i = require("../../utils/imgutil.js"), s = require("../../utils/messageutil.js"), we7 = t.globalData.we7;
 
 Page({
     data: {
@@ -24,10 +24,13 @@ Page({
         shino: !1,
         partList: !0,
         partTop: 0,
-        ShowCoinPayIcon: !0
+        ShowCoinPayIcon: !1
     },
     onLoad: function(a) {
         console.log(a)
+        this.setData({
+            we7: we7
+        })
         var i = decodeURIComponent(a.scene);
         i && i.split("&").map(function(t) {
             "i" == t.slice(0, 1) ? a.qsid = t.slice(1) : "k" == t.slice(0, 1) ? a.key = t.slice(1) : "t" == t.slice(0, 1) && (a.tag = t.slice(1));
@@ -39,15 +42,20 @@ Page({
             success: function(t) {
                 s.data.stop = t.windowHeight, s.data.width = t.windowWidth;
             }
-        }), a.title && (t.setTitle(a.title), s.data.share_title = a.title), s.data.share_qsid = a.qsid, 
-        t.showLoading("数据加载中"), s.init(!0), a.key && e.httppostmore("shop/wx/SaveWxQsStatistics", {
-            Key: a.key,
-            OpenID: wx.getStorageSync("openid"),
-            QsID: a.qsid,
-            tag: a.tag
-        }, function(t) {}, "POST");
+        }), a.title && (t.setTitle(a.title), s.data.share_title = a.title), s.data.share_qsid = a.qsid;
+        if (we7) {
+            t.showLoading("数据加载中")
+            this.init(!0,a.qsid)
+        } else {
+            t.showLoading("数据加载中"), s.init(!0), a.key && e.httppostmore("shop/wx/SaveWxQsStatistics", {
+                Key: a.key,
+                OpenID: wx.getStorageSync("openid"),
+                QsID: a.qsid,
+                tag: a.tag
+            }, function(t) {}, "POST");
+        }
     },
-    init: function(a) {
+    init: function(a,qsid) {
         var d = this;
         d.data.flag = !1;
         var n = {
@@ -58,54 +66,20 @@ Page({
             displaymode: d.data.displaymode,
             filterValues: JSON.stringify(d.data.filterValues)
         };
-        e.httppost("pinhuoitem/getitemsv2", n, function(e) {
-            console.log('专场详情+商品列表=')
-            console.log(e)
-            if (e.Result) {
-                if (t.setTitle(e.Data.Info.Name), !e.Data.Info.VisitResult.CanVisit) return wx.showModal({
-                    title: "提示",
-                    content: e.Data.Info.VisitResult.Message,
-                    showCancel: !1,
-                    success: function(t) {
-                        wx.getStorageSync("token") ? wx.switchTab({
-                            url: "/pages/nahuomain/main"
-                        }) : wx.reLaunch({
-                            url: "/pages/login/login?qsid=" + n.qsid
-                        });
-                    }
-                }), !1;
-                d.data.flag = !0;
-                var o = e.Data.Info.ToTime.split(/[^0-9]/), r = new Date(o[0], o[1] - 1, o[2], o[3], o[4], o[5]).getTime() - new Date().getTime();
-                if (e.Data.NewItems.map(function(t) {
-                    t.itemcover = i.getUrl(t.Cover, 300), t.tips = s.showtips(t.DealCount, t.ChengTuanCount);
-                }), e.Data.PassItems.map(function(t) {
-                    t.itemcover = i.getUrl(t.Cover, 300), t.tips = s.showtips(t.DealCount, t.ChengTuanCount);
-                }), 0 == d.data.displaymode ? e.Data.NewItems.length >= d.data.pagesize ? (d.data.List = e.Data.NewItems, 
-                d.data.displaymode = 1, d.data.hasMore = !0, d.data.pageIndex = 2) : e.Data.NewItems.length > 0 ? (d.data.List = e.Data.NewItems, 
-                d.data.displaymode = 1, d.data.hasMore = !1) : e.Data.PassItems.length >= d.data.pagesize ? (d.data.List = e.Data.PassItems, 
-                d.data.hasMore = !0, d.data.pageIndex = 2, d.data.displaymode = 2) : e.Data.PassItems.length > 0 ? (d.data.List = e.Data.PassItems, 
-                d.data.hasMore = !1, d.data.pageIndex = 2) : (d.data.List = e.Data.NewItems, d.data.hasMore = !1, 
-                d.data.pageIndex = 2, d.data.displaymode = 1) : 1 == d.data.displaymode ? e.Data.NewItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.NewItems), 
-                d.data.hasMore = !0, d.data.pageIndex++) : e.Data.NewItems.length < d.data.pagesize && (d.data.List = d.data.List.concat(e.Data.NewItems), 
-                d.data.hasMore = !1) : 2 == d.data.displaymode && (e.Data.PassItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.PassItems), 
-                d.data.hasMore = !0, d.data.pageIndex++) : (d.data.List = d.data.List.concat(e.Data.PassItems), 
-                d.data.hasMore = !1)), a) {
-                    d.data.SortMenus = e.Data.Info.SortMenus, d.data.ShowCoinPayIcon = e.Data.Info.ShowCoinPayIcon, 
-                    d.timeOut(r), e.Data.Info.SortMenus.map(function(t) {
-                        t.selected = !0, 4 == d.data.sort && 5 == t.Value || 5 == d.data.sort && 4 == t.Value ? t.selected = !1 : 4 !== d.data.sort && 5 !== d.data.sort && 5 == t.Value && (t.selected = !1);
-                    });
-                    var h = [ {
-                        PartTitleText: e.Data.Info.Part1Title,
-                        displaymode: 1,
-                        istrue: !0
-                    }, {
-                        PartTitleText: e.Data.Info.Part2Title,
-                        displaymode: 2,
-                        istrue: !0
-                    } ];
-                    0 == e.Data.NewItems.length && (h[0].istrue = !1, d.data.partList = !1), 0 == e.Data.PassItems.length && (h[1].istrue = !1, 
-                    d.data.partList = !1), d.setData({
-                        UserCover: "https://api2.nahuo.com/v3/shop/userlogo/" + e.Data.Info.ShopUserID,
+        if (we7) {
+            e.http_post("getlanmu", {
+                QsID: qsid
+            }, (e) => {
+                if (e.Data) {
+                    console.log('微擎专场详情+商品列表=')
+                    console.log(e)
+                    t.setTitle(e.Data.Info.Name)
+                    d.data.List = e.Data.NewItems
+                    d.data.SortMenus = e.Data.Info.SortMenus
+                    var o = e.Data.Info.ToTime.split(/[^0-9]/), r = new Date(o[0], o[1] - 1, o[2], o[3], o[4], o[5]).getTime() - new Date().getTime()
+                    d.timeOut(r)
+                    d.setData({
+                        UserCover: e.Data.Info.ShopUserID,
                         ShopUserName: e.Data.Info.ShopUserName,
                         AppCover: e.Data.Info.AppCover,
                         Description: e.Data.Info.Description,
@@ -114,32 +88,107 @@ Page({
                         stop: d.data.stop,
                         SortMenus: d.data.SortMenus,
                         List: d.data.List,
+                        // sort: e.Data.Info.CurrentMenuID,
+                        hasMore: d.data.hasMore,
+                        shino: d.data.shino,
+                        // Cover: e.Data.Info.Cover,
+                        displaymode: d.data.displaymode,
+                        // PartTitle: h,
+                        // partList: d.data.partList,
+                        ShowCoinPayIcon: d.data.ShowCoinPayIcon
+                    });
+                }
+            });
+        } else {
+            e.httppost("pinhuoitem/getitemsv2", n, function(e) {
+                console.log('专场详情+商品列表=')
+                console.log(e)
+                if (e.Result) {
+                    if (t.setTitle(e.Data.Info.Name), !e.Data.Info.VisitResult.CanVisit) return wx.showModal({
+                        title: "提示",
+                        content: e.Data.Info.VisitResult.Message,
+                        showCancel: !1,
+                        success: function(t) {
+                            wx.getStorageSync("token") ? wx.switchTab({
+                                url: "/pages/nahuomain/main"
+                            }) : wx.reLaunch({
+                                url: "/pages/login/login?qsid=" + n.qsid
+                            });
+                        }
+                    }), !1;
+                    d.data.flag = !0;
+                    var o = e.Data.Info.ToTime.split(/[^0-9]/), r = new Date(o[0], o[1] - 1, o[2], o[3], o[4], o[5]).getTime() - new Date().getTime();
+                    if (e.Data.NewItems.map(function(t) {
+                        t.itemcover = i.getUrl(t.Cover, 300), t.tips = s.showtips(t.DealCount, t.ChengTuanCount);
+                    }), e.Data.PassItems.map(function(t) {
+                        t.itemcover = i.getUrl(t.Cover, 300), t.tips = s.showtips(t.DealCount, t.ChengTuanCount);
+                    }), 0 == d.data.displaymode ? e.Data.NewItems.length >= d.data.pagesize ? (d.data.List = e.Data.NewItems, 
+                    d.data.displaymode = 1, d.data.hasMore = !0, d.data.pageIndex = 2) : e.Data.NewItems.length > 0 ? (d.data.List = e.Data.NewItems, 
+                    d.data.displaymode = 1, d.data.hasMore = !1) : e.Data.PassItems.length >= d.data.pagesize ? (d.data.List = e.Data.PassItems, 
+                    d.data.hasMore = !0, d.data.pageIndex = 2, d.data.displaymode = 2) : e.Data.PassItems.length > 0 ? (d.data.List = e.Data.PassItems, 
+                    d.data.hasMore = !1, d.data.pageIndex = 2) : (d.data.List = e.Data.NewItems, d.data.hasMore = !1, 
+                    d.data.pageIndex = 2, d.data.displaymode = 1) : 1 == d.data.displaymode ? e.Data.NewItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.NewItems), 
+                    d.data.hasMore = !0, d.data.pageIndex++) : e.Data.NewItems.length < d.data.pagesize && (d.data.List = d.data.List.concat(e.Data.NewItems), 
+                    d.data.hasMore = !1) : 2 == d.data.displaymode && (e.Data.PassItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.PassItems), 
+                    d.data.hasMore = !0, d.data.pageIndex++) : (d.data.List = d.data.List.concat(e.Data.PassItems), 
+                    d.data.hasMore = !1)), a) {
+                        d.data.SortMenus = e.Data.Info.SortMenus, d.data.ShowCoinPayIcon = e.Data.Info.ShowCoinPayIcon, 
+                        d.timeOut(r), e.Data.Info.SortMenus.map(function(t) {
+                            t.selected = !0, 4 == d.data.sort && 5 == t.Value || 5 == d.data.sort && 4 == t.Value ? t.selected = !1 : 4 !== d.data.sort && 5 !== d.data.sort && 5 == t.Value && (t.selected = !1);
+                        });
+                        var h = [ {
+                            PartTitleText: e.Data.Info.Part1Title,
+                            displaymode: 1,
+                            istrue: !0
+                        }, {
+                            PartTitleText: e.Data.Info.Part2Title,
+                            displaymode: 2,
+                            istrue: !0
+                        } ];
+                        0 == e.Data.NewItems.length && (h[0].istrue = !1, d.data.partList = !1), 0 == e.Data.PassItems.length && (h[1].istrue = !1, 
+                        d.data.partList = !1), d.setData({
+                            UserCover: "https://api2.nahuo.com/v3/shop/userlogo/" + e.Data.Info.ShopUserID,
+                            ShopUserName: e.Data.Info.ShopUserName,
+                            AppCover: e.Data.Info.AppCover,
+                            Description: e.Data.Info.Description,
+                            OpenStatu: e.Data.Info.OpenStatu,
+                            Summary: e.Data.Info.Summary,
+                            stop: d.data.stop,
+                            SortMenus: d.data.SortMenus,
+                            List: d.data.List,
+                            sort: e.Data.Info.CurrentMenuID,
+                            hasMore: d.data.hasMore,
+                            shino: d.data.shino,
+                            Cover: e.Data.Info.Cover,
+                            displaymode: d.data.displaymode,
+                            PartTitle: h,
+                            partList: d.data.partList,
+                            ShowCoinPayIcon: d.data.ShowCoinPayIcon
+                        });
+                    } else d.setData({
+                        List: d.data.List,
+                        SortMenus: d.data.SortMenus,
                         sort: e.Data.Info.CurrentMenuID,
                         hasMore: d.data.hasMore,
                         shino: d.data.shino,
-                        Cover: e.Data.Info.Cover,
-                        displaymode: d.data.displaymode,
-                        PartTitle: h,
-                        partList: d.data.partList,
-                        ShowCoinPayIcon: d.data.ShowCoinPayIcon
+                        displaymode: d.data.displaymode
                     });
-                } else d.setData({
-                    List: d.data.List,
-                    SortMenus: d.data.SortMenus,
-                    sort: e.Data.Info.CurrentMenuID,
-                    hasMore: d.data.hasMore,
-                    shino: d.data.shino,
-                    displaymode: d.data.displaymode
-                });
-                return d;
-            }
-        }, "GET");
+                    return d;
+                }
+            }, "GET");
+        }
     },
     onReady: function() {
         var t = this;
         wx.canIUse("createSelectorQuery") && setTimeout(function() {
             wx.createSelectorQuery().select("#ids").boundingClientRect(function(a) {
-                t.data.height = a.height - 88 - 30;
+                let h = a.height - 88 - 30
+                if (we7) {
+                    t.data.height = h + 50
+                } else {
+                    t.data.height = h
+                }
+                console.log(t.data.height)
             }).exec();
         }, 500);
     },
@@ -151,6 +200,24 @@ Page({
             });
         }, 1e3);
     },
+    bindscroll: function(t) {
+        wx.canIUse("createSelectorQuery") && (this.data.fixed = t.detail.scrollTop >= this.data.height, 
+        this.setData({
+            fixed: this.data.fixed
+        }), this.data.partList && this.data.fixed && (this.animation2(this.data.partTop > t.detail.scrollTop), 
+        this.data.partTop = t.detail.scrollTop));
+    },
+    loadMore: function(t) {
+        if (we7) {
+
+        } else {
+            this.data.hasMore && this.data.flag ? this.init(!1) : this.data.flag ? wx.showToast({
+                title: "没有更多数据咯"
+            }) : wx.showToast({
+                title: "亲，您太快了"
+            });
+        }
+    },
     refesh: function(t) {
         var a = this;
         a.data.flag && (a.data.hasMore ? (a.data.List = [], a.data.pageIndex = 1, a.data.listPass = [], 
@@ -159,25 +226,11 @@ Page({
             title: "没有更多数据了"
         }));
     },
-    loadMore: function(t) {
-        this.data.hasMore && this.data.flag ? this.init(!1) : this.data.flag ? wx.showToast({
-            title: "没有更多数据咯"
-        }) : wx.showToast({
-            title: "亲，您太快了"
-        });
-    },
     imagenavigator: function(t) {
         var a = t.currentTarget.dataset.testid;
         wx.navigateTo({
             url: "../pinhuo/itemdetail?id=" + a + "&qsid=" + this.data.share_qsid
         });
-    },
-    bindscroll: function(t) {
-        wx.canIUse("createSelectorQuery") && (this.data.fixed = t.detail.scrollTop >= this.data.height, 
-        this.setData({
-            fixed: this.data.fixed
-        }), this.data.partList && this.data.fixed && (this.animation2(this.data.partTop > t.detail.scrollTop), 
-        this.data.partTop = t.detail.scrollTop));
     },
     animation2: function(t) {
         var a = wx.createAnimation({

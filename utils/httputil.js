@@ -2,8 +2,8 @@ var t = "https://api2.nahuo.com/";
 
 let u = 'https://pj.dede1.com/app/index.php'
 let b = {
-    i: '116',
-    m: 'tonghuagushi',
+    i: '119',
+    m: 'pintuan',
     c: 'entry',
     a: 'wxapp'
 }
@@ -112,11 +112,10 @@ module.exports = {
         });
     },
 
-    http_post: function(a, e, o, s) {
+    http_post: function(a, e, o) {
         wx.request({
             url: u,
             data: this.merge({do: a}, this.merge(b, e)),
-            method: s,
             success: function(t) {
                 wx.hideLoading()
                 "function" == typeof o && o(t.data)
