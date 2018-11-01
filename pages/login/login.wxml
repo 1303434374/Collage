@@ -12,7 +12,7 @@
         <view class="w90p mt20 " wx:if="{{status==1}}">
             <input class="phone-input" maxlength="40" name="account" placeholder="手机/账号" style="height:36px;"></input>
         </view>
-        <view class="w90p mt20" wx:if="{{status==1}}">
+        <view class="w90p mt20" wx:if="{{we7 || status==1}}">
             <input class="phone-input" maxlength="20" name="password" password="true" placeholder="请输入密码" style="height:36px;"></input>
         </view>
         <view class="w90p mt20" wx:if="{{status==2}}">
@@ -30,11 +30,11 @@
             收不到短信，试试语音验证码
         </view>-->
         <view class="w90p mt20 ">
-            <button class="color_btn" formType="submit" size="default" type="warn"> {{status==2?'登录/注册':'登录'}}</button>
+            <button class="color_btn" formType="submit" size="default" type="warn"> {{status==1?'登录':we7?'注册':'登录/注册'}}</button>
         </view>
         <view class="forget_box">
             <view bindtap="changeStatus" class="goindex">
-                {{status==1?'手机短信快捷登录':'账号密码登录'}}
+                {{status==2?'账号密码登录':we7?'手机快捷注册':'手机短信快捷登录'}}
             </view>
             <view bindtap="forget" class="forget">忘记密码</view>
         </view>

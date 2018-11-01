@@ -1,8 +1,10 @@
-var e = require("../../utils/httputil.js"), t = getApp();
+var e = require("../../utils/httputil.js"), t = getApp(), we7 = t.globalData.we7;
 
 Page({
     data: {
-        disabled: !0
+        disabled: !0,
+        we7: !1,
+        code: ''
     },
     onLoad: function(e) {
         var t = e.mobile.substring(0, 3) + "****" + e.mobile.substring(8, 11);
@@ -11,6 +13,12 @@ Page({
             mobile1: e.mobile,
             codetime: 59
         });
+        if (we7) {
+            this.setData({
+                we7: !0,
+                code: e.code
+            })
+        }
     },
     onReady: function() {
         var e = this, t = setInterval(function() {
@@ -52,26 +60,49 @@ Page({
     getcode: function() {
         var o = this;
         t.showLoading("正在发送验证码");
-        var a = {
-            mobile: o.data.mobile1,
-            useFor: "findLoginPassword",
-            messageFrom: "天天拼货团"
-        };
-        e.httppost("user/user/GetMobileVerifyCode2", a, function(e) {
-            wx.showToast({
-                title: e.Message,
-                mask: !0
-            }), o.setData({
-                codetime: 59,
-                disabled: !0
-            }), o.onReady();
-        }, "POST");
+        if (we7) {
+            e.http_post("Smscode", {
+                tel: o.data.mobile1
+            }, (e) => {
+                console.log('验证码信息=')
+                console.log(e)
+                o.setData({
+                    codetime: 59,
+                    disabled: !0,
+                    code: e.data.code
+                })
+                o.onReady();
+            })
+        } else {
+            var a = {
+                mobile: o.data.mobile1,
+                useFor: "findLoginPassword",
+                messageFrom: "天天拼货团"
+            };
+            e.httppost("user/user/GetMobileVerifyCode2", a, function(e) {
+                wx.showToast({
+                    title: e.Message,
+                    mask: !0
+                }), o.setData({
+                    codetime: 59,
+                    disabled: !0
+                }), o.onReady();
+            }, "POST");
+        }
     },
     submit: function(e) {
-        "" == e.detail.value.code ? wx.showToast({
-            title: "请输入验证码"
-        }) : wx.redirectTo({
-            url: "/pages/login/setpassword?code=" + e.detail.value.code + "&mobile=" + this.data.mobile1
-        });
+        if (we7) {
+            if ("" == e.detail.value.code) return void t.showToast("验证码不能为空");
+            if (this.data.code != e.detail.value.code) return void t.showToast("验证码错误");
+            wx.redirectTo({
+                url: "/pages/login/setpassword?code=" + e.detail.value.code + "&mobile=" + this.data.mobile1
+            }); 
+        } else {
+            "" == e.detail.value.code ? wx.showToast({
+                title: "请输入验证码"
+            }) : wx.redirectTo({
+                url: "/pages/login/setpassword?code=" + e.detail.value.code + "&mobile=" + this.data.mobile1
+            }); 
+        }
     }
 });

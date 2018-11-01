@@ -101,7 +101,10 @@ Page({
                         ButtomBigButtons: n.Data.ButtomBigButtons,
                         ButtomSmallButtons: l.data.ButtomSmallButtons,
                         Color: n.Data.Color,
-                        Size: n.Data.Size
+                        Size: n.Data.Size,
+                        endmsg: n.Data.endmsg,
+                        preendmsg: n.Data.preendmsg,
+                        sendaddress: n.Data.sendaddress
                     })
                 }
             })

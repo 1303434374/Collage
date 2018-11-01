@@ -47,15 +47,15 @@
     <view class="content-line">
         <view class="inline">
             <text class="bold">本场结束时间：</text>
-            <text>今天（10月31日）12点结束</text>
+            <text>{{endmsg}}</text>
         </view>
         <view class="inline">
             <text class="bold">预计配送时间：</text>
-            <text>排单9~11天，预计11月09号内可发货，如遇档口改期，延3～5天</text>
+            <text>{{preendmsg}}</text>
         </view>
         <view class="inline">
             <text class="bold">发货仓库：</text>
-            <text>广州仓</text>
+            <text>{{sendaddress}}</text>
         </view>
     </view>
     <view class="line"></view>

@@ -13,6 +13,6 @@
             <block wx:if="{{codetime<=59}}">({{codetime}})</block>重新获取
         </button>
     </view>
-    <view bindtap="sendtall" class="talk">收不到短信，试试语音验证</view>
+    <view bindtap="sendtall" class="talk" wx:if="{{!we7}}">收不到短信，试试语音验证</view>
     <button class="submit color_btn" formType="submit" type="warn">确认</button>
 </form>
