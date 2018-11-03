@@ -1,4 +1,4 @@
-var t = require("../../utils/imgutil.js"), e = require("../../utils/httputil.js"), i = getApp();
+var t = require("../../utils/imgutil.js"), e = require("../../utils/httputil.js"), i = getApp(), we7 = i.globalData.we7;
 
 Page({
     data: {
@@ -19,6 +19,9 @@ Page({
         totalqty: 0
     },
     onLoad: function(t) {
+        this.setData({
+            we7: we7
+        })
         var e = this;
         e.time = null, wx.getSystemInfo({
             success: function(t) {
@@ -27,7 +30,11 @@ Page({
         });
     },
     onShow: function() {
-        this.init(), this.GetQty();
+        if (we7) {
+
+        } else {
+            this.init(),this.GetQty();
+        }
     },
     init: function() {
         var a = this;
@@ -91,8 +98,9 @@ Page({
                     list: a.data.list
                 });
             }, 1e3)), a.totlePrice());
-        });
+        });                                                                                                                                                      
     },
+    //设置选中的商品id数组
     itemInfos: function() {
         var t = this;
         this.data.itemInfos = [], this.data.totalqty = 0, this.data.list.map(function(e) {
@@ -106,11 +114,14 @@ Page({
             });
         });
     },
+    //计算选中商品的总价
     totlePrice: function() {
         var t = this;
         this.itemInfos(), i.showLoading(""), e.httppost("pinhuocart/GetItemDiscount", {
             itemInfos: JSON.stringify(t.data.itemInfos)
         }, function(e) {
+            console.log('购物车算钱=')
+            console.log(e)
             e.Result && t.setData({
                 TotalAmount: e.Data.TotalAmount,
                 PayableAmount: e.Data.PayableAmount,
@@ -197,6 +208,7 @@ Page({
             });
         }), this.totlePrice();
     },
+    //点击结算
     account: function(t) {
         this.itemInfos(), 0 == this.data.itemInfos.length ? wx.showToast({
             title: "请选择要结算的商品",
@@ -206,6 +218,7 @@ Page({
             url: "/pages/pinhuo/settlement?quickPay=false&data=" + JSON.stringify(this.data.itemInfos)
         });
     },
+    //点击删除
     deleteGoods: function(t) {
         var a = [], s = this;
         wx.showModal({
@@ -229,6 +242,8 @@ Page({
                         });
                     });
                     var o = a.join(",");
+                    console.log('购物车删除=')
+                    console.log(o)
                     i.showLoading("页面加载中..."), e.httppost("pinhuocart/delete", {
                         ids: o
                     }, function(t) {
@@ -238,6 +253,7 @@ Page({
             }
         });
     },
+    //点击编辑
     changeGoods: function(t) {
         this.getItemDetail(t.currentTarget.dataset.agentitemid, t.currentTarget.dataset.products, t.currentTarget.dataset.title, t.currentTarget.dataset.price), 
         this.animation(!0);
@@ -263,6 +279,8 @@ Page({
             id: a,
             typeid: 1
         }, function(e) {
+            console.log('购物车编辑=')
+            console.log(e)
             e.Result && (c.data.info.name = o, c.data.info.MainColorPic = t.getUrl(e.Data.MainColorPic, 200), 
             c.data.info.itemId = e.Data.ID, c.data.info.Price = n, e.Data.Products.map(function(e, i) {
                 e.ColorPic = t.getUrl(e.ColorPic, 200), e.Color == s[s.length - 1].Color && (c.data.info.fristindex = i), 
@@ -319,6 +337,7 @@ Page({
             info: this.data.info
         });
     },
+    //点击保存
     update: function(t) {
         var a = this, s = {
             itemId: a.data.info.itemId,
@@ -332,7 +351,7 @@ Page({
                     qty: e.qty
                 });
             });
-        }), s.Products.length > 0 ? (i.showLoading("修改商品"), e.httppost("pinhuocart/update", s, function(t) {
+        }), console.log('购物车更新='), console.log(s), s.Products.length > 0 ? (i.showLoading("修改商品"), e.httppost("pinhuocart/update", s, function(t) {
             t.Result && (a.init(), a.closeDrag());
         }, "POST")) : wx.showModal({
             title: "",

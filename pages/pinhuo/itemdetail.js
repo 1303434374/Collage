@@ -381,11 +381,11 @@ Page({
                     });
                 });
             }), t.showLoading("加入购物车中"), 
-            console.log('加入购物车=')
+            console.log('加入购物车的商品=')
             console.log(i)
             if (we7) {
                 a.http_post('AddMycar', i ,(t) => {
-                    console.log('微擎购物车=')
+                    console.log('微擎加入购物车=')
                     console.log(t)
                     i.Products.map(function(t) {
                         s.data.CarNum += t.qty;
