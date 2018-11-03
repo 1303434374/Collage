@@ -239,7 +239,7 @@ Page({
     loadimg: function(t) {
         var a = t.target.dataset.src, e = [];
         this.data.newimages.map(function(t) {
-            e.push(t.url);
+            we7 ? e.push(t) : e.push(t.url)
         }), wx.previewImage({
             current: a,
             urls: e
@@ -260,7 +260,7 @@ Page({
             globalData: this.data.globalData
         }));
     },
-    //点击拿货
+    //点击我要拿货
     actionSheetTap: function(t) {
         var a = this;
         if (we7) {
@@ -380,7 +380,10 @@ Page({
                         qty: a.qty
                     });
                 });
-            }), t.showLoading("加入购物车中"), a.httppost("pinhuocart/addFromJson", i, function(t) {
+            }), t.showLoading("加入购物车中"), 
+            console.log('加入购物车=')
+            console.log(i)
+            a.httppost("pinhuocart/addFromJson", i, function(t) {
                 i.Products.map(function(t) {
                     s.data.CarNum += t.qty;
                 }), s.setData({

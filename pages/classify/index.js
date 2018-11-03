@@ -34,7 +34,7 @@ Page({
     },
     onReady: function() {},
     onShow: function() {
-        we7 && this.GetQty();
+        !we7 && this.GetQty();
     },
     onHide: function() {},
     onUnload: function() {},
