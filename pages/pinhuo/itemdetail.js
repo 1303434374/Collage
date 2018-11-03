@@ -383,27 +383,53 @@ Page({
             }), t.showLoading("加入购物车中"), 
             console.log('加入购物车=')
             console.log(i)
-            a.httppost("pinhuocart/addFromJson", i, function(t) {
-                i.Products.map(function(t) {
-                    s.data.CarNum += t.qty;
-                }), s.setData({
-                    actionSheetHidden: !s.data.actionSheetHidden,
-                    CarNum: s.data.CarNum
-                }), wx.showModal({
-                    content: "是否马上结算？",
-                    confirmText: "立即结算",
-                    cancelText: "继续逛逛",
-                    success: function(t) {
-                        t.confirm ? wx.switchTab({
-                            url: "/pages/car/car"
-                        }) : 1 == getCurrentPages().length ? wx.switchTab({
-                            url: "/pages/nahuomain/main"
-                        }) : wx.navigateBack({
-                            delta: 1
-                        });
-                    }
-                });
-            }, "POST");
+            if (we7) {
+                a.http_post('AddMycar', i ,(t) => {
+                    console.log('微擎购物车=')
+                    console.log(t)
+                    i.Products.map(function(t) {
+                        s.data.CarNum += t.qty;
+                    }), s.setData({
+                        actionSheetHidden: !s.data.actionSheetHidden,
+                        CarNum: s.data.CarNum
+                    }), wx.showModal({
+                        content: "是否马上结算？",
+                        confirmText: "立即结算",
+                        cancelText: "继续逛逛",
+                        success: function(t) {
+                            t.confirm ? wx.switchTab({
+                                url: "/pages/car/car"
+                            }) : 1 == getCurrentPages().length ? wx.switchTab({
+                                url: "/pages/nahuomain/main"
+                            }) : wx.navigateBack({
+                                delta: 1
+                            });
+                        }
+                    });
+                })
+            } else {
+                a.httppost("pinhuocart/addFromJson", i, function(t) {
+                    i.Products.map(function(t) {
+                        s.data.CarNum += t.qty;
+                    }), s.setData({
+                        actionSheetHidden: !s.data.actionSheetHidden,
+                        CarNum: s.data.CarNum
+                    }), wx.showModal({
+                        content: "是否马上结算？",
+                        confirmText: "立即结算",
+                        cancelText: "继续逛逛",
+                        success: function(t) {
+                            t.confirm ? wx.switchTab({
+                                url: "/pages/car/car"
+                            }) : 1 == getCurrentPages().length ? wx.switchTab({
+                                url: "/pages/nahuomain/main"
+                            }) : wx.navigateBack({
+                                delta: 1
+                            });
+                        }
+                    });
+                }, "POST");
+            }
         }
     },
     actionSheetbindchange: function() {
