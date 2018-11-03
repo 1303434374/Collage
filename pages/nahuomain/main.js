@@ -31,7 +31,7 @@ Page({
         this.setData({
             we7: we7
         })
-        if (we7) {
+        if (!we7) {
             var a = decodeURIComponent(t.scene);
             a && a.split("&").map(function(a) {
                 "k" == a.slice(0, 1) ? t.key = a.slice(1) : "t" == a.slice(0, 1) && (t.tag = a.slice(1));

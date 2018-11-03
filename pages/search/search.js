@@ -1,4 +1,4 @@
-var e = getApp(), t = require("../../utils/httputil.js");
+var e = getApp(), t = require("../../utils/httputil.js"), we7 = e.globalData.we7;
 
 Page({
     data: {
@@ -21,26 +21,43 @@ Page({
         placehoder: "档口/品牌"
     },
     onLoad: function() {
+        this.setData({
+            we7: we7
+        })
         var e = wx.getStorageSync("keyword");
         e ? this.data.keyarr = e.key : wx.setStorageSync("keyword", {
             key: []
         });
         var a = this;
-        t.httppost("shop/agent/getitemhotkeyword", {
-            userIDs: -1,
-            fromType: 3,
-            version: 2
-        }, function(e) {
-            console.log('热搜=')
-            console.log(e)
-            a.setData({
-                HotBrands: e.Data.HotBrands,
-                HotKeywords: e.Data.HotKeyWords,
-                SearchKeywords: e.Data.SearchKeywords,
-                HotCategroys: e.Data.HotCategroys,
-                keyarr: a.data.keyarr
-            });
-        }, "GET");
+        if (we7) {
+            t.http_post('SeachTag',{},(e)=> {
+                console.log('微擎热搜=')
+                console.log(e)
+                a.setData({
+                    HotBrands: e.Data.HotBrands,
+                    HotKeywords: e.Data.HotKeyWords,
+                    SearchKeywords: e.Data.SearchKeywords,
+                    HotCategroys: e.Data.HotCategroys,
+                    keyarr: a.data.keyarr
+                });
+            })
+        } else {
+            t.httppost("shop/agent/getitemhotkeyword", {
+                userIDs: -1,
+                fromType: 3,
+                version: 2
+            }, function(e) {
+                console.log('热搜=')
+                console.log(e)
+                a.setData({
+                    HotBrands: e.Data.HotBrands,
+                    HotKeywords: e.Data.HotKeyWords,
+                    SearchKeywords: e.Data.SearchKeywords,
+                    HotCategroys: e.Data.HotCategroys,
+                    keyarr: a.data.keyarr
+                });
+            }, "GET");
+        }
     },
     change: function(e) {
         this.setData({
@@ -49,7 +66,7 @@ Page({
         });
     },
     submit: function(t) {
-        if ("" == t.detail.value.key) return e.showToast("搜索内容不能为空"), !1;
+        if ("" == t.detail.value.key) return e.showToast("关键词不能为空"), !1;
         var a = wx.getStorageSync("keyword");
         a.key.unshift(t.detail.value.key), a.key = this.unique(a.key), wx.setStorageSync("keyword", a), 
         this.setData({

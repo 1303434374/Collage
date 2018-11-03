@@ -1,4 +1,4 @@
-var a = require("../../utils/imgutil.js"), t = require("../../utils/httputil.js"), e = getApp();
+var a = require("../../utils/imgutil.js"), t = require("../../utils/httputil.js"), e = getApp(), we7 = e.globalData.we7;
 
 Page({
     data: {
@@ -23,7 +23,10 @@ Page({
         partList: !0
     },
     onLoad: function(a) {
-      console.log(a);
+        this.setData({
+            we7: we7
+        })
+        console.log(a);
         var t = this;
         "" == a.key ? (e.setTitle(a.title), t.data.AreaID = 3) : (e.setTitle(a.key), t.data.AreaID = 2, 
         a.rid = -1, a.ValueIDS = ""), t.data.Datas = {
@@ -40,68 +43,133 @@ Page({
     init: function(i) {
         var s = this;
         e.showLoading("搜索中"), s.data.NewItems = [], s.data.PassItems = [], s.data.pageIndex = 1;
-        var d = {
-            keyword: s.data.keyword,
-            pageIndex: s.data.pageIndex,
-            pageSize: 20,
-            rid: this.data.rid,
-            valueIDS: this.data.valueIDS,
-            sort: this.data.sort,
-            displaymode: this.data.displaymode,
-            filterValues: JSON.stringify(s.data.filterValues)
-        };
-        t.httppost("pinhuoitem/SearchV2", d, function(t) {
-            console.log('搜索到的商品=')
-            console.log(t)
-            if (0 == t.Data.PassItems.length && 0 == t.Data.NewItems.length && i) return s.setData({
-                empty: "亲，没有该类的商品哟",
-                firstEmpty: !0
-            }), !1;
-            if (0 == t.Data.PassItems.length && 0 == t.Data.NewItems.length && (s.data.empty = "没有符合筛选条件的商品", 
-            wx.showModal({
-                title: "",
-                content: "没有符合筛选条件的商品",
-                showCancel: !1
-            })), t.Data.NewItems.map(function(t) {
-                t.Cover = a.getUrl(t.Cover, 300);
-            }), t.Data.PassItems.map(function(t) {
-                t.Cover = a.getUrl(t.Cover, 300);
-            }), i && (t.Data.SortMenus.map(function(a) {
-                5 == a.Value ? a.selected = !1 : a.selected = !0;
-            }), s.data.SortMenus = t.Data.SortMenus), i) {
-                var e = [ {
-                    PartTitleText: t.Data.Part1Title,
-                    displaymode: 1,
-                    istrue: !0
-                }, {
-                    PartTitleText: t.Data.Part2Title,
-                    displaymode: 2,
-                    istrue: !0
-                } ];
-                0 == t.Data.NewItems.length && (e[0].istrue = !1, s.data.partList = !1), 0 == t.Data.PassItems.length && (e[1].istrue = !1, 
-                s.data.partList = !1), t.Data.NewItems.length > 19 ? (s.data.pageIndex++, s.data.loadflage = !0, 
-                s.data.List = t.Data.NewItems, s.data.displaymode = 1) : t.Data.NewItems.length > 0 ? (s.data.loadflage = !1, 
-                s.data.List = t.Data.NewItems, s.data.displaymode = 1) : t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
-                s.data.loadflage = !0, s.data.displaymode = 2, s.data.List = t.Data.PassItems) : t.Data.PassItems.length > 0 ? (s.data.loadflage = !1, 
-                s.data.displaymode = 2, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
-                s.data.List = []), s.setData({
-                    PartTitle: e,
-                    partList: s.data.partList
+        if (we7) {
+            t.http_post("getlanmu", {
+                key: s.data.keyword,
+                rid: s.data.rid,
+                ordernum: s.data.sort,
+                state: s.data.keyword ? 1 : 2
+            }, (t) => {
+                if (t.Data) {
+                    console.log('微擎搜索到的商品=')
+                    console.log(t)
+                    if (0 == t.Data.NewItems.length && i) return s.setData({
+                        empty: "亲，没有该类的商品哟",
+                        firstEmpty: !0
+                    }), !1;
+                    if (0 == t.Data.NewItems.length && (s.data.empty = "没有符合筛选条件的商品", 
+                    wx.showModal({
+                        title: "",
+                        content: "没有符合筛选条件的商品",
+                        showCancel: !1
+                    })),
+                    // t.Data.NewItems.map(function(t) {
+                    //     t.Cover = a.getUrl(t.Cover, 300);
+                    // }), t.Data.PassItems.map(function(t) {
+                    //     t.Cover = a.getUrl(t.Cover, 300);
+                    // }), 
+                    i && (t.Data.Info.SortMenus.map(function(a) {
+                        5 == a.Value ? a.selected = !1 : a.selected = !0;
+                    }), s.data.SortMenus = t.Data.Info.SortMenus), i) {
+                        var e = [ {
+                            PartTitleText: t.Data.Part1Title,
+                            displaymode: 1,
+                            istrue: !0
+                        }, {
+                            PartTitleText: t.Data.Part2Title,
+                            displaymode: 2,
+                            istrue: !0
+                        } ];
+                        0 == t.Data.NewItems.length && (e[0].istrue = !1, s.data.partList = !1),
+                        0 == t.Data.PassItems.length && (e[1].istrue = !1, s.data.partList = !1),
+                        t.Data.NewItems.length > 19 ? (s.data.pageIndex++, s.data.loadflage = !0,s.data.List = t.Data.NewItems, s.data.displaymode = 1) 
+                        : t.Data.NewItems.length > 0 ? (s.data.loadflage = !1, s.data.List = t.Data.NewItems, s.data.displaymode = 1) 
+                        : t.Data.PassItems.length > 19 ? (s.data.pageIndex++,s.data.loadflage = !0, s.data.displaymode = 2, s.data.List = t.Data.PassItems)
+                        : t.Data.PassItems.length > 0 ? (s.data.loadflage = !1,s.data.displaymode = 2, s.data.List = t.Data.PassItems) 
+                        : (s.data.loadflage = !1,s.data.List = []), s.setData({
+                            PartTitle: e,
+                            partList: s.data.partList
+                        });
+                    } else 1 == s.data.displaymode ? t.Data.NewItems.length > 19 ? (s.data.pageIndex++, 
+                    s.data.loadflage = !0, s.data.List = t.Data.NewItems) : (s.data.loadflage = !1, 
+                    s.data.List = t.Data.NewItems) : 2 == s.data.displaymode && (t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
+                    s.data.loadflage = !0, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
+                    s.data.List = t.Data.PassItems));
+                    s.setData({
+                        List: s.data.List,
+                        displaymode: s.data.displaymode,
+                        // sort: t.Data.CurrentMenuID,
+                        sort: i ? 0 : s.data.sort,
+                        SortMenus: s.data.SortMenus,
+                        shino: s.data.shino,
+                        empty: s.data.empty
+                    });
+                }
+            })
+        } else {
+            var d = {
+                keyword: s.data.keyword,
+                pageIndex: s.data.pageIndex,
+                pageSize: 20,
+                rid: this.data.rid,
+                valueIDS: this.data.valueIDS,
+                sort: this.data.sort,
+                displaymode: this.data.displaymode,
+                filterValues: JSON.stringify(s.data.filterValues)
+            };
+            t.httppost("pinhuoitem/SearchV2", d, function(t) {
+                console.log('搜索到的商品=')
+                console.log(t)
+                if (0 == t.Data.PassItems.length && 0 == t.Data.NewItems.length && i) return s.setData({
+                    empty: "亲，没有该类的商品哟",
+                    firstEmpty: !0
+                }), !1;
+                if (0 == t.Data.PassItems.length && 0 == t.Data.NewItems.length && (s.data.empty = "没有符合筛选条件的商品", 
+                wx.showModal({
+                    title: "",
+                    content: "没有符合筛选条件的商品",
+                    showCancel: !1
+                })), t.Data.NewItems.map(function(t) {
+                    t.Cover = a.getUrl(t.Cover, 300);
+                }), t.Data.PassItems.map(function(t) {
+                    t.Cover = a.getUrl(t.Cover, 300);
+                }), i && (t.Data.SortMenus.map(function(a) {
+                    5 == a.Value ? a.selected = !1 : a.selected = !0;
+                }), s.data.SortMenus = t.Data.SortMenus), i) {
+                    var e = [ {
+                        PartTitleText: t.Data.Part1Title,
+                        displaymode: 1,
+                        istrue: !0
+                    }, {
+                        PartTitleText: t.Data.Part2Title,
+                        displaymode: 2,
+                        istrue: !0
+                    } ];
+                    0 == t.Data.NewItems.length && (e[0].istrue = !1, s.data.partList = !1), 0 == t.Data.PassItems.length && (e[1].istrue = !1, 
+                    s.data.partList = !1), t.Data.NewItems.length > 19 ? (s.data.pageIndex++, s.data.loadflage = !0, 
+                    s.data.List = t.Data.NewItems, s.data.displaymode = 1) : t.Data.NewItems.length > 0 ? (s.data.loadflage = !1, 
+                    s.data.List = t.Data.NewItems, s.data.displaymode = 1) : t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
+                    s.data.loadflage = !0, s.data.displaymode = 2, s.data.List = t.Data.PassItems) : t.Data.PassItems.length > 0 ? (s.data.loadflage = !1, 
+                    s.data.displaymode = 2, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
+                    s.data.List = []), s.setData({
+                        PartTitle: e,
+                        partList: s.data.partList
+                    });
+                } else 1 == s.data.displaymode ? t.Data.NewItems.length > 19 ? (s.data.pageIndex++, 
+                s.data.loadflage = !0, s.data.List = t.Data.NewItems) : (s.data.loadflage = !1, 
+                s.data.List = t.Data.NewItems) : 2 == s.data.displaymode && (t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
+                s.data.loadflage = !0, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
+                s.data.List = t.Data.PassItems));
+                s.setData({
+                    List: s.data.List,
+                    displaymode: s.data.displaymode,
+                    SortMenus: s.data.SortMenus,
+                    sort: t.Data.CurrentMenuID,
+                    shino: s.data.shino,
+                    empty: s.data.empty
                 });
-            } else 1 == s.data.displaymode ? t.Data.NewItems.length > 19 ? (s.data.pageIndex++, 
-            s.data.loadflage = !0, s.data.List = t.Data.NewItems) : (s.data.loadflage = !1, 
-            s.data.List = t.Data.NewItems) : 2 == s.data.displaymode && (t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
-            s.data.loadflage = !0, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
-            s.data.List = t.Data.PassItems));
-            s.setData({
-                List: s.data.List,
-                displaymode: s.data.displaymode,
-                SortMenus: s.data.SortMenus,
-                sort: t.Data.CurrentMenuID,
-                shino: s.data.shino,
-                empty: s.data.empty
-            });
-        }, "GET");
+            }, "GET");
+        }
     },
     //下拉加载更多
     loadMore: function() {
@@ -145,31 +213,56 @@ Page({
     //点击排序类型
     bindsearch: function(a) {
         var i = this;
-        if (20 != a.currentTarget.dataset.id) return i.data.pageIndex = 1, 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
-        i.data.SortMenus.map(function(a) {
-            5 == a.Value && (a.selected = !1), 4 == a.Value && (a.selected = !0);
-        })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(a) {
-            4 == a.Value && (a.selected = !1), 5 == a.Value && (a.selected = !0);
-        })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
-        i.init(!1), i.setData({
-            scroll_top: 0
-        }), !1;
-        i.data.firsted ? (e.showLoading("数据加载中"), t.httppost("pinhuoitem/GetSearchPanel", {
-            areaid: i.data.AreaID,
-            datas: JSON.stringify(i.data.Datas)
-        }, function(a) {
-            console.log('筛选条件=')
-            console.log(a)
-            a.Result && (a.Data.Panels.map(function(a) {
-                a.choose = !1, 1 == a.TypeID || 2 == a.TypeID ? a.selected = !0 : a.selected = !1, 
-                a.Panels.map(function(a) {
-                    a.selected = !1;
-                });
-            }), i.setData({
-                grid: a.Data.Panels,
-                firsted: !1
-            }), i.animation(!0));
-        }, "POST")) : i.animation(!0);
+        if (we7) {
+            if (20 != a.currentTarget.dataset.id) return i.data.pageIndex = 1, 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
+            i.data.SortMenus.map(function(a) {
+                5 == a.Value && (a.selected = !1), 4 == a.Value && (a.selected = !0);
+            })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(a) {
+                4 == a.Value && (a.selected = !1), 5 == a.Value && (a.selected = !0);
+            })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
+            i.init(!1), i.setData({
+                scroll_top: 0
+            }), !1;
+            i.data.firsted ? (e.showLoading("数据加载中"), 
+            t.http_post("Findneed", {
+                state: 1                
+            }, (a) => {
+                console.log('微擎筛选条件=')
+                console.log(a)
+                a.Data && (a.Data.Panels.map(function(a) {
+                    a.choose = !1, 1 == a.TypeID || 2 == a.TypeID ? a.selected = !0 : a.selected = !1 
+                }), i.setData({
+                    grid: a.Data.Panels,
+                    firsted: !1
+                }), i.animation(!0));
+            })) : i.animation(!0)
+        } else {
+            if (20 != a.currentTarget.dataset.id) return i.data.pageIndex = 1, 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
+            i.data.SortMenus.map(function(a) {
+                5 == a.Value && (a.selected = !1), 4 == a.Value && (a.selected = !0);
+            })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(a) {
+                4 == a.Value && (a.selected = !1), 5 == a.Value && (a.selected = !0);
+            })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
+            i.init(!1), i.setData({
+                scroll_top: 0
+            }), !1;
+            i.data.firsted ? (e.showLoading("数据加载中"), t.httppost("pinhuoitem/GetSearchPanel", {
+                areaid: i.data.AreaID,
+                datas: JSON.stringify(i.data.Datas)
+            }, function(a) {
+                console.log('筛选条件=')
+                console.log(a)
+                a.Result && (a.Data.Panels.map(function(a) {
+                    a.choose = !1, 1 == a.TypeID || 2 == a.TypeID ? a.selected = !0 : a.selected = !1, 
+                    a.Panels.map(function(a) {
+                        a.selected = !1;
+                    });
+                }), i.setData({
+                    grid: a.Data.Panels,
+                    firsted: !1
+                }), i.animation(!0));
+            }, "POST")) : i.animation(!0);
+        }
     },
     //筛选面板多选
     selected: function(a) {

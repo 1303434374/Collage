@@ -53,6 +53,15 @@ App(function(e, t, n) {
     getUserInfo: function(e) {
         this.globalData.userInfo && "function" == typeof e && e(this.globalData.userInfo);
     },
+    isLogin: function (event) {
+        let uid = wx.getStorageSync("u_id")
+        let oid = wx.getStorageSync("openid")
+        if (uid && uid != '' && oid && oid != '') {
+            return true
+        } else {
+            return false
+        }
+    },
     showToast: function(e) {
         wx.showToast({
             title: e,

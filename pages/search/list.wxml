@@ -1,5 +1,5 @@
-<view animation="{{animationData2}}" class="top_box">
-    <view class="part_box" wx:if="{{!firstEmpty&&partList}}">
+<view animation="{{we7 ? '' : animationData2}}" class="top_box">
+    <view class="part_box" wx:if="{{!firstEmpty&&partList && !we7}}">
         <view bindtap="checkpart" class="part_list {{displaymode==item.displaymode?'part_selected':''}}" data-id="{{item.displaymode}}" wx:if="{{item.istrue}}" wx:for="{{PartTitle}}" wx:key="PartTitle">{{item.PartTitleText}}</view>
     </view>
     <view class="fiter_box" wx:if="{{SortMenus.length>0}}">
@@ -8,14 +8,14 @@
         </view>
     </view>
 </view>
-<scroll-view bindscroll="bindscrollx" bindscrolltolower="loadMore" class="scroll_box" scrollTop="{{scroll_top}}" scrollY="true">
+<scroll-view bindscroll="bindscrollx" bindscrolltolower="{{we7 ? '' : loadMore}}" class="scroll_box" scrollTop="{{scroll_top}}" scrollY="true">
     <view class="empty_fill" wx:if="{{SortMenus.length>0}}"></view>
-    <view class="empty2" wx:if="{{partList}}"></view>
+    <view class="empty2" wx:if="{{partList && !we7}}"></view>
     <view class="list_img">
-        <view bindtap="skip" class="img_box" data-id="{{item.ID}}" wx:for="{{List}}" wx:key="{{index}}">
+        <view bindtap="skip" class="img_box" data-id="{{we7 ? item.gID : item.ID}}" wx:for="{{List}}" wx:key="{{index}}">
             <image class="overimg" src="/Image/pinhuo/JIESHU@3x.png" wx:if="{{item.Statu=='已下架'&&displayMode==2}}"></image>
             <image class="sealout" mode="widthFix" src="/Image/pinhuo/selaout.png" wx:if="{{item.IsSaleOut}}"></image>
-            <image class="img_banner" lazyLoad="true" mode="aspectFill" src="{{item.Cover}}"></image>
+            <image class="img_banner" lazyLoad="true" mode="aspectFill" src="{{we7 ? item.Itemcover : item.Cover}}"></image>
             <view class="content" style="height:44px;line-height:22px;overflow:hidden;">{{item.Title}}</view>
             <view class="content">
                 <text class="price">¥ {{item.Price}}</text>

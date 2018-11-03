@@ -91,6 +91,7 @@ Page({
         }
     },
     we7_login: function (phone,psw) {
+        wx.showLoading()
         t.http_post("Login", {
             phone: phone,
             psw: psw

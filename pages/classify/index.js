@@ -1,4 +1,4 @@
-var t = require("../../utils/imgutil.js"), a = require("../../utils/httputil.js"), e = getApp();
+var t = require("../../utils/imgutil.js"), a = require("../../utils/httputil.js"), e = getApp(), we7 = e.globalData.we7;
 
 Page({
     data: {
@@ -7,21 +7,34 @@ Page({
     },
     onLoad: function(n) {
         var i = this;
-        e.showLoading("页面加载中"), a.httppost("pinhuoitem/activity/GetRecommendList", {}, function(a) {
-            console.log('商品分类=')
-            console.log(a)
-            a.Data.List.map(function(a) {
-                a.Datas.map(function(a) {
-                    a.Cover && (a.Cover = t.getUrl(a.Cover, 200));
+        this.setData({
+            we7: we7
+        })
+        if (we7) {
+            e.showLoading("页面加载中"), a.http_post('AllType', {}, (a) => {
+                console.log('微擎分类=')
+                console.log(a)
+                i.setData({
+                    list: a.Data.List
                 });
-            }), i.setData({
-                list: a.Data.List
+            })
+        } else {
+            e.showLoading("页面加载中"), a.httppost("pinhuoitem/activity/GetRecommendList", {}, function(a) {
+                console.log('商品分类=')
+                console.log(a)
+                a.Data.List.map(function(a) {
+                    a.Datas.map(function(a) {
+                        a.Cover && (a.Cover = t.getUrl(a.Cover, 200));
+                    });
+                }), i.setData({
+                    list: a.Data.List
+                });
             });
-        });
+        }
     },
     onReady: function() {},
     onShow: function() {
-        this.GetQty();
+        we7 && this.GetQty();
     },
     onHide: function() {},
     onUnload: function() {},

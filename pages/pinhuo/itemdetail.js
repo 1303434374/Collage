@@ -50,7 +50,8 @@ Page({
         t.showLoading("页面加载中...")
         if (we7) {
             a.http_post("getdetailgood", {
-                gID: o.id
+                gID: o.id,
+                uid: wx.getStorageSync('u_id')
             }, (n) => {
                 if (n.Data) {
                     console.log('微擎商品详情=')
@@ -182,29 +183,57 @@ Page({
     //收藏功能
     collect: function() {
         var e = this;
-        this.data.flagdrag ? this.data.IsFavorite ? (t.showLoading("取消收藏"), a.httppost("shop/agent/RemoveItemFromMyFavorite", {
-            id: e.data.ItemId
-        }, function(t) {
-            e.setData({
-                IsFavorite: !1
-            }), wx.showToast({
-                title: "取消收藏成功",
-                icon: "success",
-                mask: !0
-            });
-        })) : (t.showLoading("收藏中..."), a.httppost("shop/agent/AddItemToMyFavorite", {
-            id: e.data.ItemId
-        }, function(t) {
-            e.setData({
-                IsFavorite: !0
-            }), wx.showToast({
-                title: "收藏成功",
-                icon: "success",
-                mask: !0
-            });
-        })) : (this.data.globalData.flag1 = !0, this.setData({
-            globalData: this.data.globalData
-        }));
+        if (we7) {
+          this.data.flagdrag ? this.data.IsFavorite ? (t.showLoading("取消收藏"), a.http_post("Dolike", {
+                id: e.data.ItemId,
+                uid: wx.getStorageSync('u_id')
+            }, function(t) {
+                e.setData({
+                    IsFavorite: !1
+                }), wx.showToast({
+                    title: "取消收藏成功",
+                    icon: "success",
+                    mask: !0
+                });
+            })) : (t.showLoading("收藏中..."), a.http_post("Dolike", {
+                id: e.data.ItemId,
+                uid: wx.getStorageSync('u_id')
+            }, function(t) {
+                e.setData({
+                    IsFavorite: !0
+                }), wx.showToast({
+                    title: "收藏成功",
+                    icon: "success",
+                    mask: !0
+                });
+            })) : (this.data.globalData.flag1 = !0, this.setData({
+                globalData: this.data.globalData
+            }));
+        } else {
+            this.data.flagdrag ? this.data.IsFavorite ? (t.showLoading("取消收藏"), a.httppost("shop/agent/RemoveItemFromMyFavorite", {
+                id: e.data.ItemId
+            }, function(t) {
+                e.setData({
+                    IsFavorite: !1
+                }), wx.showToast({
+                    title: "取消收藏成功",
+                    icon: "success",
+                    mask: !0
+                });
+            })) : (t.showLoading("收藏中..."), a.httppost("shop/agent/AddItemToMyFavorite", {
+                id: e.data.ItemId
+            }, function(t) {
+                e.setData({
+                    IsFavorite: !0
+                }), wx.showToast({
+                    title: "收藏成功",
+                    icon: "success",
+                    mask: !0
+                });
+            })) : (this.data.globalData.flag1 = !0, this.setData({
+                globalData: this.data.globalData
+            }));
+        }
     },
     //预览图片
     loadimg: function(t) {
@@ -234,23 +263,43 @@ Page({
     //点击拿货
     actionSheetTap: function(t) {
         var a = this;
-        return "已下架" != t.currentTarget.dataset.action && (wx.getStorageSync("token") ? void (t.currentTarget.dataset.my && (a.data.flagdrag ? a.setData({
-            actionSheetHidden: !a.data.actionSheetHidden,
-            carflag: !0
-        }) : (a.data.globalData.flag1 = !0, a.setData({
-            globalData: a.data.globalData
-        })))) : (wx.showToast({
-            title: "请先登录",
-            duration: 2e3,
-            mask: !0,
-            success: function(t) {
-                setTimeout(function() {
-                    wx.reLaunch({
-                        url: "/pages/login/login?itemdetail=" + a.data.obj.id
-                    });
-                }, 2e3);
-            }
-        }), !1));
+        if (we7) {
+            return "已下架" != t.currentTarget.dataset.action && (getApp().isLogin() ? void (t.currentTarget.dataset.my && (a.data.flagdrag ? a.setData({
+                actionSheetHidden: !a.data.actionSheetHidden,
+                carflag: !0
+            }) : (a.data.globalData.flag1 = !0, a.setData({
+                globalData: a.data.globalData
+            })))) : (wx.showToast({
+                title: "请先登录",
+                duration: 500,
+                mask: !0,
+                success: function(t) {
+                    setTimeout(function() {
+                        wx.reLaunch({
+                            url: "/pages/login/login"
+                        });
+                    }, 500);
+                }
+            }), !1));
+        } else {
+            return "已下架" != t.currentTarget.dataset.action && (wx.getStorageSync("token") ? void (t.currentTarget.dataset.my && (a.data.flagdrag ? a.setData({
+                actionSheetHidden: !a.data.actionSheetHidden,
+                carflag: !0
+            }) : (a.data.globalData.flag1 = !0, a.setData({
+                globalData: a.data.globalData
+            })))) : (wx.showToast({
+                title: "请先登录",
+                duration: 2e3,
+                mask: !0,
+                success: function(t) {
+                    setTimeout(function() {
+                        wx.reLaunch({
+                            url: "/pages/login/login?itemdetail=" + a.data.obj.id
+                        });
+                    }, 2e3);
+                }
+            }), !1));
+        }
     },
     selectAttrValue: function(t) {
         this.setData({

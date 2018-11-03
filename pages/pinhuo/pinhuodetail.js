@@ -18,6 +18,7 @@ Page({
         sort: 0,
         MinPrice: "",
         MaxPrice: "",
+        QsID: 0,
         tick: "00时00分00秒",
         filterValues: {},
         firstgo: !0,
@@ -44,8 +45,9 @@ Page({
             }
         }), a.title && (t.setTitle(a.title), s.data.share_title = a.title), s.data.share_qsid = a.qsid;
         if (we7) {
-            t.showLoading("数据加载中")
-            this.init(!0,a.qsid)
+            s.setData({
+                QsID: a.qsid
+            }), s.init(!0)
         } else {
             t.showLoading("数据加载中"), s.init(!0), a.key && e.httppostmore("shop/wx/SaveWxQsStatistics", {
                 Key: a.key,
@@ -55,7 +57,7 @@ Page({
             }, function(t) {}, "POST");
         }
     },
-    init: function(a,qsid) {
+    init: function(a) {
         var d = this;
         d.data.flag = !1;
         var n = {
@@ -67,15 +69,19 @@ Page({
             filterValues: JSON.stringify(d.data.filterValues)
         };
         if (we7) {
-            e.http_post("getlanmu", {
-                QsID: qsid
+            t.isLogin() ? (t.showLoading("数据加载中"), e.http_post("getlanmu", {
+                QsID: d.data.QsID,
+                ordernum: d.data.sort,
+                state: 0
             }, (e) => {
                 if (e.Data) {
                     console.log('微擎专场详情+商品列表=')
                     console.log(e)
                     t.setTitle(e.Data.Info.Name)
                     d.data.List = e.Data.NewItems
-                    d.data.SortMenus = e.Data.Info.SortMenus
+                    if (a) {
+                        d.data.SortMenus = e.Data.Info.SortMenus
+                    }
                     var o = e.Data.Info.ToTime.split(/[^0-9]/), r = new Date(o[0], o[1] - 1, o[2], o[3], o[4], o[5]).getTime() - new Date().getTime()
                     d.timeOut(r)
                     d.setData({
@@ -86,19 +92,28 @@ Page({
                         OpenStatu: e.Data.Info.OpenStatu,
                         Summary: e.Data.Info.Summary,
                         stop: d.data.stop,
+                        sort: d.data.sort,
                         SortMenus: d.data.SortMenus,
                         List: d.data.List,
-                        // sort: e.Data.Info.CurrentMenuID,
                         hasMore: d.data.hasMore,
                         shino: d.data.shino,
-                        // Cover: e.Data.Info.Cover,
                         displaymode: d.data.displaymode,
+                        // Cover: e.Data.Info.Cover,
                         // PartTitle: h,
                         // partList: d.data.partList,
                         ShowCoinPayIcon: d.data.ShowCoinPayIcon
                     });
                 }
-            });
+            })) : wx.showModal({
+                title: "提示",
+                content: '请先登录',
+                showCancel: !1,
+                success: function(t) {
+                    wx.reLaunch({
+                        url: "/pages/login/login"
+                    });
+                }
+            })
         } else {
             e.httppost("pinhuoitem/getitemsv2", n, function(e) {
                 console.log('专场详情+商品列表=')
@@ -263,34 +278,79 @@ Page({
     },
     bindsearch: function(a) {
         var i = this;
-        if (20 == a.currentTarget.dataset.id) i.data.firstgo ? (t.showLoading("数据加载中"), 
-        e.httppost("pinhuoitem/GetSearchPanel", {
-            areaid: 1,
-            datas: JSON.stringify({
-                ID: i.data.share_qsid
-            })
-        }, function(t) {
-            t.Result && (t.Data.Panels.map(function(t) {
-                t.choose = !1, 1 == t.TypeID || 2 == t.TypeID ? t.selected = !0 : t.selected = !1, 
-                t.Panels.map(function(t) {
-                    t.selected = !1;
-                });
-            }), i.setData({
-                grid: t.Data.Panels,
-                firstgo: !1
-            }), i.animation(!0));
-        }, "GET")) : i.animation(!0); else if (i.data.List = [], i.data.pageIndex = 1, i.data.listPass = [], 
-        i.data.templist = [], t.showLoading("数据加载中"), 5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
-        i.data.SortMenus.map(function(t) {
-            5 == t.Value && (t.selected = !1), 4 == t.Value && (t.selected = !0);
-        })) : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, i.data.SortMenus.map(function(t) {
-            4 == t.Value && (t.selected = !1), 5 == t.Value && (t.selected = !0);
-        })) : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
-        i.init(!1), i.data.fixed) return i.data.partList ? i.setData({
-            scroll_top: i.data.height + 30
-        }) : i.setData({
-            scroll_top: i.data.height + 80
-        }), !1;
+        if (we7) {
+            if (20 == a.currentTarget.dataset.id) {
+                i.data.firstgo ? (t.showLoading("数据加载中"), 
+                e.http_post("Findneed", {
+                    QsID: i.data.QsID,
+                    state: 0
+                }, (t) => {
+                    console.log('微擎筛选条件=')
+                    console.log(t)
+                    t.Data && (t.Data.Panels.map(function(t) {
+                        t.choose = !1, 1 == t.TypeID || 2 == t.TypeID ? t.selected = !0 : t.selected = !1
+                    }), i.setData({
+                        grid: t.Data.Panels,
+                        firstgo: !1
+                    }), i.animation(!0));
+                })) : i.animation(!0)
+            }
+            if (20 != a.currentTarget.dataset.id) {
+                i.data.List = [], i.data.pageIndex = 1, i.data.listPass = [], 
+                i.data.templist = [], t.showLoading("数据加载中"),
+                5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
+                i.data.SortMenus.map(function(t) {
+                    5 == t.Value && (t.selected = !1), 4 == t.Value && (t.selected = !0);
+                })) 
+                : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, 
+                i.data.SortMenus.map(function(t) {
+                    4 == t.Value && (t.selected = !1), 5 == t.Value && (t.selected = !0);
+                })) 
+                : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
+                i.init(!1), i.data.fixed 
+                i.data.partList ? i.setData({
+                    scroll_top: i.data.height + 30
+                }) : i.setData({
+                    scroll_top: i.data.height + 80
+                }), !1;
+            }
+        } else {
+            if (20 == a.currentTarget.dataset.id) i.data.firstgo ? (t.showLoading("数据加载中"), 
+            e.httppost("pinhuoitem/GetSearchPanel", {
+                areaid: 1,
+                datas: JSON.stringify({
+                    ID: i.data.share_qsid
+                })
+            }, function(t) {
+                console.log('筛选条件=')
+                console.log(t)
+                t.Result && (t.Data.Panels.map(function(t) {
+                    t.choose = !1, 1 == t.TypeID || 2 == t.TypeID ? t.selected = !0 : t.selected = !1, 
+                    t.Panels.map(function(t) {
+                        t.selected = !1;
+                    });
+                }), i.setData({
+                    grid: t.Data.Panels,
+                    firstgo: !1
+                }), i.animation(!0));
+            }, "GET")) : i.animation(!0); 
+            else if (i.data.List = [], i.data.pageIndex = 1, i.data.listPass = [], 
+            i.data.templist = [], t.showLoading("数据加载中"),
+            5 == a.currentTarget.dataset.id && 5 == i.data.sort ? (i.data.sort = 4, 
+            i.data.SortMenus.map(function(t) {
+                5 == t.Value && (t.selected = !1), 4 == t.Value && (t.selected = !0);
+            })) 
+            : 4 == a.currentTarget.dataset.id && 4 == i.data.sort ? (i.data.sort = 5, 
+            i.data.SortMenus.map(function(t) {
+                4 == t.Value && (t.selected = !1), 5 == t.Value && (t.selected = !0);
+            })) 
+            : a.currentTarget.dataset.id !== i.data.sort && (i.data.sort = a.currentTarget.dataset.id), 
+            i.init(!1), i.data.fixed) return i.data.partList ? i.setData({
+                scroll_top: i.data.height + 30
+            }) : i.setData({
+                scroll_top: i.data.height + 80
+            }), !1;
+        }
     },
     animation: function(t) {
         var a = wx.createAnimation({

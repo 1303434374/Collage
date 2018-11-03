@@ -1,4 +1,4 @@
-var t = require("../../utils/httputil.js"), o = getApp();
+var t = require("../../utils/httputil.js"), o = getApp(), we7 = o.globalData.we7;
 
 Page({
     data: {
@@ -6,33 +6,63 @@ Page({
     },
     onLoad: function() {
         var a = this;
-        o.showLoading("页面加载中..."), t.httppost("user/user/getmyuserinfo", {}, function(n) {
-            console.log('个人信息=')
-            console.log(n)
-            o.showLoading("页面加载中..."), t.httppost("pinhuobuyer/GetOrderStatuAmount2", {}, function(t) {
-                a.setData({
-                    point: n.Data.Point,
-                    PointName: n.Data.PointName,
-                    nickName: n.Data.UserName,
-                    url: "https://api2.nahuo.com/v3/shop/logo/uid/" + wx.getStorageSync("userid"),
-                    Total: t.Data.AvailableCouponInfo.Total > 0 ? t.Data.AvailableCouponInfo.Total + "张可用" : "",
-                    MaxID: t.Data.AvailableCouponInfo.MaxID,
-                    newbool: t.Data.AvailableCouponInfo.MaxID > wx.getStorageSync("MaxID")
+        if (we7) {
+            o.isLogin() ? (o.showLoading("数据加载中"), t.http_post("UserInfo", {
+                uid: wx.getStorageSync('u_id')
+            }, (n) => {
+                if (n) {
+                    console.log('微擎个人信息=')
+                    console.log(n)
+                    a.setData({
+                        nickName: n.username,
+                        url: "/Image/my/shoplogo.jpg"
+                    });
+                }
+            })) : wx.showModal({
+                title: "提示",
+                content: '请先登录',
+                showCancel: !1,
+                success: function(t) {
+                    wx.reLaunch({
+                        url: "/pages/login/login"
+                    });
+                }
+            })
+        } else {
+            o.showLoading("页面加载中..."), t.httppost("user/user/getmyuserinfo", {}, function(n) {
+                console.log('个人信息=')
+                console.log(n)
+                o.showLoading("页面加载中..."), t.httppost("pinhuobuyer/GetOrderStatuAmount2", {}, function(t) {
+                    a.setData({
+                        point: n.Data.Point,
+                        PointName: n.Data.PointName,
+                        nickName: n.Data.UserName,
+                        url: "https://api2.nahuo.com/v3/shop/logo/uid/" + wx.getStorageSync("userid"),
+                        Total: t.Data.AvailableCouponInfo.Total > 0 ? t.Data.AvailableCouponInfo.Total + "张可用" : "",
+                        MaxID: t.Data.AvailableCouponInfo.MaxID,
+                        newbool: t.Data.AvailableCouponInfo.MaxID > wx.getStorageSync("MaxID")
+                    });
                 });
-            });
-        }, "GET");
+            }, "GET");
+        }
     },
     onShow: function() {
-        this.GetQty();
+        !we7 && this.GetQty();
     },
     login_out: function() {
         wx.showModal({
             title: "提示",
             content: "确定要退出登录吗？",
             success: function(t) {
-                t.confirm && (wx.removeStorageSync("token"), wx.removeStorageSync("MaxID"), wx.reLaunch({
-                    url: "/pages/login/login"
-                }));
+                if (we7) {
+                    t.confirm && (wx.removeStorageSync("u_id"), wx.removeStorageSync("openid"), wx.reLaunch({
+                        url: "/pages/login/login"
+                    }));
+                } else {
+                    t.confirm && (wx.removeStorageSync("token"), wx.removeStorageSync("MaxID"), wx.reLaunch({
+                        url: "/pages/login/login"
+                    }));
+                }
             }
         });
     },
