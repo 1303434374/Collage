@@ -55,7 +55,7 @@
         </view>
         <view class="inline">
             <text class="bold">发货仓库：</text>
-            <text>{{sendaddress}}</text>
+            <text>{{sendaddress}}仓</text>
         </view>
     </view>
     <view class="line"></view>
