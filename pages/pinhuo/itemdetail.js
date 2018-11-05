@@ -370,6 +370,7 @@ Page({
         if (s.data.IsJiesuan) {
             var i = {
                 itemId: s.data.ItemId,
+                uid: we7 ? wx.getStorageSync('u_id') : '',
                 Products: []
             };
             s.data.choose.map(function(t) {
