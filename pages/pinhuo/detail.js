@@ -3,6 +3,7 @@ Page({
         detail: []
     },
     onLoad: function(o) {
+        console.log(o)
         this.data.detail = JSON.parse(o.item), this.data.detail.map(function(o) {
             o.colorArr = [], o.colorList = [], o.Products.map(function(t) {
                 t.msg = t.Size + "/" + t.Qty + "件", o.colorArr.push(t.Color);

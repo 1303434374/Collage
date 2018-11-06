@@ -63,7 +63,7 @@ Page({
                     list: e.Data.Items,
                     height: .8 * Number(a.data.height1),
                     stopheight: .8 * Number(a.data.height1) - 210
-                }), a.totlePrice());
+                }), a.totlePrice(), a.GetQty());
             });
         } else {
             i.showLoading("页面加载中..."), e.httppost("pinhuocart/GetItems3", {}, function(e) {
@@ -125,7 +125,7 @@ Page({
                     }), a.data.tempbool || clearInterval(a.time), a.setData({
                         list: a.data.list
                     });
-                }, 1e3)), a.totlePrice());
+                }, 1e3)), a.totlePrice(), a.GetQty());
             }); 
         }                                                                                                                                                     
     },
@@ -296,11 +296,23 @@ Page({
                     var o = a.join(",");
                     console.log('购物车删除=')
                     console.log(o)
-                    i.showLoading("页面加载中..."), e.httppost("pinhuocart/delete", {
-                        ids: o
-                    }, function(t) {
-                        t.Result && (i.showToast(t.Message), s.init());
-                    }, "POST");
+                    if (we7) {
+                        e.http_post('Delshopcat',{
+                            uid: wx.getStorageSync('u_id'),
+                            ids: o
+                        },(t) => {
+                            i.showToast(t.Data.msg)
+                            setTimeout(function() {
+                                 s.init()
+                            }, 500);
+                        })
+                    } else {
+                        i.showLoading("页面加载中..."), e.httppost("pinhuocart/delete", {
+                            ids: o
+                        }, function(t) {
+                            t.Result && (i.showToast(t.Message), s.init());
+                        }, "POST");
+                    }
                 }
             }
         });
@@ -327,26 +339,49 @@ Page({
     },
     getItemDetail: function(a, s, o, n) {
         var c = this;
-        i.showLoading(""), e.httppost("pinhuoitem/getinfo", {
-            id: a,
-            typeid: 1
-        }, function(e) {
-            console.log('购物车编辑=')
-            console.log(e)
-            e.Result && (c.data.info.name = o, c.data.info.MainColorPic = t.getUrl(e.Data.MainColorPic, 200), 
-            c.data.info.itemId = e.Data.ID, c.data.info.Price = n, e.Data.Products.map(function(e, i) {
-                e.ColorPic = t.getUrl(e.ColorPic, 200), e.Color == s[s.length - 1].Color && (c.data.info.fristindex = i), 
-                e.SizeList.map(function(t) {
-                    t.qty = 0;
-                }), s.map(function(t) {
-                    t.Color == e.Color && e.SizeList.map(function(e) {
-                        e.Size == t.Size && (e.qty = t.Qty);
+        if (we7) {
+            i.showLoading(""), e.http_post("GetUpdatecart", {
+                id: a,
+                uid: wx.getStorageSync('u_id')
+            }, function(e) {
+                console.log('微擎购物车编辑=')
+                console.log(e)
+                e.Data && (c.data.info.name = o, c.data.info.MainColorPic = e.Data.MainColorPic, 
+                c.data.info.itemId = e.Data.ID, c.data.info.Price = n, e.Data.Products.map(function(e, i) {
+                    e.ColorPic = '', e.Color == s[s.length - 1].Color && (c.data.info.fristindex = i), 
+                    e.SizeList.map(function(t) {
+                        t.qty = 0;
+                    }), s.map(function(t) {
+                        t.Color == e.Color && e.SizeList.map(function(e) {
+                            e.Size == t.Size && (e.qty = t.Qty);
+                        });
                     });
-                });
-            }), c.data.info.Products = e.Data.Products, c.chooseGoods(), c.setData({
-                info: c.data.info
-            }));
-        }, "GET");
+                }), c.data.info.Products = e.Data.Products, c.chooseGoods(), c.setData({
+                    info: c.data.info
+                }));
+            });
+        } else {
+            i.showLoading(""), e.httppost("pinhuoitem/getinfo", {
+                id: a,
+                typeid: 1
+            }, function(e) {
+                console.log('购物车编辑=')
+                console.log(e)
+                e.Result && (c.data.info.name = o, c.data.info.MainColorPic = t.getUrl(e.Data.MainColorPic, 200), 
+                c.data.info.itemId = e.Data.ID, c.data.info.Price = n, e.Data.Products.map(function(e, i) {
+                    e.ColorPic = t.getUrl(e.ColorPic, 200), e.Color == s[s.length - 1].Color && (c.data.info.fristindex = i), 
+                    e.SizeList.map(function(t) {
+                        t.qty = 0;
+                    }), s.map(function(t) {
+                        t.Color == e.Color && e.SizeList.map(function(e) {
+                            e.Size == t.Size && (e.qty = t.Qty);
+                        });
+                    });
+                }), c.data.info.Products = e.Data.Products, c.chooseGoods(), c.setData({
+                    info: c.data.info
+                }));
+            }, "GET");
+        }
     },
     selectAttrValue: function(t) {
         this.data.info.fristindex = t.currentTarget.dataset.index, this.setData({
@@ -363,16 +398,34 @@ Page({
                 listArr: "",
                 listAll: []
             };
-            e.SizeList.map(function(t) {
-                if (t.qty > 0) {
-                    i.selected = !0;
-                    var e = t.Size + "/" + t.qty + "件", a = {
-                        size: t.Size,
-                        qty: t.qty
-                    };
-                    i.list.push(e), i.listAll.push(a);
-                }
-            }), i.selected && (i.listArr = i.list.join(","), t.data.info.choose.push(i));
+            if (we7) {
+                e.SizeList.map(function(t) {
+                    if (t.qty > 0) {
+                        i.selected = !0;
+                        var e = t.Size + "/" + t.qty + "件", a = {
+                            size: t.Size,
+                            qty: t.qty
+                        };
+                        i.list.push(e), i.listAll.push(a);
+                    } else {
+                        i.listAll.push({
+                            size: t.Size,
+                            qty: 0
+                        });
+                    }
+                }), i.selected && (i.listArr = i.list.join(",")), t.data.info.choose.push(i);
+            } else {
+                e.SizeList.map(function(t) {
+                    if (t.qty > 0) {
+                        i.selected = !0;
+                        var e = t.Size + "/" + t.qty + "件", a = {
+                            size: t.Size,
+                            qty: t.qty
+                        };
+                        i.list.push(e), i.listAll.push(a);
+                    } 
+                }), i.selected && (i.listArr = i.list.join(","), t.data.info.choose.push(i));
+            }
         });
     },
     bindMinus: function(t) {
@@ -403,19 +456,53 @@ Page({
                     qty: e.qty
                 });
             });
-        }), console.log('购物车更新='), console.log(s), s.Products.length > 0 ? (i.showLoading("修改商品"), e.httppost("pinhuocart/update", s, function(t) {
-            t.Result && (a.init(), a.closeDrag());
-        }, "POST")) : wx.showModal({
-            title: "",
-            content: "确认删除已选商品",
-            success: function(t) {
-                t.confirm && e.httppost("pinhuocart/delete", {
-                    ids: a.data.info.itemId
-                }, function(t) {
-                    t.Result && (i.showToast(t.Message), a.init(), a.closeDrag());
-                }, "POST");
+        })
+        console.log('购物车更新=')
+        console.log(s)
+        if (s.Products.length > 0) {
+            i.showLoading("修改商品")
+            if (we7) {
+                s.uid = wx.getStorageSync('u_id')
+                s.state = 1
+                e.http_post("AddMycar", s, function(t) {
+                    console.log('微擎更新购物车=')
+                    console.log(t)
+                    a.init()
+                    a.closeDrag()
+                })
+            } else {
+                e.httppost("pinhuocart/update", s, function(t) {
+                    t.Result && (a.init(), a.closeDrag());
+                }, "POST")
             }
-        });
+        } else {
+            wx.showModal({
+                title: "",
+                content: "确认删除已选商品",
+                success: function(t) {
+                    if (t.confirm) {
+                        if (we7) {
+                            e.http_post('Delshopcat',{
+                                uid: wx.getStorageSync('u_id'),
+                                ids: a.data.info.itemId
+                            },(t) => {
+                                i.showToast(t.Data.msg)
+                                setTimeout(function() {
+                                    a.init()
+                                    a.closeDrag()
+                                }, 500);
+                            })
+                        } else {
+                            e.httppost("pinhuocart/delete", {
+                                ids: a.data.info.itemId
+                            }, function(t) {
+                                t.Result && (i.showToast(t.Message), a.init(), a.closeDrag());
+                            }, "POST");
+                        }
+                    }
+                }
+            });
+        }
     },
     detail: function(t) {
         wx.navigateTo({

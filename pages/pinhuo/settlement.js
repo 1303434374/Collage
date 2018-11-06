@@ -1,4 +1,4 @@
-var t = getApp(), a = require("../../utils/httputil.js"), o = require("../../utils/imgutil.js"), e = require("../../utils/common.js");
+var t = getApp(), a = require("../../utils/httputil.js"), o = require("../../utils/imgutil.js"), e = require("../../utils/common.js"), we7 = t.globalData.we7;
 
 Page({
     data: {
@@ -19,6 +19,9 @@ Page({
     },
     onLoad: function(e) {
         console.log(e)
+        this.setData({
+            we7: we7
+        })
         wx.setStorageSync("flag", !0);
         var i = this, s = e.data, n = [];
         JSON.parse(e.data).map(function(t) {
@@ -40,60 +43,118 @@ Page({
                         quickPay: i.data.quickPay,
                         AddressID: i.data.AddressID
                     };
-                    t.showLoading("数据加载中"), a.httppost("pinhuo/order/CreateTempOrder", u, function(t) {
-                        console.log('生成订单=')
-                        console.log(t)
-                        for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) a[e].Items[s].Cover = o.getUrl(a[e].Items[s].Cover, 300);
-                        t.Data.ShipSetting.map(function(t) {
-                            t.IsDefault && i.setData({
-                                typeid: t.ID
+                    if (we7) {
+                        /*t.showLoading("数据加载中"), a.http_post("", u, function(t) {
+                            console.log('生成订单=')
+                            console.log(t)
+                            for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) 
+                            // t.Data.ShipSetting.map(function(t) {
+                            //     t.IsDefault && i.setData({
+                            //         typeid: t.ID
+                            //     });
+                            // }), t.Data.Coupons.length > 0 && t.Data.AutoUseCoupon ? (t.Data.Coupons.map(function(t) {
+                            //     t.ToTime = t.ToTime.substring(5, 10), t.FromTime = t.FromTime.substring(5, 10), 
+                            //     t.seclted = !1;
+                            // }),i.data.couponID = t.Data.Coupons[0].ID, i.data.coupon_obj = t.Data.Coupons[0], 
+                            // i.setData({
+                            //     couponID: i.data.couponID,
+                            //     coupon_obj: i.data.coupon_obj,
+                            //     info: a,
+                            //     CouponAmount: t.Data.CouponAmount,
+                            //     DiscountAmount: t.Data.DiscountAmount,
+                            //     ShipSetting: t.Data.ShipSetting,
+                            //     Coupons: t.Data.Coupons,
+                            //     ids: n.join(","),
+                            //     postinfo: i.data.postinfo,
+                            //     CouponsNotice: t.Data.CouponsNotice,
+                            //     ShipSettingNotice: t.Data.ShipSettingNotice,
+                            //     ShipApplyNotice: t.Data.ShipApplyNotice,
+                            //     ShipApply: t.Data.ShipApply,
+                            //     WareHouseIDS: t.Data.WareHouseIDS,
+                            //     TotalProductAmount: t.Data.TotalProductAmount,
+                            //     ProductDiscount: t.Data.ProductDiscount,
+                            //     PostfeeDiscount: t.Data.PostfeeDiscount,
+                            //     TotalWeight: t.Data.TotalWeight
+                            // }), i.comfirm()) : 
+                            i.setData({
+                                money: t.Data.TotalPayableAmount,
+                                // postfee: t.Data.TotalPostFeeAmount,
+                                TotalOriPostFeeAmount: t.Data.TotalOriPostFeeAmount,
+                                TotalPayableAmount: t.Data.TotalPayableAmount,
+                                info: a,
+                                // CouponAmount: t.Data.CouponAmount,
+                                // DiscountAmount: t.Data.DiscountAmount,
+                                // ShipSetting: t.Data.ShipSetting,
+                                // Coupons: t.Data.Coupons,
+                                ids: n.join(","),
+                                postinfo: i.data.postinfo,
+                                // CouponsNotice: t.Data.CouponsNotice,
+                                ShipSettingNotice: t.Data.ShipSettingNotice,
+                                ShipApplyNotice: t.Data.ShipApplyNotice,
+                                // ShipApply: t.Data.ShipApply,
+                                // WareHouseIDS: t.Data.WareHouseIDS,
+                                TotalProductAmount: t.Data.TotalProductAmount,
+                                // ProductDiscount: t.Data.ProductDiscount,
+                                // PostfeeDiscount: t.Data.PostfeeDiscount,
+                                TotalWeight: t.Data.TotalWeight
                             });
-                        }), t.Data.Coupons.length > 0 && t.Data.AutoUseCoupon ? (t.Data.Coupons.map(function(t) {
-                            t.ToTime = t.ToTime.substring(5, 10), t.FromTime = t.FromTime.substring(5, 10), 
-                            t.seclted = !1;
-                        }), i.data.couponID = t.Data.Coupons[0].ID, i.data.coupon_obj = t.Data.Coupons[0], 
-                        i.setData({
-                            couponID: i.data.couponID,
-                            coupon_obj: i.data.coupon_obj,
-                            info: a,
-                            CouponAmount: t.Data.CouponAmount,
-                            DiscountAmount: t.Data.DiscountAmount,
-                            ShipSetting: t.Data.ShipSetting,
-                            Coupons: t.Data.Coupons,
-                            ids: n.join(","),
-                            postinfo: i.data.postinfo,
-                            CouponsNotice: t.Data.CouponsNotice,
-                            ShipSettingNotice: t.Data.ShipSettingNotice,
-                            ShipApplyNotice: t.Data.ShipApplyNotice,
-                            ShipApply: t.Data.ShipApply,
-                            WareHouseIDS: t.Data.WareHouseIDS,
-                            TotalProductAmount: t.Data.TotalProductAmount,
-                            ProductDiscount: t.Data.ProductDiscount,
-                            PostfeeDiscount: t.Data.PostfeeDiscount,
-                            TotalWeight: t.Data.TotalWeight
-                        }), i.comfirm()) : i.setData({
-                            money: t.Data.TotalPayableAmount,
-                            postfee: t.Data.TotalPostFeeAmount,
-                            TotalOriPostFeeAmount: t.Data.TotalOriPostFeeAmount,
-                            TotalPayableAmount: t.Data.TotalPayableAmount,
-                            info: a,
-                            CouponAmount: t.Data.CouponAmount,
-                            DiscountAmount: t.Data.DiscountAmount,
-                            ShipSetting: t.Data.ShipSetting,
-                            Coupons: t.Data.Coupons,
-                            ids: n.join(","),
-                            postinfo: i.data.postinfo,
-                            CouponsNotice: t.Data.CouponsNotice,
-                            ShipSettingNotice: t.Data.ShipSettingNotice,
-                            ShipApplyNotice: t.Data.ShipApplyNotice,
-                            ShipApply: t.Data.ShipApply,
-                            WareHouseIDS: t.Data.WareHouseIDS,
-                            TotalProductAmount: t.Data.TotalProductAmount,
-                            ProductDiscount: t.Data.ProductDiscount,
-                            PostfeeDiscount: t.Data.PostfeeDiscount,
-                            TotalWeight: t.Data.TotalWeight
-                        });
-                    }, "POST");
+                        });*/
+                    } else {
+                        t.showLoading("数据加载中"), a.httppost("pinhuo/order/CreateTempOrder", u, function(t) {
+                            console.log('生成订单=')
+                            console.log(t)
+                            for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) a[e].Items[s].Cover = o.getUrl(a[e].Items[s].Cover, 300);
+                            t.Data.ShipSetting.map(function(t) {
+                                t.IsDefault && i.setData({
+                                    typeid: t.ID
+                                });
+                            }), t.Data.Coupons.length > 0 && t.Data.AutoUseCoupon ? (t.Data.Coupons.map(function(t) {
+                                t.ToTime = t.ToTime.substring(5, 10), t.FromTime = t.FromTime.substring(5, 10), 
+                                t.seclted = !1;
+                            }), i.data.couponID = t.Data.Coupons[0].ID, i.data.coupon_obj = t.Data.Coupons[0], 
+                            i.setData({
+                                couponID: i.data.couponID,
+                                coupon_obj: i.data.coupon_obj,
+                                info: a,
+                                CouponAmount: t.Data.CouponAmount,
+                                DiscountAmount: t.Data.DiscountAmount,
+                                ShipSetting: t.Data.ShipSetting,
+                                Coupons: t.Data.Coupons,
+                                ids: n.join(","),
+                                postinfo: i.data.postinfo,
+                                CouponsNotice: t.Data.CouponsNotice,
+                                ShipSettingNotice: t.Data.ShipSettingNotice,
+                                ShipApplyNotice: t.Data.ShipApplyNotice,
+                                ShipApply: t.Data.ShipApply,
+                                WareHouseIDS: t.Data.WareHouseIDS,
+                                TotalProductAmount: t.Data.TotalProductAmount,
+                                ProductDiscount: t.Data.ProductDiscount,
+                                PostfeeDiscount: t.Data.PostfeeDiscount,
+                                TotalWeight: t.Data.TotalWeight
+                            }), i.comfirm()) : i.setData({
+                                money: t.Data.TotalPayableAmount,
+                                postfee: t.Data.TotalPostFeeAmount,
+                                TotalOriPostFeeAmount: t.Data.TotalOriPostFeeAmount,
+                                TotalPayableAmount: t.Data.TotalPayableAmount,
+                                info: a,
+                                CouponAmount: t.Data.CouponAmount,
+                                DiscountAmount: t.Data.DiscountAmount,
+                                ShipSetting: t.Data.ShipSetting,
+                                Coupons: t.Data.Coupons,
+                                ids: n.join(","),
+                                postinfo: i.data.postinfo,
+                                CouponsNotice: t.Data.CouponsNotice,
+                                ShipSettingNotice: t.Data.ShipSettingNotice,
+                                ShipApplyNotice: t.Data.ShipApplyNotice,
+                                ShipApply: t.Data.ShipApply,
+                                WareHouseIDS: t.Data.WareHouseIDS,
+                                TotalProductAmount: t.Data.TotalProductAmount,
+                                ProductDiscount: t.Data.ProductDiscount,
+                                PostfeeDiscount: t.Data.PostfeeDiscount,
+                                TotalWeight: t.Data.TotalWeight
+                            });
+                        }, "POST");
+                    }
                 } else t.hideLoading(), wx.showModal({
                     title: "",
                     content: "您还没有收货地址，现在去添加一个？",

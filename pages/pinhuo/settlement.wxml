@@ -31,20 +31,20 @@
         <text style="color:#aaaaaa;"> ></text>
     </view>
 </view>
-<view bindtap="kdway" class="coupon_use_box bgf">
+<view bindtap="{{!we7 ? kdway : ''}}" class="coupon_use_box bgf">
     <view class="coupon_use">配送方式</view>
     <view capture-catch:tap="ShowInfo" class="info" data-content="{{ShipSettingNotice}}" data-title="配送说明">
         <image src="/Image/login/i.png"></image>
     </view>
-    <view class="coupon_use_title">{{typeid==2?'物流':'快递'}}<text style="color:#aaaaaa;"> ></text>
+    <view class="coupon_use_title">{{!we7 && typeid==2 ?'物流':'快递'}}<text style="color:#aaaaaa;"> ></text>
     </view>
 </view>
-<view bindtap="fhway" class="coupon_use_box bgf">
+<view bindtap="{{!we7 ? fhway : ''}}" class="coupon_use_box bgf">
     <view class="coupon_use">发货方式</view>
     <view capture-catch:tap="ShowInfo" class="info" data-content="{{ShipApplyNotice}}" data-title="发货说明">
         <image src="/Image/login/i.png"></image>
     </view>
-    <view class="coupon_use_title">{{ShipApply.Desc}}<text style="color:#aaaaaa;"> ></text>
+    <view class="coupon_use_title">{{we7 ? '由仓库视情况发货' : ShipApply.Desc}}<text style="color:#aaaaaa;"> ></text>
     </view>
 </view>
 <view style="border-bottom:1px solid #fff;" wx:for="{{info}}" wx:for-index="attrIndex" wx:for-item="attrValueObj" wx:key="{{index}}">

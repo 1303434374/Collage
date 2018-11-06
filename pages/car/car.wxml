@@ -137,7 +137,7 @@
         <view style="display: flex;flex-direction: row;justify-content:center;margin-top:20rpx ">
             <scroll-view class="choose" scrollY="true" style="height:100rpx;overflow:hidden;">
                 <view style="font-size: 12px;" wx:for="{{info.choose}}" wx:key="key">
-                        {{item.color}} : {{item.listArr}}
+                        {{item.list.length != 0 ? item.color + ' : ' : ''}}{{item.listArr}}
                     </view>
             </scroll-view>
         </view>
