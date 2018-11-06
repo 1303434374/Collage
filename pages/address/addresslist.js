@@ -18,6 +18,8 @@ Page({
     init: function() {
         var r = this;
         t.showLoading("加载中"), a.httppost("shop/address/GetAddresses", {}, function(a) {
+            console.log('获取收货地址列表=')
+            console.log(a)
             r.setData({
                 arrlist: a.Data
             });

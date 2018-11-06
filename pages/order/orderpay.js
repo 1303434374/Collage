@@ -14,12 +14,16 @@ Page({
         isanswer: 1
     },
     onLoad: function(t) {
+        console.log('传给支付=')
+        console.log(t)
         var i = this;
         a.setTitle("提交成功"), wx.getSystemInfo({
             success: function(a) {
                 i.data.money = t.money, i.data.orderids = t.orderids, i.data.itemids = t.itemids;
             }
         }), a.showLoading("数据加载中"), e.httppost("pay/Account/GetBalance4PinHuo", {}, function(a) {
+            console.log('支付加载=')
+            console.log(a)
             i.data.isopenyue = a.Data.userpaymentstatus, i.data.enough = a.Data.balance - i.data.money >= 0, 
             i.data.isbindcellphone = a.Data.userpaymentbindcellphone, i.data.mobile = a.Data.mobile, 
             wx.setStorageSync("paymobile", i.data.mobile), i.data.isanswer = a.Data.isanswer, 

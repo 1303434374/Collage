@@ -18,6 +18,7 @@ Page({
         showhide: !0
     },
     onLoad: function(e) {
+        console.log(e)
         wx.setStorageSync("flag", !0);
         var i = this, s = e.data, n = [];
         JSON.parse(e.data).map(function(t) {
@@ -29,7 +30,7 @@ Page({
                 Authorization: wx.getStorageSync("token")
             },
             success: function(e) {
-                console.log('获取默认地址=')
+                console.log('获取默认收货地址=')
                 console.log(e)
                 if (e.data.Result) {
                     i.data.AddressID = e.data.Data.ID, i.data.postinfo = e.data.Data;
@@ -40,7 +41,7 @@ Page({
                         AddressID: i.data.AddressID
                     };
                     t.showLoading("数据加载中"), a.httppost("pinhuo/order/CreateTempOrder", u, function(t) {
-                        console.log('确认订单=')
+                        console.log('生成订单=')
                         console.log(t)
                         for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) a[e].Items[s].Cover = o.getUrl(a[e].Items[s].Cover, 300);
                         t.Data.ShipSetting.map(function(t) {
@@ -93,7 +94,7 @@ Page({
                             TotalWeight: t.Data.TotalWeight
                         });
                     }, "POST");
-                } else wx.showModal({
+                } else t.hideLoading(), wx.showModal({
                     title: "",
                     content: "您还没有收货地址，现在去添加一个？",
                     showCancel: !1,
@@ -124,6 +125,10 @@ Page({
                     shipTypeID: o.data.typeid
                 };
                 a.httppost("pinhuo/order/submit?from=mina", e, function(t) {
+                    console.log('提交订单=')
+                    console.log(e)
+                    console.log('订单返回=')
+                    console.log(t)
                     wx.redirectTo({
                         url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + t.Data.OrderIds + "&&itemids=" + o.data.ids
                     });

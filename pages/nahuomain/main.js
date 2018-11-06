@@ -50,7 +50,7 @@ Page({
         this.ajax();
     },
     onShow: function() {
-        !we7 && this.GetQty();
+        this.GetQty();
     },
     onShareAppMessage: function() {
         return wx.getStorageSync("userid") ? {
@@ -161,19 +161,31 @@ Page({
             }, "GET");
         }
     },
-    //获取底部工具栏红点
+    //获取红点
     GetQty: function(t) {
-        wx.getStorageSync("token") && i.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
-            console.log('底部工具栏红点=')
-            console.log(t)
-            t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-            wx.setTabBarBadge({
-                index: 2,
-                text: t.Data.CartItemQty
-            })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
-                index: 9
-            }));
-        }, "GET");
+        if (we7) {
+            wx.getStorageSync("u_id") && i.http_post("getTotalCount", {
+                uid: wx.getStorageSync('u_id')
+            }, function(t) {
+                t.Data && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })));
+            }, "GET");
+        } else {
+            wx.getStorageSync("token") && i.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
+                console.log('底部工具栏红点=')
+                console.log(t)
+                t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
+                    index: 9
+                }));
+            }, "GET");
+        }
     },
     //点击菜单
     click_menu: function(t) {

@@ -3,10 +3,10 @@
         <view bindtap="checkAll" data-idx="{{idx1}}" style="float:left;height:40px;padding-right:30rpx;padding-left:30rpx;">
             <icon class="icon_title" size="20" type="{{item1.selected?'success_circle':'circle'}}"></icon>
         </view>
-        <view class="title_text">{{item1.WareHouseName}}</view>
+        <view class="title_text">{{we7 ? item1.WareHouseName + '发货' : item1.WareHouseName}}</view>
     </view>
     <view wx:for="{{item1.TimeList}}" wx:for-index="idx2" wx:for-item="item2" wx:key="idx2">
-        <view class="timeout">
+        <view class="timeout" wx:if="{{!we7}}">
             <image class="timeImg" src="/Image/pinhuo/shijian@3x.png"></image>
             <text class="timecount" wx:if="{{item2.IsStart}}">
                 距截单 <text wx:if="{{item2.hours<10}}">0{{item2.hours}}</text>

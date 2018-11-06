@@ -30,75 +30,104 @@ Page({
         });
     },
     onShow: function() {
-        if (we7) {
-
-        } else {
-            this.init(),this.GetQty();
-        }
+        this.init(),this.GetQty();
     },
     init: function() {
         var a = this;
-        i.showLoading("页面加载中..."), e.httppost("pinhuocart/GetItems3", {}, function(e) {
-            console.log('获取购物车=')
-            console.log(e)
-            e.Result && (e.Data.Items.map(function(e) {
-                e.selected = !0, e.TimeList.map(function(e) {
-                    e.ToTime = e.ToTime.replace(/-/g, "/");
-                    var i = new Date(), a = new Date(e.ToTime);
-                    a > i && (e.hours = parseInt((a - i) / 1e3 / 60 / 60), e.minutes = parseInt((a - i) / 1e3 / 60) - 60 * e.hours, 
-                    e.seconds = parseInt((a - i) / 1e3) - 60 * e.hours * 60 - 60 * e.minutes), e.Items.map(function(e) {
-                        e.colorList = [], e.selected = !0, e.Cover = t.getUrl(e.Cover, 400);
-                        var i = [];
-                        e.Products.map(function(t) {
-                            t.msg = t.Size + "/" + t.Qty + "件", i.push(t.Color);
-                        }), (i = Array.from(new Set(i))).map(function(t) {
-                            var i = {
-                                color: t,
-                                SizeList: []
-                            };
-                            e.Products.map(function(e) {
-                                e.Color == t && i.SizeList.push(e.msg);
-                            }), i.msg = i.SizeList.join("，"), e.colorList.push(i);
+        if (we7) {
+            i.showLoading("页面加载中..."), e.http_post("Getcart", {
+                uid: wx.getStorageSync('u_id')
+            }, function(e) {
+                console.log('微擎获取购物车=')
+                console.log(e)
+                e.Data && (e.Data.Items.map(function(e) {
+                    e.selected = !0, e.TimeList.map(function(e) {
+                        e.Items.map(function(e) {
+                            e.colorList = [], e.selected = !0;
+                            var i = [];
+                            e.Products.map(function(t) {
+                                t.msg = t.Size + "/" + t.Qty + "件", i.push(t.Color);
+                            }), (i = Array.from(new Set(i))).map(function(t) {
+                                var i = {
+                                    color: t,
+                                    SizeList: []
+                                };
+                                e.Products.map(function(e) {
+                                    e.Color == t && i.SizeList.push(e.msg);
+                                }), i.msg = i.SizeList.join("，"), e.colorList.push(i);
+                            });
                         });
                     });
-                });
-            }), e.Data.DisableItems.map(function(e) {
-                e.selected = !0, e.TimeList.map(function(e) {
-                    e.Items.map(function(e) {
-                        e.colorList = [], e.selected = !0, e.Cover = t.getUrl(e.Cover, 400);
-                        var i = [];
-                        e.Products.map(function(t) {
-                            t.msg = t.Size + "/" + t.Qty + "件", i.push(t.Color);
-                        }), (i = Array.from(new Set(i))).map(function(t) {
-                            var i = {
-                                color: t,
-                                SizeList: []
-                            };
-                            e.Products.map(function(e) {
-                                e.Color == t && i.SizeList.push(e.msg);
-                            }), i.msg = i.SizeList.join("，"), e.colorList.push(i);
+                }), a.setData({
+                    selected: !0,
+                    list: e.Data.Items,
+                    height: .8 * Number(a.data.height1),
+                    stopheight: .8 * Number(a.data.height1) - 210
+                }), a.totlePrice());
+            });
+        } else {
+            i.showLoading("页面加载中..."), e.httppost("pinhuocart/GetItems3", {}, function(e) {
+                console.log('获取购物车=')
+                console.log(e.Data.Items)
+                e.Result && (e.Data.Items.map(function(e) {
+                    e.selected = !0, e.TimeList.map(function(e) {
+                        e.ToTime = e.ToTime.replace(/-/g, "/");
+                        var i = new Date(), a = new Date(e.ToTime);
+                        a > i && (e.hours = parseInt((a - i) / 1e3 / 60 / 60), e.minutes = parseInt((a - i) / 1e3 / 60) - 60 * e.hours, 
+                        e.seconds = parseInt((a - i) / 1e3) - 60 * e.hours * 60 - 60 * e.minutes), e.Items.map(function(e) {
+                            e.colorList = [], e.selected = !0, e.Cover = t.getUrl(e.Cover, 400);
+                            var i = [];
+                            e.Products.map(function(t) {
+                                t.msg = t.Size + "/" + t.Qty + "件", i.push(t.Color);
+                            }), (i = Array.from(new Set(i))).map(function(t) {
+                                var i = {
+                                    color: t,
+                                    SizeList: []
+                                };
+                                e.Products.map(function(e) {
+                                    e.Color == t && i.SizeList.push(e.msg);
+                                }), i.msg = i.SizeList.join("，"), e.colorList.push(i);
+                            });
                         });
                     });
-                });
-            }), a.setData({
-                selected: !0,
-                list: e.Data.Items,
-                timeOutList: e.Data.DisableItems,
-                height: .8 * Number(a.data.height1),
-                stopheight: .8 * Number(a.data.height1) - 210
-            }), a.data.list.length > 0 && (clearInterval(a.time), a.time = setInterval(function() {
-                a.data.list.map(function(t) {
-                    t.TimeList.map(function(t) {
-                        t.IsStart && (0 == t.seconds && 0 == t.minutes && 0 == t.hours ? t.IsStart = !1 : t.seconds > 0 ? (t.seconds--, 
-                        a.data.tempbool = !0) : 0 == t.seconds && t.minutes > 0 ? (t.seconds = 59, t.minutes--, 
-                        a.data.tempbool = !0) : 0 == t.seconds && 0 == t.minutes && t.hours > 0 && (t.seconds = 59, 
-                        t.minutes = 59, t.hours--, a.data.tempbool = !0));
+                }), e.Data.DisableItems.map(function(e) {
+                    e.selected = !0, e.TimeList.map(function(e) {
+                        e.Items.map(function(e) {
+                            e.colorList = [], e.selected = !0, e.Cover = t.getUrl(e.Cover, 400);
+                            var i = [];
+                            e.Products.map(function(t) {
+                                t.msg = t.Size + "/" + t.Qty + "件", i.push(t.Color);
+                            }), (i = Array.from(new Set(i))).map(function(t) {
+                                var i = {
+                                    color: t,
+                                    SizeList: []
+                                };
+                                e.Products.map(function(e) {
+                                    e.Color == t && i.SizeList.push(e.msg);
+                                }), i.msg = i.SizeList.join("，"), e.colorList.push(i);
+                            });
+                        });
                     });
-                }), a.data.tempbool || clearInterval(a.time), a.setData({
-                    list: a.data.list
-                });
-            }, 1e3)), a.totlePrice());
-        });                                                                                                                                                      
+                }), a.setData({
+                    selected: !0,
+                    list: e.Data.Items,
+                    timeOutList: e.Data.DisableItems,
+                    height: .8 * Number(a.data.height1),
+                    stopheight: .8 * Number(a.data.height1) - 210
+                }), a.data.list.length > 0 && (clearInterval(a.time), a.time = setInterval(function() {
+                    a.data.list.map(function(t) {
+                        t.TimeList.map(function(t) {
+                            t.IsStart && (0 == t.seconds && 0 == t.minutes && 0 == t.hours ? t.IsStart = !1 : t.seconds > 0 ? (t.seconds--, 
+                            a.data.tempbool = !0) : 0 == t.seconds && t.minutes > 0 ? (t.seconds = 59, t.minutes--, 
+                            a.data.tempbool = !0) : 0 == t.seconds && 0 == t.minutes && t.hours > 0 && (t.seconds = 59, 
+                            t.minutes = 59, t.hours--, a.data.tempbool = !0));
+                        });
+                    }), a.data.tempbool || clearInterval(a.time), a.setData({
+                        list: a.data.list
+                    });
+                }, 1e3)), a.totlePrice());
+            }); 
+        }                                                                                                                                                     
     },
     //设置选中的商品id数组
     itemInfos: function() {
@@ -108,7 +137,7 @@ Page({
                 e.Items.map(function(e) {
                     if (e.selected) {
                         var i = {};
-                        i.AgentItemID = e.AgentItemID, t.data.itemInfos.push(i), t.data.totalqty += e.TotalQty;
+                        i.AgentItemID = e.AgentItemID, t.data.itemInfos.push(i), t.data.totalqty += Number(e.TotalQty);
                     }
                 });
             });
@@ -117,23 +146,62 @@ Page({
     //计算选中商品的总价
     totlePrice: function() {
         var t = this;
-        this.itemInfos(), i.showLoading(""), e.httppost("pinhuocart/GetItemDiscount", {
-            itemInfos: JSON.stringify(t.data.itemInfos)
-        }, function(e) {
-            console.log('购物车算钱=')
-            console.log(e)
-            e.Result && t.setData({
-                TotalAmount: e.Data.TotalAmount,
-                PayableAmount: e.Data.PayableAmount,
-                Discount: e.Data.Discount,
-                Content: e.Data.Content,
-                list: t.data.list,
-                timeOutList: t.data.timeOutList,
-                selected: t.data.selected,
-                totalqty: t.data.totalqty
+        if (we7) {
+            this.itemInfos(), i.showLoading(""), e.http_post("getTotal", {
+                uid: wx.getStorageSync('u_id'),
+                itemInfos: t.data.itemInfos
+            }, function(e) {
+                console.log('微擎购物车算钱=')
+                console.log(e)
+                e.Data && t.setData({
+                    TotalAmount: e.Data.TotalAmount,
+                    PayableAmount: e.Data.TotalAmount,
+                    Discount: '0.00',
+                    Content: '',
+                    list: t.data.list,
+                    timeOutList: t.data.timeOutList,
+                    selected: t.data.selected,
+                    totalqty: t.data.totalqty
+                });
             });
-        }, "POST");
+        } else {
+            this.itemInfos(), i.showLoading(""), e.httppost("pinhuocart/GetItemDiscount", {
+                itemInfos: JSON.stringify(t.data.itemInfos)
+            }, function(e) {
+                console.log('购物车算钱=')
+                console.log(e)
+                e.Result && t.setData({
+                    TotalAmount: e.Data.TotalAmount,
+                    PayableAmount: e.Data.PayableAmount,
+                    Discount: e.Data.Discount,
+                    Content: e.Data.Content,
+                    list: t.data.list,
+                    timeOutList: t.data.timeOutList,
+                    selected: t.data.selected,
+                    totalqty: t.data.totalqty
+                });
+            }, "POST");
+        }
     },
+    //全选
+    total_all: function(t) {
+        var e = this;
+        this.data.selected = !this.data.selected, this.data.timeoutselected = this.data.selected, 
+        this.data.list.map(function(t) {
+            t.selected = e.data.selected, t.TimeList.map(function(t) {
+                t.Items.map(function(t) {
+                    t.selected = e.data.selected;
+                });
+            });
+        }), this.data.timeOutList.map(function(t) {
+            t.selected = e.data.selected, t.TimeList.map(function(t) {
+                t.Items.map(function(t) {
+                    t.selected = e.data.selected;
+                });
+            });
+        }),this.totlePrice();
+    },
+    //有效
     checkAll: function(t) {
         var e = this;
         this.data.list[t.currentTarget.dataset.idx].selected = !this.data.list[t.currentTarget.dataset.idx].selected, 
@@ -163,6 +231,7 @@ Page({
         }
         this.totlePrice();
     },
+    //失效
     checkAllLimt: function(t) {
         var e = this;
         this.data.timeoutselected = !this.data.timeoutselected, this.data.timeOutList.map(function(t) {
@@ -190,23 +259,6 @@ Page({
             timeoutselected: this.data.timeoutselected,
             timeOutList: this.data.timeOutList
         });
-    },
-    total_all: function(t) {
-        var e = this;
-        this.data.selected = !this.data.selected, this.data.timeoutselected = this.data.selected, 
-        this.data.list.map(function(t) {
-            t.selected = e.data.selected, t.TimeList.map(function(t) {
-                t.Items.map(function(t) {
-                    t.selected = e.data.selected;
-                });
-            });
-        }), this.data.timeOutList.map(function(t) {
-            t.selected = e.data.selected, t.TimeList.map(function(t) {
-                t.Items.map(function(t) {
-                    t.selected = e.data.selected;
-                });
-            });
-        }), this.totlePrice();
     },
     //点击结算
     account: function(t) {
@@ -371,14 +423,26 @@ Page({
         });
     },
     GetQty: function(t) {
-        wx.getStorageSync("token") && e.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
-            t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-            wx.setTabBarBadge({
-                index: 2,
-                text: t.Data.CartItemQty
-            })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
-                index: 9
-            }));
-        }, "GET");
+        if (we7) {
+            wx.getStorageSync("u_id") && e.http_post("getTotalCount", {
+                uid: wx.getStorageSync('u_id')
+            }, function(t) {
+                t.Data && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })));
+            }, "GET");
+        } else {
+            wx.getStorageSync("token") && e.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
+                t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
+                    index: 9
+                }));
+            }, "GET");
+        }
     }
 });

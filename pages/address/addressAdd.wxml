@@ -8,10 +8,10 @@
     <view class="add_box">
         <view class="add_title">地区信息</view>
         <view class="add_content">
-            <picker bindchange="changeRegion" mode="region" name="address">
-            <!--<view bindtap="selectaddress" class="address">{{area}}</view>-->
-            <view class="address">{{regionVal[0]}} {{regionVal[1]}} {{regionVal[2]}}</view>
+            <picker bindchange="changeRegion" mode="region" name="area" wx:if="{{we7}}">
+                <view class="address">{{regionVal[0]}} {{regionVal[1]}} {{regionVal[2]}}</view>
             </picker>
+            <view bindtap="selectaddress" class="address" wx:else>{{area}}</view>
         </view>
     </view>
     <view class="add_box">
@@ -24,6 +24,12 @@
         <view class="add_title">手机号码</view>
         <view class="add_content">
             <input name="mobile" type="number" value="{{mobile}}"></input>
+        </view>
+    </view>
+    <view class="add_box" wx:if="{{we7}}">
+        <view class="add_title">设为默认</view>
+        <view class="add_content" style="border: none;">
+            <switch name="checked" checked="{{checked}}" bindchange="switchChange"/>
         </view>
     </view>
     <button class="btn_sub" formType="submit" type="primary">保存</button>

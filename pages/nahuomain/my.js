@@ -47,7 +47,7 @@ Page({
         }
     },
     onShow: function() {
-        !we7 && this.GetQty();
+        this.GetQty();
     },
     login_out: function() {
         wx.showModal({
@@ -96,15 +96,27 @@ Page({
     },
     onReachBottom: function() {},
     GetQty: function(o) {
-        wx.getStorageSync("token") && t.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
-            t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-            wx.setTabBarBadge({
-                index: 2,
-                text: t.Data.CartItemQty
-            })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
-                index: 9
-            }));
-        }, "GET");
+       if (we7) {
+            wx.getStorageSync("u_id") && t.http_post("getTotalCount", {
+                uid: wx.getStorageSync('u_id')
+            }, function(t) {
+                t.Data && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })));
+            }, "GET");
+        } else {
+            wx.getStorageSync("token") && t.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
+                t.Result && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
+                wx.setTabBarBadge({
+                    index: 2,
+                    text: t.Data.CartItemQty
+                })), wx.getStorageSync("TopicID") == t.Data.TopicID || wx.showTabBarRedDot({
+                    index: 9
+                }));
+            }, "GET");
+        }
     },
     Alert: function() {
         wx.showModal({

@@ -1,4 +1,4 @@
-var a = require("../../utils/httputil.js");
+var a = require("../../utils/httputil.js"), t = getApp(), we7 = t.globalData.we7;
 
 Page({
     data: {
@@ -12,14 +12,23 @@ Page({
         url: "",
         flag: !1,
         flagadd: !1,
-        regionVal: ''
+        regionVal: '',
+        checked: !0
     },
     changeRegion: function(e) {
         this.setData({
             regionVal: e.detail.value
         });
     },    
+    switchChange: function (e) {
+        this.setData({
+            checked: e.detail.value
+        });
+    },
     onLoad: function(t) {
+        this.setData({
+            we7: we7 
+        })
         t.url && this.setData({
             url: t.url,
             quickPay: t.quickPay || !1
@@ -167,11 +176,19 @@ Page({
             icon: "success",
             duration: 2e3
         }), !1;
-        if ("" == this.data.areaId) return wx.showToast({
-            title: "请选择地区",
-            icon: "success",
-            duration: 2e3
-        }), !1;
+        if (we7) {
+            if (0 == t.detail.value.area.length) return wx.showToast({
+                title: "请选择地区",
+                icon: "success",
+                duration: 2e3
+            }), !1;
+        } else {
+            if ("" == this.data.areaId) return wx.showToast({
+                title: "请选择地区",
+                icon: "success",
+                duration: 2e3
+            }), !1;
+        }
         if ("" == t.detail.value.address) return wx.showToast({
             title: "请填写详细地址",
             icon: "success",
@@ -199,22 +216,35 @@ Page({
                 });
             }, "GET");
         } else {
-            var d = {
-                realName: t.detail.value.user,
-                mobile: t.detail.value.mobile,
-                areaId: e.data.areaId,
-                address: t.detail.value.address,
-                isDefault: !0
-            };
-            a.httppost("shop/address/add", d, function(a) {
-                "undefined" == e.data.url && "undefined" != e.data.dataurl && e.data.flagadd ? wx.redirectTo({
-                    url: "/pages/address/addresslist?data" + e.data.dataurl + "&url=" + e.data.url
-                }) : "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.redirectTo({
-                    url: "/pages/address/addresslist?data" + e.data.dataurl
-                }) : wx.redirectTo({
-                    url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
-                });
-            }, "GET");
+            if (we7) {
+                var d = {
+                    realName: t.detail.value.user,
+                    mobile: t.detail.value.mobile,
+                    areaId: t.detail.value.area.join(' '),
+                    address: t.detail.value.address,
+                    isDefault: t.detail.value.checked
+                };
+                console.log('表单提交=')
+                console.log(d)
+            } else {
+                var d = {
+                    realName: t.detail.value.user,
+                    mobile: t.detail.value.mobile,
+                    areaId: e.data.areaId,
+                    address: t.detail.value.address,
+                    isDefault: !0
+                };
+                console.log(d)
+                a.httppost("shop/address/add", d, function(a) {
+                    "undefined" == e.data.url && "undefined" != e.data.dataurl && e.data.flagadd ? wx.redirectTo({
+                        url: "/pages/address/addresslist?data" + e.data.dataurl + "&url=" + e.data.url
+                    }) : "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.redirectTo({
+                        url: "/pages/address/addresslist?data" + e.data.dataurl
+                    }) : wx.redirectTo({
+                        url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
+                    });
+                }, "GET");
+            }
         }
     },
     onPullDownRefresh: function() {

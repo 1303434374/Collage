@@ -56,7 +56,7 @@
             <text style="font-size:15px;margin-left:30rpx">{{attrValueObj.Name}}</text>
         </view>
     </view>
-    <view bindtap="detail" class="pic_box" data-item="{{attrValueObj.Items}}">
+    <view bindtap="detail" class="pic_box" data-item="{{attrValueObj.Items}}" style="background-color: #fff;">
         <view class="detail_pic">
             <image class="imgList" mode="aspectFill" src="{{item.Cover}}" wx:for="{{attrValueObj.Items}}" wx:key="key"></image>
         </view>
