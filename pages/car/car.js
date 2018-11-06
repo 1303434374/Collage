@@ -459,9 +459,15 @@ Page({
         })
         console.log('购物车更新=')
         console.log(s)
-        if (s.Products.length > 0) {
-            i.showLoading("修改商品")
-            if (we7) {
+        if (we7) {
+            let zero = !0
+            s.Products.map((ss)=>{
+                if (ss.qty != 0) {
+                    zero = !1
+                }
+            })
+            if (!zero) {
+                i.showLoading("修改商品")
                 s.uid = wx.getStorageSync('u_id')
                 s.state = 1
                 e.http_post("AddMycar", s, function(t) {
@@ -471,17 +477,11 @@ Page({
                     a.closeDrag()
                 })
             } else {
-                e.httppost("pinhuocart/update", s, function(t) {
-                    t.Result && (a.init(), a.closeDrag());
-                }, "POST")
-            }
-        } else {
-            wx.showModal({
-                title: "",
-                content: "确认删除已选商品",
-                success: function(t) {
-                    if (t.confirm) {
-                        if (we7) {
+                wx.showModal({
+                    title: "",
+                    content: "确认删除已选商品",
+                    success: function(t) {
+                        if (t.confirm) {
                             e.http_post('Delshopcat',{
                                 uid: wx.getStorageSync('u_id'),
                                 ids: a.data.info.itemId
@@ -492,7 +492,22 @@ Page({
                                     a.closeDrag()
                                 }, 500);
                             })
-                        } else {
+                        }
+                    }
+                });
+            }
+        } else {
+            if (s.Products.length > 0) {
+                i.showLoading("修改商品")
+                e.httppost("pinhuocart/update", s, function(t) {
+                    t.Result && (a.init(), a.closeDrag());
+                }, "POST")
+            } else {
+                wx.showModal({
+                    title: "",
+                    content: "确认删除已选商品",
+                    success: function(t) {
+                        if (t.confirm) {
                             e.httppost("pinhuocart/delete", {
                                 ids: a.data.info.itemId
                             }, function(t) {
@@ -500,8 +515,8 @@ Page({
                             }, "POST");
                         }
                     }
-                }
-            });
+                });
+            } 
         }
     },
     detail: function(t) {
