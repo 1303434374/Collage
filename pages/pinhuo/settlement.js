@@ -41,63 +41,20 @@ Page({
                             quickPay: i.data.quickPay,
                             AddressID: i.data.AddressID
                         };
-                        // i.setData({
-                        //     postinfo: i.data.postinfo
-                        // })
-                        // t.hideLoading()
                         t.showLoading("数据加载中"), a.http_post("Cartlist", u, function(t) {
                             console.log('微擎生成订单=')
                             console.log(t)
                             for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) 
-                            // t.Data.ShipSetting.map(function(t) {
-                            //     t.IsDefault && i.setData({
-                            //         typeid: t.ID
-                            //     });
-                            // }), t.Data.Coupons.length > 0 && t.Data.AutoUseCoupon ? (t.Data.Coupons.map(function(t) {
-                            //     t.ToTime = t.ToTime.substring(5, 10), t.FromTime = t.FromTime.substring(5, 10), 
-                            //     t.seclted = !1;
-                            // }),i.data.couponID = t.Data.Coupons[0].ID, i.data.coupon_obj = t.Data.Coupons[0], 
-                            // i.setData({
-                            //     couponID: i.data.couponID,
-                            //     coupon_obj: i.data.coupon_obj,
-                            //     info: a,
-                            //     CouponAmount: t.Data.CouponAmount,
-                            //     DiscountAmount: t.Data.DiscountAmount,
-                            //     ShipSetting: t.Data.ShipSetting,
-                            //     Coupons: t.Data.Coupons,
-                            //     ids: n.join(","),
-                            //     postinfo: i.data.postinfo,
-                            //     CouponsNotice: t.Data.CouponsNotice,
-                            //     ShipSettingNotice: t.Data.ShipSettingNotice,
-                            //     ShipApplyNotice: t.Data.ShipApplyNotice,
-                            //     ShipApply: t.Data.ShipApply,
-                            //     WareHouseIDS: t.Data.WareHouseIDS,
-                            //     TotalProductAmount: t.Data.TotalProductAmount,
-                            //     ProductDiscount: t.Data.ProductDiscount,
-                            //     PostfeeDiscount: t.Data.PostfeeDiscount,
-                            //     TotalWeight: t.Data.TotalWeight
-                            // }), i.comfirm()) : 
                             i.setData({
                                 money: t.Data.TotalPayableAmount,
-                                // postfee: t.Data.TotalPostFeeAmount,
                                 TotalOriPostFeeAmount: t.Data.TotalOriPostFeeAmount,
                                 TotalPayableAmount: t.Data.TotalPayableAmount,
                                 info: a,
-                                // CouponAmount: t.Data.CouponAmount,
-                                // DiscountAmount: t.Data.DiscountAmount,
-                                // ShipSetting: t.Data.ShipSetting,
-                                // Coupons: t.Data.Coupons,
                                 ids: n.join(","),
                                 postinfo: i.data.postinfo,
-                                // CouponsNotice: t.Data.CouponsNotice,
                                 ShipSettingNotice: t.Data.ShipSettingNotice,
                                 ShipApplyNotice: t.Data.ShipApplyNotice,
-                                // ShipApply: t.Data.ShipApply,
-                                // WareHouseIDS: t.Data.WareHouseIDS,
-                                TotalProductAmount: t.Data.TotalProductAmount,
-                                // ProductDiscount: t.Data.ProductDiscount,
-                                // PostfeeDiscount: t.Data.PostfeeDiscount,
-                                // TotalWeight: t.Data.TotalWeight
+                                TotalProductAmount: t.Data.TotalProductAmount
                             });
                         });
                     } else {

@@ -12,6 +12,7 @@ Page({
         })
         this.data.id = t.id, this.init();
     },
+    //获取数据
     init: function(n) {
         var o = this;
         o.data.info = {}, e.showLoading(""), t.httppost("pinhuobuyer/OrderDetailV2?orderid=" + o.data.id, {}, function(t) {
@@ -31,6 +32,7 @@ Page({
             });
         });
     },
+    //订单按钮
     payorder: function(a) {
         var n = this, o = this.data.info;
         "买家支付" == a.currentTarget.dataset.action ? wx.redirectTo({
@@ -112,6 +114,7 @@ Page({
             }
         });
     },
+    //点击商品
     goitem: function(n) {
         var o = this, i = n.currentTarget.dataset;
         "补货" == i.action ? wx.navigateTo({
