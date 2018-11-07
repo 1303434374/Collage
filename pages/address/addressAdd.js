@@ -26,6 +26,7 @@ Page({
         });
     },
     onLoad: function(t) {
+        console.log(t)
         this.setData({
             we7: we7 
         })
@@ -39,69 +40,90 @@ Page({
             quickPay: t.quickPay || !1
         });
         var e = this;
-        if (t.id) {
-            var r = t.areaid.substring(0, 2), d = t.areaid.substring(0, 4);
-            wx.setNavigationBarTitle({
-                title: "编辑收货地址"
-            }), this.setData({
-                id: t.id,
-                realname: t.realname,
-                areaId: t.areaid,
-                mobile: t.mobile,
-                Address: t.address,
-                area: t.area
-            }), a.httppost("shop/area/Get?pid=0", {}, function(a) {
-                for (var t = 0; t < a.Data.length; t++) {
-                    if (r + "0000000" == a.Data[t].AreaID) {
-                        e.data.arrvalue[0] = t;
-                        break;
+        if (we7) {
+            if (t.id) {
+                wx.setNavigationBarTitle({
+                    title: "编辑收货地址"
+                }), this.setData({
+                    id: t.id,
+                    realname: t.realname,
+                    regionVal: t.areaid.split(' '),
+                    mobile: t.mobile,
+                    Address: t.address,
+                    checked: t.isdefault == '1' ? true : false
+                })
+            } else {
+                wx.setNavigationBarTitle({
+                    title: "添加收货地址"
+                })
+            }
+        } else {
+            if (t.id) {
+                var r = t.areaid.substring(0, 2), d = t.areaid.substring(0, 4);
+                wx.setNavigationBarTitle({
+                    title: "编辑收货地址"
+                }), this.setData({
+                    id: t.id,
+                    realname: t.realname,
+                    areaId: t.areaid,
+                    mobile: t.mobile,
+                    Address: t.address,
+                    area: t.area
+                }), a.httppost("shop/area/Get?pid=0", {}, function(a) {
+                    for (var t = 0; t < a.Data.length; t++) {
+                        if (r + "0000000" == a.Data[t].AreaID) {
+                            e.data.arrvalue[0] = t;
+                            break;
+                        }
+                        e.data.arrvalue[0] = 0;
                     }
-                    e.data.arrvalue[0] = 0;
-                }
-                e.setData({
-                    provinces: a.Data,
-                    arrvalue: e.data.arrvalue
-                });
-            }, "GET"), a.httppost("shop/area/Get?pid=" + r + "0000000", {}, function(a) {
-                for (var t = 0; t < a.Data.length; t++) {
-                    if (d + "00000" == a.Data[t].AreaID) {
-                        e.data.arrvalue[1] = t;
-                        break;
+                    e.setData({
+                        provinces: a.Data,
+                        arrvalue: e.data.arrvalue
+                    });
+                }, "GET"), a.httppost("shop/area/Get?pid=" + r + "0000000", {}, function(a) {
+                    for (var t = 0; t < a.Data.length; t++) {
+                        if (d + "00000" == a.Data[t].AreaID) {
+                            e.data.arrvalue[1] = t;
+                            break;
+                        }
+                        e.data.arrvalue[1] = 0;
                     }
-                    e.data.arrvalue[1] = 0;
-                }
-                e.setData({
-                    citys: a.Data,
-                    arrvalue: e.data.arrvalue
-                });
-            }, "GET"), a.httppost("shop/area/Get?pid=" + d + "00000", {}, function(a) {
-                for (var r = 0; r < a.Data.length; r++) {
-                    if (t.areaid == a.Data[r].AreaID) {
-                        e.data.arrvalue[2] = r;
-                        break;
+                    e.setData({
+                        citys: a.Data,
+                        arrvalue: e.data.arrvalue
+                    });
+                }, "GET"), a.httppost("shop/area/Get?pid=" + d + "00000", {}, function(a) {
+                    for (var r = 0; r < a.Data.length; r++) {
+                        if (t.areaid == a.Data[r].AreaID) {
+                            e.data.arrvalue[2] = r;
+                            break;
+                        }
+                        e.data.arrvalue[2] = 0;
                     }
-                    e.data.arrvalue[2] = 0;
-                }
-                e.setData({
-                    countys: a.Data,
-                    arrvalue: e.data.arrvalue
-                });
-            }, "GET");
-        } else wx.setNavigationBarTitle({
-            title: "添加收货地址"
-        }), a.httppost("shop/area/Get?pid=0", {}, function(a) {
-            e.setData({
-                provinces: a.Data
-            });
-        }, "GET"), a.httppost("shop/area/Get?pid=110000000", {}, function(a) {
-            e.setData({
-                citys: a.Data
-            });
-        }, "GET"), a.httppost("shop/area/Get?pid=110100000", {}, function(a) {
-            e.setData({
-                countys: a.Data
-            });
-        }, "GET");
+                    e.setData({
+                        countys: a.Data,
+                        arrvalue: e.data.arrvalue
+                    });
+                }, "GET");
+            } else {
+                wx.setNavigationBarTitle({
+                    title: "添加收货地址"
+                }), a.httppost("shop/area/Get?pid=0", {}, function(a) {
+                    e.setData({
+                        provinces: a.Data
+                    });
+                }, "GET"), a.httppost("shop/area/Get?pid=110000000", {}, function(a) {
+                    e.setData({
+                        citys: a.Data
+                    });
+                }, "GET"), a.httppost("shop/area/Get?pid=110100000", {}, function(a) {
+                    e.setData({
+                        countys: a.Data
+                    });
+                }, "GET");
+            }
+        }
     },
     bindChange: function(t) {
         var e = this;
@@ -142,7 +164,6 @@ Page({
         });
     },
     open: function() {
-        console.log('open')
         0 == this.data.citys.length ? (this.data.area = this.data.provinces[this.data.arrvalue[0]].Name, 
         this.setData({
             flag: !1,
@@ -177,13 +198,13 @@ Page({
             duration: 2e3
         }), !1;
         if (we7) {
-            if (0 == t.detail.value.area.length) return wx.showToast({
+            if (0 == e.data.regionVal.length) return wx.showToast({
                 title: "请选择地区",
                 icon: "success",
                 duration: 2e3
             }), !1;
         } else {
-            if ("" == this.data.areaId) return wx.showToast({
+            if ("" == e.data.areaId) return wx.showToast({
                 title: "请选择地区",
                 icon: "success",
                 duration: 2e3
@@ -200,32 +221,63 @@ Page({
             duration: 2e3
         }), !1;
         if (this.data.id) {
-            var r = {
-                ID: e.data.id,
-                realName: t.detail.value.user,
-                mobile: t.detail.value.mobile,
-                areaId: e.data.areaId,
-                address: t.detail.value.address,
-                isDefault: !0
-            };
-            a.httppost("shop/address/update", r, function(a) {
-                "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.navigateTo({
-                    url: "/pages/address/addresslist"
-                }) : wx.redirectTo({
-                    url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
+            if (we7) {
+                var r = {
+                    uid: wx.getStorageSync('u_id'),
+                    ID: e.data.id,
+                    realName: t.detail.value.user,
+                    mobile: t.detail.value.mobile,
+                    areaId: e.data.regionVal.join(' '),
+                    address: t.detail.value.address,
+                    isDefault: !0
+                }
+                a.http_post("UpdAddress", r, function(a) {
+                    console.log('微擎更新收货地址=')
+                    console.log(a)
+                    "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.navigateTo({
+                        url: "/pages/address/addresslist"
+                    }) : wx.redirectTo({
+                        url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
+                    });
                 });
-            }, "GET");
+            } else {
+                var r = {
+                    ID: e.data.id,
+                    realName: t.detail.value.user,
+                    mobile: t.detail.value.mobile,
+                    areaId: e.data.areaId,
+                    address: t.detail.value.address,
+                    isDefault: !0
+                };
+                a.httppost("shop/address/update", r, function(a) {
+                    "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.navigateTo({
+                        url: "/pages/address/addresslist"
+                    }) : wx.redirectTo({
+                        url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
+                    });
+                }, "GET");
+            }
         } else {
             if (we7) {
                 var d = {
+                    uid: wx.getStorageSync('u_id'),
                     realName: t.detail.value.user,
                     mobile: t.detail.value.mobile,
-                    areaId: t.detail.value.area.join(' '),
+                    areaId: e.data.regionVal.join(' '),
                     address: t.detail.value.address,
-                    isDefault: t.detail.value.checked
+                    isDefault: t.detail.value.checked ? 1 : 0
                 };
-                console.log('表单提交=')
-                console.log(d)
+                a.http_post("Addaddress", d, function(a) {
+                    console.log('微擎添加收货地址')
+                    console.log(a)
+                    "undefined" == e.data.url && "undefined" != e.data.dataurl && e.data.flagadd ? wx.redirectTo({
+                        url: "/pages/address/addresslist?data" + e.data.dataurl + "&url=" + e.data.url
+                    }) : "undefined" == e.data.url && "undefined" == e.data.dataurl ? wx.redirectTo({
+                        url: "/pages/address/addresslist?data" + e.data.dataurl
+                    }) : wx.redirectTo({
+                        url: e.data.url + "?data=" + e.data.dataurl + "&quickPay=" + e.data.quickPay
+                    });
+                });
             } else {
                 var d = {
                     realName: t.detail.value.user,
@@ -234,7 +286,6 @@ Page({
                     address: t.detail.value.address,
                     isDefault: !0
                 };
-                console.log(d)
                 a.httppost("shop/address/add", d, function(a) {
                     "undefined" == e.data.url && "undefined" != e.data.dataurl && e.data.flagadd ? wx.redirectTo({
                         url: "/pages/address/addresslist?data" + e.data.dataurl + "&url=" + e.data.url

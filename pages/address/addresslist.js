@@ -1,4 +1,4 @@
-var a = require("../../utils/httputil.js"), t = getApp();
+var a = require("../../utils/httputil.js"), t = getApp(), we7 = t.globalData.we7;
 
 Page({
     data: {
@@ -8,6 +8,9 @@ Page({
         urldata: ""
     },
     onLoad: function(a) {
+        this.setData({
+            we7: we7 
+        })
         a && this.setData({
             url: a.url,
             dataurl: a.url,
@@ -17,30 +20,63 @@ Page({
     },
     init: function() {
         var r = this;
-        t.showLoading("加载中"), a.httppost("shop/address/GetAddresses", {}, function(a) {
-            console.log('获取收货地址列表=')
-            console.log(a)
-            r.setData({
-                arrlist: a.Data
+        if (we7) {
+            t.showLoading("加载中"), a.http_post("MyAddress", {
+                uid: wx.getStorageSync('u_id')
+            }, function(a) {
+                console.log('微擎获取收货地址列表=')
+                console.log(a)
+                r.setData({
+                    arrlist: a.Data
+                });
             });
-        }, "GET");
+        } else {
+            t.showLoading("加载中"), a.httppost("shop/address/GetAddresses", {}, function(a) {
+                console.log('获取收货地址列表=')
+                console.log(a)
+                r.setData({
+                    arrlist: a.Data
+                });
+            }, "GET");
+        }
     },
     navclick: function(t) {
-        var r = this, d = {
-            ID: t.currentTarget.dataset.id,
-            realName: t.currentTarget.dataset.realname,
-            mobile: t.currentTarget.dataset.mobile,
-            areaId: t.currentTarget.dataset.areaid,
-            address: t.currentTarget.dataset.address,
-            isDefault: !0
-        };
-        a.httppost("shop/address/update", d, function(a) {
-            console.log(r.data.url), console.log(r.data.urldata), r.data.url && r.data.urldata ? wx.redirectTo({
-                url: r.data.dataurl + "?data=" + r.data.urldata + "&quickPay=" + r.data.quickPay
-            }) : wx.navigateTo({
-                url: "/pages/address/addresslist"
+        if (we7) {
+            var r = this, d = {
+                uid: wx.getStorageSync('u_id'),
+                ID: t.currentTarget.dataset.id,
+                realName: t.currentTarget.dataset.realname,
+                mobile: t.currentTarget.dataset.mobile,
+                areaId: t.currentTarget.dataset.areaid,
+                address: t.currentTarget.dataset.address,
+                isDefault: !0
+            };
+            a.http_post("UpdAddress", d, function(a) {
+                console.log('微擎更新收货地址=')
+                console.log(a)
+                console.log(r.data.url), console.log(r.data.urldata), r.data.url && r.data.urldata ? wx.redirectTo({
+                    url: r.data.dataurl + "?data=" + r.data.urldata + "&quickPay=" + r.data.quickPay
+                }) : wx.navigateTo({
+                    url: "/pages/address/addresslist"
+                });
             });
-        }, "GET");
+        } else {
+            var r = this, d = {
+                ID: t.currentTarget.dataset.id,
+                realName: t.currentTarget.dataset.realname,
+                mobile: t.currentTarget.dataset.mobile,
+                areaId: t.currentTarget.dataset.areaid,
+                address: t.currentTarget.dataset.address,
+                isDefault: !0
+            };
+            a.httppost("shop/address/update", d, function(a) {
+                console.log(r.data.url), console.log(r.data.urldata), r.data.url && r.data.urldata ? wx.redirectTo({
+                    url: r.data.dataurl + "?data=" + r.data.urldata + "&quickPay=" + r.data.quickPay
+                }) : wx.navigateTo({
+                    url: "/pages/address/addresslist"
+                });
+            }, "GET");
+        }
     },
     navadd: function() {
         var a = this;
@@ -50,19 +86,49 @@ Page({
     },
     revamp: function(a) {
         var t = a.currentTarget.dataset;
-        wx.redirectTo({
-            url: "/pages/address/addressAdd?id=" + t.id + "&area=" + t.area + "&areaid=" + t.areaid + "&mobile=" + t.mobile + "&realname=" + t.realname + "&address=" + t.address + "&url=" + this.data.dataurl + "&data=" + this.data.urldata
-        });
+        if (we7) {
+            wx.redirectTo({
+                url: "/pages/address/addressAdd?id=" + t.id + "&areaid=" + t.areaid + "&mobile=" + t.mobile + "&realname=" + t.realname + "&address=" + t.address + "&isdefault=" + t.isdefault + "&url=" + this.data.dataurl + "&data=" + this.data.urldata
+            });
+        } else {
+            wx.redirectTo({
+                url: "/pages/address/addressAdd?id=" + t.id + "&area=" + t.area + "&areaid=" + t.areaid + "&mobile=" + t.mobile + "&realname=" + t.realname + "&address=" + t.address + "&url=" + this.data.dataurl + "&data=" + this.data.urldata
+            });
+        }
     },
     del: function(r) {
-        var d = this;
-        t.showLoading("删除中");
-        var e = r.currentTarget.dataset;
-        a.httppost("shop/address/delete", {
-            ID: e.id
-        }, function(a) {
-            d.init();
-        }, "GET");
+        if (we7) {
+            var d = this;
+            var e = r.currentTarget.dataset;
+            wx.showModal({
+                title: "",
+                content: "确定要删除这个收货地址吗？",
+                confirmText: "再想想",
+                cancelText: "确定",
+                success: function(s) {
+                    if (!s.confirm) {
+                        t.showLoading("删除中");
+                        a.http_post("DelAdd", {
+                            ID: e.id,
+                            uid: wx.getStorageSync('u_id')
+                        }, function(a) {
+                            console.log('微擎删除收货地址=')
+                            console.log(a)
+                            d.init();
+                        }, "GET");
+                    }
+                }
+            });
+        } else {
+            var d = this;
+            t.showLoading("删除中");
+            var e = r.currentTarget.dataset;
+            a.httppost("shop/address/delete", {
+                ID: e.id
+            }, function(a) {
+                d.init();
+            }, "GET");
+        }
     },
     onPullDownRefresh: function() {
         wx.stopPullDownRefresh();

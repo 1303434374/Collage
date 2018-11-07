@@ -1,4 +1,4 @@
-<view class="list_address_box">
+<view class="list_address_box" wx:if="{{!we7}}">
     <view class="address_box" wx:for="{{arrlist}}" wx:key="{{index}}">
         <view bindtap="navclick" class="address_left" data-Address="{{item.Address}}" data-Area="{{item.Area}}" data-AreaID="{{item.AreaID}}" data-Mobile="{{item.Mobile}}" data-RealName="{{item.RealName}}" data-id="{{item.ID}}">
             <view class="address_title">
@@ -16,6 +16,31 @@
         <view class="right">
             <view>
                 <image bindtap="revamp" data-Address="{{item.Address}}" data-Area="{{item.Area}}" data-AreaID="{{item.AreaID}}" data-Mobile="{{item.Mobile}}" data-RealName="{{item.RealName}}" data-id="{{item.ID}}" src="/Image/search/repair.png"></image>
+            </view>
+            <view style="margin-top:20px;">
+                <image bindtap="del" data-id="{{item.ID}}" src="/Image/search/cancel.png"></image>
+            </view>
+        </view>
+    </view>
+</view>
+<view class="list_address_box" wx:else>
+    <view class="address_box" wx:for="{{arrlist}}" wx:key="{{index}}">
+        <view bindtap="navclick" class="address_left" data-Address="{{item.address}}" data-AreaID="{{item.areaId}}" data-Mobile="{{item.mobile}}" data-RealName="{{item.realName}}" data-id="{{item.ID}}">
+            <view class="address_title">
+                <text class="name">{{item.realName}}</text>
+                <text class="phone">{{item.mobile}}</text>
+                <text class="normal" wx:if="{{item.isDefault == '1'}}">[默认]</text>
+            </view>
+            <view class="address_title">
+                {{item.areaId}}
+            </view>
+            <view class="address_title">
+                {{item.address}}
+            </view>
+        </view>
+        <view class="right">
+            <view>
+                <image bindtap="revamp" data-Address="{{item.address}}" data-AreaID="{{item.areaId}}" data-Mobile="{{item.mobile}}" data-RealName="{{item.realName}}" data-isDefault="{{item.isDefault}}" data-id="{{item.ID}}" src="/Image/search/repair.png"></image>
             </view>
             <view style="margin-top:20px;">
                 <image bindtap="del" data-id="{{item.ID}}" src="/Image/search/cancel.png"></image>

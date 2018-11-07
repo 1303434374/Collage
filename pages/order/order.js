@@ -1,5 +1,4 @@
-var t = require("../../utils/imgutil.js"), a = require("../../utils/httputil.js"), e = (require("../../utils/common.js"), 
-getApp());
+var t = require("../../utils/imgutil.js"), a = require("../../utils/httputil.js"), e = (require("../../utils/common.js"), getApp()), we7 = e.globalData.we7;
 
 Page({
     data: {
@@ -30,6 +29,9 @@ Page({
         keyword: ""
     },
     onLoad: function(t) {
+        this.setData({
+            we7: we7
+        })
         var a = this;
         t.id && (this.data.currNav = t.id), 4 == this.data.currNav ? this.data.scrollLeft = 178 : 5 == this.data.currNav ? this.data.scrollLeft = 265 : 6 == this.data.currNav || -1 == this.data.currNav ? this.data.scrollLeft = 277 : this.data.scrollLeft = 0, 
         a.setData({
@@ -37,6 +39,7 @@ Page({
             currNav: this.data.currNav
         }), a.init();
     },
+    //点击导航
     changetitle: function(t) {
         t.target.dataset.id !== this.data.currNav && (4 == t.target.dataset.id ? this.data.scrollLeft = 178 : 5 == t.target.dataset.id ? this.data.scrollLeft = 265 : 6 == t.target.dataset.id || -1 == t.target.dataset.id ? this.data.scrollLeft = 277 : this.data.scrollLeft = 0, 
         this.setData({
@@ -46,6 +49,7 @@ Page({
             scrollLeft: this.data.scrollLeft
         }), this.init());
     },
+    //获取数据
     init: function() {
         var i = this, s = {
             StatuID: i.data.currNav,
@@ -67,11 +71,13 @@ Page({
             });
         }, "GET");
     },
+    //订单详情
     detail: function(t) {
         wx.navigateTo({
             url: "/pages/order/orderdetail?id=" + t.currentTarget.dataset.item
         });
     },
+    //点击按钮
     payment: function(t) {
         var i = this, s = i.data.lists[t.currentTarget.dataset.idx];
         "买家支付" == t.currentTarget.dataset.action ? wx.navigateTo({

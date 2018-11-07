@@ -1,5 +1,4 @@
-var t = require("../../utils/httputil.js"), a = require("../../utils/imgutil.js"), e = (require("../../utils/common.js"), 
-getApp());
+var t = require("../../utils/httputil.js"), a = require("../../utils/imgutil.js"), e = (require("../../utils/common.js"), getApp()), we7 = e.globalData.we7;
 
 Page({
     data: {
@@ -8,6 +7,9 @@ Page({
         numflag: !1
     },
     onLoad: function(t) {
+        this.setData({
+            we7: we7
+        })
         this.data.id = t.id, this.init();
     },
     init: function(n) {

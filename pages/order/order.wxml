@@ -1,5 +1,5 @@
 <view class="fixed_box">
-    <form bindsubmit="search">
+    <form bindsubmit="search" wx:if="{{!we7}}">
         <view class="headsearch">
             <view class="box">
                 <icon size="16" type="search"></icon>
@@ -16,7 +16,7 @@
             </view>
     </scroll-view>
 </view>
-<view class="header" style="width:100%;height:104px;"></view>
+<view class="header" style="width:100%;{{!we7 ? 'height:104px;' : 'height:50px;'}}"></view>
 <view class="notice" wx:if="{{notice&&lists.length>1}}">未支付的订单将在专场后自动取消，请尽快付款！</view>
 <view class="order_box" wx:for="{{lists}}" wx:for-index="idx" wx:key="{{lists}}">
     <view class="order">

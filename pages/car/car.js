@@ -265,7 +265,7 @@ Page({
         this.itemInfos(), 0 == this.data.itemInfos.length ? wx.showToast({
             title: "请选择要结算的商品",
             mask: !0,
-            icon: "success"
+            icon: "none"
         }) : wx.navigateTo({
             url: "/pages/pinhuo/settlement?quickPay=false&data=" + JSON.stringify(this.data.itemInfos)
         });
@@ -273,13 +273,17 @@ Page({
     //点击删除
     deleteGoods: function(t) {
         var a = [], s = this;
-        wx.showModal({
+        s.itemInfos(), 0 == s.data.itemInfos.length ? wx.showToast({
+            title: "请选择要删除的商品",
+            mask: !0,
+            icon: "none"
+        }) : wx.showModal({
             title: "",
             content: "确定要删除选中的商品吗",
             confirmText: "再想想",
             cancelText: "确定",
             success: function(t) {
-                if (t.confirm) ; else {
+                if (!t.confirm) {
                     s.data.list.map(function(t) {
                         t.TimeList.map(function(t) {
                             t.Items.map(function(t) {
@@ -292,7 +296,7 @@ Page({
                                 t.selected && a.push(t.AgentItemID);
                             });
                         });
-                    });
+                    }); 
                     var o = a.join(",");
                     console.log('购物车删除=')
                     console.log(o)
@@ -529,11 +533,17 @@ Page({
             wx.getStorageSync("u_id") && e.http_post("getTotalCount", {
                 uid: wx.getStorageSync('u_id')
             }, function(t) {
-                t.Data && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-                wx.setTabBarBadge({
-                    index: 2,
-                    text: t.Data.CartItemQty
-                })));
+                let num = t.Data.CartItemQty
+                if (num > 0) {
+                    wx.setTabBarBadge({
+                        index: 2,
+                        text: num
+                    })
+                } else {
+                    wx.removeTabBarBadge({
+                        index: 2
+                    })
+                }
             }, "GET");
         } else {
             wx.getStorageSync("token") && e.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {

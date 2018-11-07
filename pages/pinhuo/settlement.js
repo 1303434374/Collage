@@ -26,26 +26,27 @@ Page({
         var i = this, s = e.data, n = [];
         JSON.parse(e.data).map(function(t) {
             -1 == n.indexOf(t.AgentItemID) && n.push(t.AgentItemID);
-        }), i.data.str = s, i.data.quickPay = e.quickPay, t.showLoading("数据加载中"), wx.request({
-            url: "https://api2.nahuo.com/v3/shop/address/GetDefaultAddress",
-            header: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                Authorization: wx.getStorageSync("token")
-            },
-            success: function(e) {
-                console.log('获取默认收货地址=')
-                console.log(e)
-                if (e.data.Result) {
-                    i.data.AddressID = e.data.Data.ID, i.data.postinfo = e.data.Data;
-                    var u = {
-                        version: 3,
-                        itemInfos: s,
-                        quickPay: i.data.quickPay,
-                        AddressID: i.data.AddressID
-                    };
-                    if (we7) {
-                        /*t.showLoading("数据加载中"), a.http_post("", u, function(t) {
-                            console.log('生成订单=')
+        }), i.data.str = s, i.data.quickPay = e.quickPay
+        if (we7) {
+            t.showLoading("数据加载中"), a.http_post('GetDefaultaddress', {
+                    uid: wx.getStorageSync('u_id')
+                }, function(e) {
+                    console.log('微擎获取默认收货地址=')
+                    console.log(e)
+                    if (e.Result) {
+                        i.data.AddressID = e.Data.ID, i.data.postinfo = e.Data;
+                        var u = {
+                            version: 3,
+                            itemInfos: s,
+                            quickPay: i.data.quickPay,
+                            AddressID: i.data.AddressID
+                        };
+                        // i.setData({
+                        //     postinfo: i.data.postinfo
+                        // })
+                        // t.hideLoading()
+                        t.showLoading("数据加载中"), a.http_post("Cartlist", u, function(t) {
+                            console.log('微擎生成订单=')
                             console.log(t)
                             for (var a = t.Data.Orders, e = 0; e < a.length; e++) for (var s = 0; s < a[e].Items.length; s++) 
                             // t.Data.ShipSetting.map(function(t) {
@@ -96,10 +97,45 @@ Page({
                                 TotalProductAmount: t.Data.TotalProductAmount,
                                 // ProductDiscount: t.Data.ProductDiscount,
                                 // PostfeeDiscount: t.Data.PostfeeDiscount,
-                                TotalWeight: t.Data.TotalWeight
+                                // TotalWeight: t.Data.TotalWeight
                             });
-                        });*/
+                        });
                     } else {
+                        t.hideLoading(), wx.showModal({
+                            title: "",
+                            content: "您还没有收货地址，现在去添加一个？",
+                            showCancel: !1,
+                            confirmText: "确定",
+                            success: function(t) {
+                                t.confirm && wx.redirectTo({
+                                    url: "/pages/address/addressAdd?data=" + s + "&url=/pages/pinhuo/settlement&quickPay=" + i.data.quickPay,
+                                    success: function(t) {},
+                                    fail: function(t) {},
+                                    complete: function(t) {}
+                                });
+                            }
+                        });
+                    }
+                }
+            );
+        } else {
+            t.showLoading("数据加载中"), wx.request({
+                url: "https://api2.nahuo.com/v3/shop/address/GetDefaultAddress",
+                header: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization: wx.getStorageSync("token")
+                },
+                success: function(e) {
+                    console.log('获取默认收货地址=')
+                    console.log(e)
+                    if (e.data.Result) {
+                        i.data.AddressID = e.data.Data.ID, i.data.postinfo = e.data.Data;
+                        var u = {
+                            version: 3,
+                            itemInfos: s,
+                            quickPay: i.data.quickPay,
+                            AddressID: i.data.AddressID
+                        };
                         t.showLoading("数据加载中"), a.httppost("pinhuo/order/CreateTempOrder", u, function(t) {
                             console.log('生成订单=')
                             console.log(t)
@@ -154,23 +190,23 @@ Page({
                                 TotalWeight: t.Data.TotalWeight
                             });
                         }, "POST");
-                    }
-                } else t.hideLoading(), wx.showModal({
-                    title: "",
-                    content: "您还没有收货地址，现在去添加一个？",
-                    showCancel: !1,
-                    confirmText: "确定",
-                    success: function(t) {
-                        t.confirm && wx.redirectTo({
-                            url: "/pages/address/addressAdd?data=" + s + "&url=/pages/pinhuo/settlement&quickPay=" + i.data.quickPay,
-                            success: function(t) {},
-                            fail: function(t) {},
-                            complete: function(t) {}
-                        });
-                    }
-                });
-            }
-        });
+                    } else t.hideLoading(), wx.showModal({
+                        title: "",
+                        content: "您还没有收货地址，现在去添加一个？",
+                        showCancel: !1,
+                        confirmText: "确定",
+                        success: function(t) {
+                            t.confirm && wx.redirectTo({
+                                url: "/pages/address/addressAdd?data=" + s + "&url=/pages/pinhuo/settlement&quickPay=" + i.data.quickPay,
+                                success: function(t) {},
+                                fail: function(t) {},
+                                complete: function(t) {}
+                            });
+                        }
+                    });
+                }
+            });
+        }
     },
     orderSubmit: function() {
         var o = this;

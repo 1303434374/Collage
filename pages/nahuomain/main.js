@@ -167,11 +167,17 @@ Page({
             wx.getStorageSync("u_id") && i.http_post("getTotalCount", {
                 uid: wx.getStorageSync('u_id')
             }, function(t) {
-                t.Data && (t.Data.CartItemQty > 0 && (t.Data.CartItemQty = t.Data.CartItemQty + "", 
-                wx.setTabBarBadge({
-                    index: 2,
-                    text: t.Data.CartItemQty
-                })));
+                let num = t.Data.CartItemQty
+                if (num > 0) {
+                    wx.setTabBarBadge({
+                        index: 2,
+                        text: num
+                    })
+                } else {
+                    wx.removeTabBarBadge({
+                        index: 2
+                    })
+                }
             }, "GET");
         } else {
             wx.getStorageSync("token") && i.httppost("pinhuocart/GetMenuRedPoint", {}, function(t) {
