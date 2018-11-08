@@ -197,7 +197,8 @@ Page({
                         uid: wx.getStorageSync('u_id'),
                         aid: o.data.AddressID,
                         arr: arr,
-                        money: o.data.TotalPayableAmount
+                        money: o.data.TotalPayableAmount,
+                        postfee: o.data.TotalOriPostFeeAmount
                     }
                     a.http_post('AddMyOrder',e,(t)=>{
                         console.log('微擎提交订单=')

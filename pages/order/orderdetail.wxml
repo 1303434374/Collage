@@ -35,11 +35,11 @@
 <view class="goodlist" wx:for="{{info.SenderList}}" wx:for-index="idx1" wx:for-item="item1" wx:key="m">
     <view class="goodtitlebox">
         <image class="goodicon" src="/Image/pinhuo/dp4.png"></image>
-        <view class="goodaddress">{{item1.Name}}</view>
+        <view class="goodaddress">{{we7 ? item1.Name + '发货' : item1.Name}}</view>
     </view>
     <block wx:for="{{item1.ChildOrders}}" wx:for-index="idx2" wx:for-item="item2" wx:key="n">
         <view class="detail_title">
-            <view class="buyer" wx:if="{{item2.BuyerShopID!==0}}">
+            <view class="buyer" wx:if="{{!we7 && item2.BuyerShopID!==0}}">
                 <image class="buyerimg" src="https://api2.nahuo.com/v3/shop/logo/uid/{{item2.BuyerShopID}}"></image>
                 <view class="buyername">买手：{{item2.BuyerShopName}}</view>
             </view>
@@ -58,7 +58,10 @@
             </view>
             <view class="coinsummary">{{item2.CoinSummary}}</view>
             <view class="size_list">
-                <view class="color_size_qty" wx:for="{{item2.Products}}" wx:for-index="idx3" wx:for-item="item3" wx:key="o">{{item3.Color}}/{{item3.Size}}/{{item3.Qty}}
+                <view class="color_size_qty" wx:for="{{item2.desc}}" wx:for-index="idx3" wx:for-item="item3" wx:key="o" wx:if="{{we7}}">{{item3}}
+                    <text style="margin-left:30rpx;">{{item3.Summary}}</text>
+                </view>
+                <view class="color_size_qty" wx:for="{{item2.Products}}" wx:for-index="idx3" wx:for-item="item3" wx:key="o" wx:if="{{!we7}}">{{item3.Color}}/{{item3.Size}}/{{item3.Qty}}
                     <text style="margin-left:30rpx;">{{item3.Summary}}</text>
                 </view>
             </view>

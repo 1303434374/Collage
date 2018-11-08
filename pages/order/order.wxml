@@ -17,7 +17,7 @@
     </scroll-view>
 </view>
 <view class="header" style="width:100%;{{!we7 ? 'height:104px;' : 'height:50px;'}}"></view>
-<view class="notice" wx:if="{{notice&&lists.length>1}}">未支付的订单将在专场后自动取消，请尽快付款！</view>
+<view class="notice" wx:if="{{notice&&lists.length>1}}">{{we7 ? notice : '未支付的订单将在专场后自动取消，请尽快付款！'}}</view>
 <view class="order_box" wx:for="{{lists}}" wx:for-index="idx" wx:key="{{lists}}">
     <view class="order">
         <view class="order_id">拿货单：{{item.Code}}</view>
@@ -38,7 +38,7 @@
     <view class="total_comment" wx:if="{{item.Summary}}">{{item.Summary}}</view>
     <view class="return_money" wx:if="{{item.RefundSummary}}">{{item.RefundSummary}}</view>
     <view class="btn_box">
-        <button bindtap="payment" class="btn" data-action="{{item1.action}}" data-idx="{{idx}}" type="{{item1.isPoint?'warn':'default'}}" wx:for="{{item.Buttons}}" wx:for-item="item1" wx:key="key11">{{item1.title}}</button>
+        <button bindtap="payment" class="btn" data-action="{{item1.action}}" data-idx="{{idx}}" type="{{item1.isPoint?'warn':'default'}}" wx:for="{{item.Buttons}}" wx:for-item="item1" wx:key="key11" wx:if="{{item1.isEnable}}">{{item1.title}}</button>
     </view>
 </view>
 <view class="empty" wx:if="{{lists.length<1}}">没有数据</view>

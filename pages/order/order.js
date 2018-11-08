@@ -39,6 +39,10 @@ Page({
             currNav: this.data.currNav
         }), a.init();
     },
+    onShow: function (event) {
+        var t = this
+        t.data.pageIndex = 1, t.data.notice = "", t.data.lists = [], t.init();
+    },
     //点击导航
     changetitle: function(t) {
         t.target.dataset.id !== this.data.currNav && (4 == t.target.dataset.id ? this.data.scrollLeft = 178 : 5 == t.target.dataset.id ? this.data.scrollLeft = 265 : 6 == t.target.dataset.id || -1 == t.target.dataset.id ? this.data.scrollLeft = 277 : this.data.scrollLeft = 0, 
@@ -107,22 +111,46 @@ Page({
             title: "",
             content: "是否确认取消订单",
             success: function(t) {
-                t.confirm && (e.showLoading(""), a.httppostmore("pinhuoBuyer/orderv2/Cancel", {
-                    id: s.ID
-                }, function(t) {
-                    t.Result ? wx.showModal({
-                        title: "",
-                        content: "成功取消订单",
-                        showCancel: !1,
-                        success: function(t) {
-                            t.confirm && (i.data.pageIndex = 1, i.data.notice = "", i.data.lists = [], i.init());
-                        }
-                    }) : wx.showModal({
-                        title: "",
-                        content: t.Message,
-                        showCancel: !1
-                    });
-                }, "POST"));
+                if (t.confirm) {
+                    if (we7) {
+                        e.showLoading("")
+                        a.http_post("CancelMyOrder", {
+                            uid: wx.getStorageSync('u_id'),
+                            id: s.ID
+                        }, function(t) {
+                            t.Result ? wx.showModal({
+                                title: "",
+                                content: "成功取消订单",
+                                showCancel: !1,
+                                success: function(t) {
+                                    t.confirm && (i.data.pageIndex = 1, i.data.notice = "", i.data.lists = [], i.init());
+                                }
+                            }) : wx.showModal({
+                                title: "",
+                                content: t.Message,
+                                showCancel: !1
+                            });
+                        })
+                    } else {
+                        e.showLoading("")
+                        a.httppostmore("pinhuoBuyer/orderv2/Cancel", {
+                            id: s.ID
+                        }, function(t) {
+                            t.Result ? wx.showModal({
+                                title: "",
+                                content: "成功取消订单",
+                                showCancel: !1,
+                                success: function(t) {
+                                    t.confirm && (i.data.pageIndex = 1, i.data.notice = "", i.data.lists = [], i.init());
+                                }
+                            }) : wx.showModal({
+                                title: "",
+                                content: t.Message,
+                                showCancel: !1
+                            });
+                        }, "POST")
+                    }
+                }
             }
         }) : "一键加入购物车" == t.currentTarget.dataset.action ? (e.showLoading(""), a.httppostmore("pinhuocart/AddItemFromOrder", {
             id: s.ID
