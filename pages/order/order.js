@@ -57,19 +57,40 @@ Page({
             pageSize: 20,
             keyword: i.data.keyword
         };
-        i.data.flag = !1, e.showLoading("数据请求中"), a.httppost("pinhuoBuyer/GetOrderListV5", s, function(a) {
-            console.log('订单列表=')
-            console.log(a)
-            i.data.notice = a.Data.Notice, a.Data.OrderList.map(function(a) {
-                a.imglist = [], a.Images.map(function(e) {
-                    a.imglist.push(t.getUrl(e, 300));
+        if (we7) {
+            i.data.flag = !1, e.showLoading("数据请求中"), a.http_post("GetOrder", {
+                uid: wx.getStorageSync('u_id'),
+                StatuID: i.data.currNav
+            }, function(a) {
+                console.log('微擎订单列表=')
+                console.log(a)
+                i.data.notice = a.Data.Notice, a.Data.OrderList.map(function(a) {
+                    a.imglist = [], a.Images.map(function(e) {
+                        a.imglist.push(e);
+                    });
+                }), 
+                // 20 == a.Data.OrderList.length ? (i.data.pageIndex++, i.data.flag = !0) : i.data.flag = !1, 
+                i.data.lists = i.data.lists.concat(a.Data.OrderList), 
+                i.setData({
+                    lists: i.data.lists,
+                    notice: i.data.notice
                 });
-            }), 20 == a.Data.OrderList.length ? (i.data.pageIndex++, i.data.flag = !0) : i.data.flag = !1, 
-            i.data.lists = i.data.lists.concat(a.Data.OrderList), i.setData({
-                lists: i.data.lists,
-                notice: i.data.notice
             });
-        }, "GET");
+        } else {
+            i.data.flag = !1, e.showLoading("数据请求中"), a.httppost("pinhuoBuyer/GetOrderListV5", s, function(a) {
+                console.log('订单列表=')
+                console.log(a)
+                i.data.notice = a.Data.Notice, a.Data.OrderList.map(function(a) {
+                    a.imglist = [], a.Images.map(function(e) {
+                        a.imglist.push(t.getUrl(e, 300));
+                    });
+                }), 20 == a.Data.OrderList.length ? (i.data.pageIndex++, i.data.flag = !0) : i.data.flag = !1, 
+                i.data.lists = i.data.lists.concat(a.Data.OrderList), i.setData({
+                    lists: i.data.lists,
+                    notice: i.data.notice
+                });
+            }, "GET");
+        }
     },
     //订单详情
     detail: function(t) {

@@ -17,6 +17,7 @@ Page({
         gofirst: !0,
         showhide: !0
     },
+    //获取数据
     onLoad: function(e) {
         console.log(e)
         this.setData({
@@ -165,6 +166,7 @@ Page({
             });
         }
     },
+    //提交订单
     orderSubmit: function() {
         var o = this;
         if (0 == o.data.AddressID) t.showToast("请先选择收货地址"); else if (wx.getStorageSync("flag")) {
@@ -172,28 +174,61 @@ Page({
             if (o.data.OrderId) wx.redirectTo({
                 url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + o.data.OrderId + "&&itemids=" + o.data.ids
             }); else {
-                var e = {
-                    couponID: o.data.couponID,
-                    addressID: o.data.AddressID,
-                    quickpay: o.data.quickPay,
-                    shipTypeID: o.data.typeid
-                };
-                a.httppost("pinhuo/order/submit?from=mina", e, function(t) {
-                    console.log('提交订单=')
-                    console.log(e)
-                    console.log('订单返回=')
-                    console.log(t)
-                    wx.redirectTo({
-                        url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + t.Data.OrderIds + "&&itemids=" + o.data.ids
-                    });
-                }, "POST");
+                if (we7) {
+                    t.showLoading("正在提交订单")
+                    let arr = []
+                    o.data.info.map(function(e) {
+                        e.Items.map(function(e) {
+                            let ele = {}
+                            let i = []
+                            ele.id = e.AgentItemID
+                            ele.fid = e.fid
+                            ele.price = e.Price
+                            ele.num = e.TotalQty
+                            e.Products.map(function(t) {
+                                t.msg = t.Color + "/" + t.Size + "/" + t.Qty + "件"
+                                i.push(t.msg);
+                            })
+                            ele.msg = i.join(',')
+                            arr.push(ele)
+                        });
+                    })
+                    var e = {
+                        uid: wx.getStorageSync('u_id'),
+                        aid: o.data.AddressID,
+                        arr: arr,
+                        money: o.data.TotalPayableAmount
+                    }
+                    a.http_post('AddMyOrder',e,(t)=>{
+                        console.log('微擎提交订单=')
+                        console.log(e)
+                        console.log('微擎订单返回=')
+                        console.log(t)
+                        wx.redirectTo({
+                            url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + t.Data.OrderIds + "&&itemids=" + o.data.ids
+                        });
+                    })
+                } else {
+                    var e = {
+                        couponID: o.data.couponID,
+                        addressID: o.data.AddressID,
+                        quickpay: o.data.quickPay,
+                        shipTypeID: o.data.typeid
+                    };
+                    a.httppost("pinhuo/order/submit?from=mina", e, function(t) {
+                        console.log('提交订单=')
+                        console.log(e)
+                        console.log('订单返回=')
+                        console.log(t)
+                        wx.redirectTo({
+                            url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + t.Data.OrderIds + "&&itemids=" + o.data.ids
+                        });
+                    }, "POST");
+                }
             }
         }
     },
-    paysumbit: function(t) {
-        var a = this.data.money, o = this.data.ids;
-        e.payment(t, a, o);
-    },
+    //点击地址
     navaddress: function() {
         var t = this;
         wx.redirectTo({
@@ -202,6 +237,16 @@ Page({
             fail: function(t) {},
             complete: function(t) {}
         });
+    },
+    //商品清单
+    detail: function(t) {
+        wx.navigateTo({
+            url: "/pages/pinhuo/detail?item=" + JSON.stringify(t.currentTarget.dataset.item)
+        });
+    },
+    paysumbit: function(t) {
+        var a = this.data.money, o = this.data.ids;
+        e.payment(t, a, o);
     },
     checkcoupon: function(t) {
         this.data.Coupons.map(function(a) {
@@ -364,10 +409,5 @@ Page({
                 showCancel: !1
             }));
         }, "POST");
-    },
-    detail: function(t) {
-        wx.navigateTo({
-            url: "/pages/pinhuo/detail?item=" + JSON.stringify(t.currentTarget.dataset.item)
-        });
     }
 });

@@ -35,7 +35,13 @@
                     <view class="nav_text">已完成</view>
                 </navigator>
             </view>
-            <view class="nav_title">
+            <view class="nav_title" wx:if="{{we7}}">
+                <navigator url="/pages/order/order?id=5">
+                    <image class="nav_img" src="/Image/my/shouhou@2x.png"></image>
+                    <view class="nav_text">已关闭</view>
+                </navigator>
+            </view>            
+            <view class="nav_title" wx:else>
                 <navigator url="/pages/order/sealed">
                     <image class="nav_img" src="/Image/my/shouhou@2x.png"></image>
                     <view class="nav_text">售后单</view>

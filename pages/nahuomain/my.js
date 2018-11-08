@@ -6,6 +6,9 @@ Page({
     },
     onLoad: function() {
         var a = this;
+        this.setData({
+            we7: we7
+        })
         if (we7) {
             o.isLogin() ? (o.showLoading("数据加载中"), t.http_post("UserInfo", {
                 uid: wx.getStorageSync('u_id')
