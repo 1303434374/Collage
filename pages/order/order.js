@@ -74,7 +74,8 @@ Page({
                     });
                 }), 
                 // 20 == a.Data.OrderList.length ? (i.data.pageIndex++, i.data.flag = !0) : i.data.flag = !1, 
-                i.data.lists = i.data.lists.concat(a.Data.OrderList), 
+                // i.data.lists = i.data.lists.concat(a.Data.OrderList), 
+                i.data.lists = a.Data.OrderList, 
                 i.setData({
                     lists: i.data.lists,
                     notice: i.data.notice
