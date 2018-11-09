@@ -218,7 +218,6 @@ Page({
                             uid: wx.getStorageSync('u_id'),
                             childId: i.orderid
                         }, function(t) {
-                            console.log(t)
                             t.Result && o.init();
                         }, "POST")  
                     } else {
