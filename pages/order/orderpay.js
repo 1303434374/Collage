@@ -14,6 +14,9 @@ Page({
         isanswer: 1
     },
     onLoad: function(t) {
+        this.setData({
+            we7: we7 
+        })
         console.log('传给支付=')
         console.log(t)
         if (we7) {
@@ -127,6 +130,16 @@ Page({
                 }
             });
         })
+    },
+    saveFormId: function (v) {
+        if (v.detail.formId != 'the formId is a mock one') {
+            e.http_post('AddFormId', {
+                user_id: wx.getStorageSync('u_id'),
+                form_id: v.detail.formId
+            }, (s) => {
+                console.log(s)
+            })
+        }
     },
     onReady: function() {},
     onShow: function() {},
