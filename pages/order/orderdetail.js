@@ -12,6 +12,10 @@ Page({
         })
         this.data.id = t.id, this.init();
     },
+    onShow: function (t) {
+        let n = this
+        n.data.pageIndex = 1, n.data.notice = "", n.data.lists = [], n.init()  
+    },
     //获取数据
     init: function(n) {
         var o = this;
@@ -58,9 +62,11 @@ Page({
     //订单按钮
     payorder: function(a) {
         var n = this, o = this.data.info;
-        "买家支付" == a.currentTarget.dataset.action ? wx.redirectTo({
+        "买家支付" == a.currentTarget.dataset.action ? (we7 ? wx.navigateTo({
+            url: "/pages/order/orderpay?money=" + o.PayableAmount + "&orderid=" + o.ID
+        }) : wx.redirectTo({
             url: "/pages/order/orderpay?money=" + o.PayableAmount + "&orderids=" + o.OrderIDS + "&itemids="
-        }) : "买家取消" == a.currentTarget.dataset.action ? wx.showModal({
+        })) : "买家取消" == a.currentTarget.dataset.action ? wx.showModal({
             title: "",
             content: "是否确认取消订单",
             success: function(a) {
@@ -129,19 +135,37 @@ Page({
             cancelText: "取消",
             confirmText: "确认签收",
             success: function(a) {
-                a.confirm && (e.showLoading("签收中"), t.httppostmore("pinhuoBuyer/orderv2/ComfirmReceipt", {
-                    id: n.data.id
-                }, function(t) {
-                    wx.showModal({
-                        title: "",
-                        content: t.Message,
-                        showCancel: !1,
-                        success: function(a) {
-                            a.confirm && t.Result && (n.data.pageIndex = 1, n.data.notice = "", n.data.lists = [], 
-                            n.init());
-                        }
-                    });
-                }, "POST"));
+                if (a.confirm) {
+                    if (we7) {
+                        e.showLoading("签收中"), t.http_post("OkMyOrder", {
+                            id: n.data.id
+                        }, function(t) {
+                            wx.showModal({
+                                title: "",
+                                content: t.Message,
+                                showCancel: !1,
+                                success: function(a) {
+                                    a.confirm && t.Result && (n.data.pageIndex = 1, n.data.notice = "", n.data.lists = [], 
+                                    n.init());
+                                }
+                            });
+                        }, "POST")
+                    } else {
+                        e.showLoading("签收中"), t.httppostmore("pinhuoBuyer/orderv2/ComfirmReceipt", {
+                            id: n.data.id
+                        }, function(t) {
+                            wx.showModal({
+                                title: "",
+                                content: t.Message,
+                                showCancel: !1,
+                                success: function(a) {
+                                    a.confirm && t.Result && (n.data.pageIndex = 1, n.data.notice = "", n.data.lists = [], 
+                                    n.init());
+                                }
+                            });
+                        }, "POST")
+                    }
+                }
             }
         });
     },

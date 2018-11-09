@@ -151,7 +151,11 @@ module.exports = {
                 money: e,
                 openid: wx.getStorageSync("openid")
             };
+            console.log('支付提交=')
+            console.log(r)
             T.httppost("pay/Trade/CreateRecharge", r, function(n) {
+                console.log('支付返回=')
+                console.log(n)
                 if (n.Result) {
                     wx.setStorageSync("flag", !0);
                     var a = t + n.Data.payGuid.toLowerCase() + wx.getStorageSync("userid"), r = n.Data.payGuid;

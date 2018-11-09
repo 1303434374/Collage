@@ -206,7 +206,7 @@ Page({
                         console.log('微擎订单返回=')
                         console.log(t)
                         wx.redirectTo({
-                            url: "/pages/order/orderpay?money=" + o.data.money + "&&orderids=" + t.Data.OrderIds + "&&itemids=" + o.data.ids
+                            url: "/pages/order/orderpay?money=" + o.data.money + "&&orderid=" + t.Data.orderid
                         });
                     })
                 } else {
