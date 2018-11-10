@@ -4,6 +4,7 @@ Page({
     data: {
         displaymode: 0,
         pageIndex: 1,
+        pagesize: 6,
         loadflage: !0,
         List: [],
         empty: "",
@@ -48,7 +49,10 @@ Page({
                 key: s.data.keyword,
                 rid: s.data.rid,
                 ordernum: s.data.sort,
-                state: s.data.keyword ? 1 : 2
+                pageIndex: s.data.pageIndex,
+                pagesize: s.data.pagesize,
+                state: s.data.keyword ? 1 : 2,
+                filterValues: JSON.stringify(s.data.filterValues)
             }, (t) => {
                 if (t.Data) {
                     console.log('微擎搜索到的商品=')
@@ -82,17 +86,17 @@ Page({
                         } ];
                         0 == t.Data.NewItems.length && (e[0].istrue = !1, s.data.partList = !1),
                         0 == t.Data.PassItems.length && (e[1].istrue = !1, s.data.partList = !1),
-                        t.Data.NewItems.length > 19 ? (s.data.pageIndex++, s.data.loadflage = !0,s.data.List = t.Data.NewItems, s.data.displaymode = 1) 
+                        t.Data.NewItems.length > (s.data.pagesize - 1) ? (s.data.pageIndex++, s.data.loadflage = !0,s.data.List = t.Data.NewItems, s.data.displaymode = 1) 
                         : t.Data.NewItems.length > 0 ? (s.data.loadflage = !1, s.data.List = t.Data.NewItems, s.data.displaymode = 1) 
-                        : t.Data.PassItems.length > 19 ? (s.data.pageIndex++,s.data.loadflage = !0, s.data.displaymode = 2, s.data.List = t.Data.PassItems)
+                        : t.Data.PassItems.length > (s.data.pagesize - 1) ? (s.data.pageIndex++,s.data.loadflage = !0, s.data.displaymode = 2, s.data.List = t.Data.PassItems)
                         : t.Data.PassItems.length > 0 ? (s.data.loadflage = !1,s.data.displaymode = 2, s.data.List = t.Data.PassItems) 
                         : (s.data.loadflage = !1,s.data.List = []), s.setData({
                             PartTitle: e,
                             partList: s.data.partList
                         });
-                    } else 1 == s.data.displaymode ? t.Data.NewItems.length > 19 ? (s.data.pageIndex++, 
+                    } else 1 == s.data.displaymode ? t.Data.NewItems.length > (s.data.pagesize - 1) ? (s.data.pageIndex++, 
                     s.data.loadflage = !0, s.data.List = t.Data.NewItems) : (s.data.loadflage = !1, 
-                    s.data.List = t.Data.NewItems) : 2 == s.data.displaymode && (t.Data.PassItems.length > 19 ? (s.data.pageIndex++, 
+                    s.data.List = t.Data.NewItems) : 2 == s.data.displaymode && (t.Data.PassItems.length > (s.data.pagesize - 1) ? (s.data.pageIndex++, 
                     s.data.loadflage = !0, s.data.List = t.Data.PassItems) : (s.data.loadflage = !1, 
                     s.data.List = t.Data.PassItems));
                     s.setData({
@@ -197,12 +201,41 @@ Page({
             }), t.Data.PassItems.map(function(t) {
                 t.Cover = a.getUrl(t.Cover, 300);
             }), 1 == i.data.displaymode ? (i.data.List = i.data.List.concat(t.Data.NewItems), 
-            t.Data.NewItems.length > 19 ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1) : 2 == i.data.displaymode && (i.data.List = i.data.List.concat(t.Data.PassItems), 
-            t.Data.PassItems.length > 19 ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1), 
+            t.Data.NewItems.length > (i.data.pagesize - 1) ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1) : 2 == i.data.displaymode && (i.data.List = i.data.List.concat(t.Data.PassItems), 
+            t.Data.PassItems.length > (i.data.pagesize - 1) ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1), 
             i.setData({
                 List: i.data.List
             });
         }, "GET");
+    },
+    //微擎下拉加载更多
+    onReachBottom: function (event) {
+        if (!this.data.loadflage) return wx.showToast({
+            title: "没有更多数据",
+            icon: "success",
+            mask: !0
+        }), !1;
+        e.showLoading("数据加载中");
+        var i = this, s = {
+            key: i.data.keyword,
+            pageIndex: i.data.pageIndex,
+            pagesize: i.data.pagesize,
+            displaymode: i.data.displaymode,
+            rid: i.data.rid,
+            ordernum: i.data.sort,
+            state: i.data.keyword ? 1 : 2,
+            filterValues: JSON.stringify(i.data.filterValues)
+        };
+        t.http_post("getlanmu", s, function(t) {
+            console.log('微擎下拉加载的商品=')
+            console.log(t)
+            1 == i.data.displaymode ? (i.data.List = i.data.List.concat(t.Data.NewItems), 
+            t.Data.NewItems.length > (i.data.pagesize - 1) ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1) : 2 == i.data.displaymode && (i.data.List = i.data.List.concat(t.Data.PassItems), 
+            t.Data.PassItems.length > (i.data.pagesize - 1) ? (i.data.pageIndex++, i.data.loadflage = !0) : i.data.loadflage = !1), 
+            i.setData({
+                List: i.data.List
+            });
+        });
     },
     //跳转商品详情
     skip: function(a) {

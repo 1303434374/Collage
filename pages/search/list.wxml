@@ -8,7 +8,7 @@
         </view>
     </view>
 </view>
-<scroll-view bindscroll="bindscrollx" bindscrolltolower="{{we7 ? '' : loadMore}}" class="scroll_box" scrollTop="{{scroll_top}}" scrollY="true">
+<scroll-view bindscroll="bindscrollx" bindscrolltolower="{{loadMore}}" class="scroll_box" scrollTop="{{scroll_top}}" scrollY="true">
     <view class="empty_fill" wx:if="{{SortMenus.length>0}}"></view>
     <view class="empty2" wx:if="{{partList && !we7}}"></view>
     <view class="list_img">

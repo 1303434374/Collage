@@ -64,11 +64,11 @@
             </view>
         </view>
     </view>
-    <view style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;" wx:if="{{hasMore && !we7}}">
+    <view style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;" wx:if="{{hasMore}}">
         <text class="c-block wx-text_id0VJj">加载更多数据...</text>
     </view>
     <view class="nomore" wx:if="{{!hasMore&&(List.length!==0||listPass.length!==0)}}">已经到底了</view>
-    <button bindtap="TabIndex" class="btn_more" wx:if="{{!hasMore&&(List.length!==0||listPass.length!==0)}}">查看更多款式</button>
+    <button bindtap="TabIndex" class="btn_more" wx:if="{{!hasMore&&(List.length!==0||listPass.length!==0)&&!we7}}">查看更多款式</button>
 </scroll-view>
 <view bindtap="canneled" class="mask" wx:if="{{mask}}"></view>
 <scroll-view animation="{{animationData1}}" class="grid" scrollY="true">

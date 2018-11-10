@@ -18,7 +18,19 @@
         <button bindtap="payorder" class="btn" data-action="{{item.action}}" type="{{item.isPoint?'warn':'default'}}" wx:if="{{item.isEnable}}" wx:for="{{info.Buttons}}" wx:key="key1">{{item.title}}</button>
     </view>
 </view>
-<view class="pakage" wx:if="{{info.PackageList.length>0}}">
+<view class="pakage" wx:if="{{we7 && info.PackageList.Code}}">
+    <view class="goodtitlebox">
+        <image class="goodicon" src="/Image/pinhuo/daishouhuo_red@3x.png"></image>
+        <view class="goodaddress">我的包裹：</view>
+    </view>
+    <view class="pakage_box">
+        <view class="order_num">单号：{{info.PackageList.Code}}</view>
+        <button bindtap="copy" class="btn_copy" data-copy="{{info.PackageList.Code}}" type="default">复制</button>
+        <view class="order_num">物流：{{info.PackageList.Name}}</view>
+        <view class="pakage_time">{{info.PackageList.ShipTime}}</view>
+    </view>
+</view>
+<view class="pakage" wx:if="{{!we7 && info.PackageList.length>0}}">
     <view class="goodtitlebox">
         <image class="goodicon" src="/Image/pinhuo/daishouhuo_red@3x.png"></image>
         <view class="goodaddress">我的包裹：</view>

@@ -30,7 +30,7 @@ Page({
     onLoad: function(a) {
         console.log(a)
         this.setData({
-            we7: we7
+            we7: we7,
         })
         var i = decodeURIComponent(a.scene);
         i && i.split("&").map(function(t) {
@@ -46,7 +46,8 @@ Page({
         }), a.title && (t.setTitle(a.title), s.data.share_title = a.title), s.data.share_qsid = a.qsid;
         if (we7) {
             s.setData({
-                QsID: a.qsid
+                QsID: a.qsid,
+                pagesize: 4
             }), s.init(!0)
         } else {
             t.showLoading("数据加载中"), s.init(!0), a.key && e.httppostmore("shop/wx/SaveWxQsStatistics", {
@@ -72,13 +73,31 @@ Page({
             t.isLogin() ? (t.showLoading("数据加载中"), e.http_post("getlanmu", {
                 QsID: d.data.QsID,
                 ordernum: d.data.sort,
+                displaymode: d.data.displaymode,
+                pageIndex: d.data.pageIndex,
+                pagesize: d.data.pagesize,
+                filterValues: JSON.stringify(d.data.filterValues),
                 state: 0
             }, (e) => {
                 if (e.Data) {
                     console.log('微擎专场详情+商品列表=')
                     console.log(e)
                     t.setTitle(e.Data.Info.Name)
-                    d.data.List = e.Data.NewItems
+                    0 == d.data.displaymode ? e.Data.NewItems.length >= d.data.pagesize ? (d.data.List = e.Data.NewItems, 
+                    d.data.displaymode = 1, d.data.hasMore = !0, d.data.pageIndex = 2) : e.Data.NewItems.length > 0 ? (d.data.List = e.Data.NewItems, 
+                    d.data.displaymode = 1, d.data.hasMore = !1) : 
+                    // e.Data.PassItems.length >= d.data.pagesize ? (d.data.List = e.Data.PassItems, 
+                    // d.data.hasMore = !0, d.data.pageIndex = 2, d.data.displaymode = 2) : e.Data.PassItems.length > 0 ? (d.data.List = e.Data.PassItems, 
+                    // d.data.hasMore = !1, d.data.pageIndex = 2) : 
+                    (d.data.List = e.Data.NewItems, d.data.hasMore = !1, 
+                    d.data.pageIndex = 2, d.data.displaymode = 1) : 1 == d.data.displaymode ? e.Data.NewItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.NewItems), 
+                    d.data.hasMore = !0, d.data.pageIndex++) : e.Data.NewItems.length < d.data.pagesize && (d.data.List = d.data.List.concat(e.Data.NewItems), 
+                    d.data.hasMore = !1) : ''
+                    // 2 == d.data.displaymode && (e.Data.PassItems.length == d.data.pagesize ? (d.data.List = d.data.List.concat(e.Data.PassItems), 
+                    // d.data.hasMore = !0, d.data.pageIndex++) : (d.data.List = d.data.List.concat(e.Data.PassItems), 
+                    // d.data.hasMore = !1))
+                    d.data.flag = !0;
+                    // d.data.List = e.Data.NewItems
                     if (a) {
                         d.data.SortMenus = e.Data.Info.SortMenus
                     }
@@ -98,6 +117,7 @@ Page({
                         hasMore: d.data.hasMore,
                         shino: d.data.shino,
                         displaymode: d.data.displaymode,
+                        flag: d.data.flag,
                         // Cover: e.Data.Info.Cover,
                         // PartTitle: h,
                         // partList: d.data.partList,
@@ -223,15 +243,11 @@ Page({
         this.data.partTop = t.detail.scrollTop));
     },
     loadMore: function(t) {
-        if (we7) {
-
-        } else {
-            this.data.hasMore && this.data.flag ? this.init(!1) : this.data.flag ? wx.showToast({
-                title: "没有更多数据咯"
-            }) : wx.showToast({
-                title: "亲，您太快了"
-            });
-        }
+        this.data.hasMore && this.data.flag ? this.init(!1) : this.data.flag ? wx.showToast({
+            title: "没有更多数据咯"
+        }) : wx.showToast({
+            title: "亲，您太快了"
+        });
     },
     refesh: function(t) {
         var a = this;
@@ -400,7 +416,7 @@ Page({
                     t.selected && i.push(t.ID);
                 }), i.length > 0 && (a.TypeID = t.TypeID, a.Values = i.join(","), e.data.filterValues.Params.push(a));
             }
-        }), this.canneled(), this.data.List = [], this.data.pageIndex = 1, this.data.listPass = [], 
+        }), this.canneled(),console.log(e.data.filterValues), this.data.List = [], this.data.pageIndex = 1, this.data.listPass = [], 
         this.data.templist = [], "" == this.data.MaxPrice && "" == this.data.MinPrice && 0 == this.data.filterValues.Params.length ? this.data.shino = !1 : this.data.shino = !0, 
         t.showLoading("数据加载中"), this.init(!1), this.data.fixed) return this.data.partList ? this.setData({
             scroll_top: this.data.height + 30
