@@ -223,7 +223,6 @@ Page({
                 } else {
                     t.data.height = h
                 }
-                console.log(t.data.height)
             }).exec();
         }, 500);
     },
